@@ -22,6 +22,8 @@
 		8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */; };
 		ECA903B82AD6406B0055A608 /* PaymentPages in Resources */ = {isa = PBXBuildFile; fileRef = ECA903B62AD6406A0055A608 /* PaymentPages */; };
 		ECA903B92AD6406B0055A608 /* ExpensePages in Resources */ = {isa = PBXBuildFile; fileRef = ECA903B72AD6406A0055A608 /* ExpensePages */; };
+		ECA903BC2AD64F1E0055A608 /* PaymentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA903BB2AD64F1E0055A608 /* PaymentCreationView.swift */; };
+		ECA903BE2AD64F300055A608 /* ExpenseCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA903BD2AD64F300055A608 /* ExpenseCreationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,8 +37,10 @@
 		8C3468602AD5FB3D00E0C7B3 /* SettingsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageView.swift; sourceTree = "<group>"; };
 		8C3468622AD62F9D00E0C7B3 /* DashboardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPageView.swift; sourceTree = "<group>"; };
 		8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsPageView.swift; sourceTree = "<group>"; };
-		ECA903B62AD6406A0055A608 /* PaymentPages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PaymentPages; path = FairShare/PaymentPages; sourceTree = "<group>"; };
-		ECA903B72AD6406A0055A608 /* ExpensePages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ExpensePages; path = FairShare/ExpensePages; sourceTree = "<group>"; };
+		ECA903B62AD6406A0055A608 /* PaymentPages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PaymentPages; sourceTree = "<group>"; };
+		ECA903B72AD6406A0055A608 /* ExpensePages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExpensePages; sourceTree = "<group>"; };
+		ECA903BB2AD64F1E0055A608 /* PaymentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaymentCreationView.swift; path = FairShare/PaymentPages/PaymentCreationView.swift; sourceTree = "<group>"; };
+		ECA903BD2AD64F300055A608 /* ExpenseCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpenseCreationView.swift; path = FairShare/ExpensePages/ExpenseCreationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +61,8 @@
 		8C34680D2ACF0BB000E0C7B3 = {
 			isa = PBXGroup;
 			children = (
-				ECA903B72AD6406A0055A608 /* ExpensePages */,
-				ECA903B62AD6406A0055A608 /* PaymentPages */,
+				ECA903BD2AD64F300055A608 /* ExpenseCreationView.swift */,
+				ECA903BB2AD64F1E0055A608 /* PaymentCreationView.swift */,
 				8C3468182ACF0BB000E0C7B3 /* FairShare */,
 				8C3468172ACF0BB000E0C7B3 /* Products */,
 			);
@@ -75,6 +79,8 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				ECA903B62AD6406A0055A608 /* PaymentPages */,
+				ECA903B72AD6406A0055A608 /* ExpensePages */,
 				8C3468642AD6350800E0C7B3 /* ListsPage */,
 				8C34685F2AD5FB1800E0C7B3 /* SettingsPage */,
 				8C34685C2AD5A60C00E0C7B3 /* Common */,
@@ -209,6 +215,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECA903BE2AD64F300055A608 /* ExpenseCreationView.swift in Sources */,
+				ECA903BC2AD64F1E0055A608 /* PaymentCreationView.swift in Sources */,
 				8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */,
 				8C3468282ACF0C1800E0C7B3 /* LoginView.swift in Sources */,
 				8C34681C2ACF0BB000E0C7B3 /* ContentView.swift in Sources */,
