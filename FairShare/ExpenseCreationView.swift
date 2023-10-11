@@ -11,16 +11,17 @@ struct ExpenseCreationView: View {
     var body: some View {
         VStack {
             Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            AmountEntry()
             SingleDropdown(labelName: "Sender")
             SingleDropdown(labelName: "Receiver")
             DateSelector()
-            ButtonTextFieldTest()
         }
     }
 }
 
 
 // Picker for single selection
+// Parameter: labelName
 struct SingleDropdown: View {
     
     @State private var selectedItem: String = "TODO"
@@ -30,17 +31,19 @@ struct SingleDropdown: View {
     let labelName: String
     
     var body: some View {
-        HStack (spacing: 180){
-            Text(labelName)
+        HStack {
+            Text(labelName).scenePadding(.all)
+            Spacer()
             Picker("Picker Title", selection: $selectedItem) {
                 ForEach(groupMembers, id: \.self) {
                     Text($0)
                 }
-            }
+            }.scenePadding(.all)
         }
     }
 }
 //https://www.swiftyplace.com/blog/swiftui-picker-made-easy-tutorial-with-example
+// Picker for date selection
 struct DateSelector: View {
     @State private var selectedDate: Date = Date()
     
@@ -59,15 +62,21 @@ struct DateSelector: View {
     }
 }
 
-struct ButtonTextFieldTest: View {
-    @State var text: String = ""
+// Text fields for entering a dollar amount
+struct AmountEntry: View {
+    @State var dollarEntry: String = ""
+    @State var centsEntry: String = ""
     
     var body: some View {
         HStack{
-            Text("$").font(.largeTitle)
-            TextField("Test", text: $text)
-        }.padding()
-        
+            Group {
+                Text("$")
+                TextField("_____", text: $dollarEntry).frame(width: 175, height: 75)
+                Text(".")
+                TextField("__", text: $centsEntry).frame(width: 80, height: 75)
+            }.textFieldStyle(.roundedBorder).font(Font.system(size: 60, design: .default)).padding(.all, 1)
+
+        }
     }
 }
 
