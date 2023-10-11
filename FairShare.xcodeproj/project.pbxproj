@@ -20,6 +20,8 @@
 		8C3468612AD5FB3D00E0C7B3 /* SettingsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468602AD5FB3D00E0C7B3 /* SettingsPageView.swift */; };
 		8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468622AD62F9D00E0C7B3 /* DashboardPageView.swift */; };
 		8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */; };
+		ECA903B82AD6406B0055A608 /* PaymentPages in Resources */ = {isa = PBXBuildFile; fileRef = ECA903B62AD6406A0055A608 /* PaymentPages */; };
+		ECA903B92AD6406B0055A608 /* ExpensePages in Resources */ = {isa = PBXBuildFile; fileRef = ECA903B72AD6406A0055A608 /* ExpensePages */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		8C3468602AD5FB3D00E0C7B3 /* SettingsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageView.swift; sourceTree = "<group>"; };
 		8C3468622AD62F9D00E0C7B3 /* DashboardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPageView.swift; sourceTree = "<group>"; };
 		8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsPageView.swift; sourceTree = "<group>"; };
+		ECA903B62AD6406A0055A608 /* PaymentPages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PaymentPages; path = FairShare/PaymentPages; sourceTree = "<group>"; };
+		ECA903B72AD6406A0055A608 /* ExpensePages */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ExpensePages; path = FairShare/ExpensePages; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 		8C34680D2ACF0BB000E0C7B3 = {
 			isa = PBXGroup;
 			children = (
+				ECA903B72AD6406A0055A608 /* ExpensePages */,
+				ECA903B62AD6406A0055A608 /* PaymentPages */,
 				8C3468182ACF0BB000E0C7B3 /* FairShare */,
 				8C3468172ACF0BB000E0C7B3 /* Products */,
 			);
@@ -189,7 +195,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECA903B92AD6406B0055A608 /* ExpensePages in Resources */,
 				8C3468212ACF0BB100E0C7B3 /* Preview Assets.xcassets in Resources */,
+				ECA903B82AD6406B0055A608 /* PaymentPages in Resources */,
 				8C34681E2ACF0BB100E0C7B3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
