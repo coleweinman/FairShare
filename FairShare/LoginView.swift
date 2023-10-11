@@ -10,11 +10,12 @@ import SwiftUI
 struct LoginView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            VStack(alignment: .leading) {
+                Text("Hello, World!")
                 NavigationLink(destination: {ContentView()}, label: {Text("Hi")})
-                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+                Text("Hello, World!")
             }
+            
         }
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct FairShareApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            MainTabView()
         }
     }
 }
