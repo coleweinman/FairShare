@@ -20,6 +20,16 @@
 		8C3468612AD5FB3D00E0C7B3 /* SettingsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468602AD5FB3D00E0C7B3 /* SettingsPageView.swift */; };
 		8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468622AD62F9D00E0C7B3 /* DashboardPageView.swift */; };
 		8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */; };
+		8C3468692AD9BC4900E0C7B3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468682AD9BC4900E0C7B3 /* User.swift */; };
+		8C34686B2AD9ED2700E0C7B3 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34686A2AD9ED2700E0C7B3 /* Expense.swift */; };
+		8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34686C2AD9F10300E0C7B3 /* Payment.swift */; };
+		8C34686F2AD9F27100E0C7B3 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34686E2AD9F27100E0C7B3 /* Group.swift */; };
+		8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468742ADA001900E0C7B3 /* UserViewModel.swift */; };
+		8C3468772ADA0BA600E0C7B3 /* TestUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */; };
+		8C34687B2ADA0C8500E0C7B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */; };
+		8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */; };
+		8C34687F2ADA534800E0C7B3 /* ExpenseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */; };
+		8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +43,16 @@
 		8C3468602AD5FB3D00E0C7B3 /* SettingsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageView.swift; sourceTree = "<group>"; };
 		8C3468622AD62F9D00E0C7B3 /* DashboardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPageView.swift; sourceTree = "<group>"; };
 		8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsPageView.swift; sourceTree = "<group>"; };
+		8C3468682AD9BC4900E0C7B3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		8C34686A2AD9ED2700E0C7B3 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		8C34686C2AD9F10300E0C7B3 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
+		8C34686E2AD9F27100E0C7B3 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		8C3468742ADA001900E0C7B3 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUserView.swift; sourceTree = "<group>"; };
+		8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
+		8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListViewModel.swift; sourceTree = "<group>"; };
+		8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestExpenseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +89,9 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */,
+				8C3468732ADA000900E0C7B3 /* ViewModels */,
+				8C3468672AD9BC2F00E0C7B3 /* Models */,
 				8C3468642AD6350800E0C7B3 /* ListsPage */,
 				8C34685F2AD5FB1800E0C7B3 /* SettingsPage */,
 				8C34685C2AD5A60C00E0C7B3 /* Common */,
@@ -79,6 +102,8 @@
 				8C34681D2ACF0BB100E0C7B3 /* Assets.xcassets */,
 				8C34681F2ACF0BB100E0C7B3 /* Preview Content */,
 				8C3468272ACF0C1800E0C7B3 /* LoginView.swift */,
+				8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */,
+				8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */,
 			);
 			path = FairShare;
 			sourceTree = "<group>";
@@ -120,6 +145,27 @@
 				8C3468652AD6351A00E0C7B3 /* ListsPageView.swift */,
 			);
 			path = ListsPage;
+			sourceTree = "<group>";
+		};
+		8C3468672AD9BC2F00E0C7B3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8C3468682AD9BC4900E0C7B3 /* User.swift */,
+				8C34686A2AD9ED2700E0C7B3 /* Expense.swift */,
+				8C34686C2AD9F10300E0C7B3 /* Payment.swift */,
+				8C34686E2AD9F27100E0C7B3 /* Group.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8C3468732ADA000900E0C7B3 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8C3468742ADA001900E0C7B3 /* UserViewModel.swift */,
+				8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */,
+				8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C3468212ACF0BB100E0C7B3 /* Preview Assets.xcassets in Resources */,
+				8C34687B2ADA0C8500E0C7B3 /* GoogleService-Info.plist in Resources */,
 				8C34681E2ACF0BB100E0C7B3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,11 +248,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C34686F2AD9F27100E0C7B3 /* Group.swift in Sources */,
 				8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */,
 				8C3468282ACF0C1800E0C7B3 /* LoginView.swift in Sources */,
+				8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */,
+				8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */,
 				8C34681C2ACF0BB000E0C7B3 /* ContentView.swift in Sources */,
 				8C3468612AD5FB3D00E0C7B3 /* SettingsPageView.swift in Sources */,
+				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
+				8C3468692AD9BC4900E0C7B3 /* User.swift in Sources */,
+				8C3468772ADA0BA600E0C7B3 /* TestUserView.swift in Sources */,
 				8C34681A2ACF0BB000E0C7B3 /* FairShareApp.swift in Sources */,
+				8C34687F2ADA534800E0C7B3 /* ExpenseListViewModel.swift in Sources */,
+				8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */,
+				8C34686B2AD9ED2700E0C7B3 /* Expense.swift in Sources */,
 				8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */,
 				8C3468572AD5A2CD00E0C7B3 /* MainTabView.swift in Sources */,
 			);
