@@ -13,5 +13,5 @@ struct Group: Codable, Identifiable {
     var name: String
     var members: [BasicUser]
     var invitedMembers: [BasicUser]
-    var memberUserIds: [String]
+    var involvedUserIds: [String]
 }
