@@ -123,11 +123,14 @@ struct SettingsPageView: View {
 }
     
 struct LogoutButton: View {
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
+    
     var body: some View {
         HStack {
             Spacer()
             Button(action: {
                 // Add code to handle logout action here
+                print(authViewModel.signOut())
             }) {
                 Text("Logout")
                     .foregroundColor(.red)

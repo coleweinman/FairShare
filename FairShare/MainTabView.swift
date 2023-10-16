@@ -10,10 +10,11 @@ import SwiftUI
 struct MainTabView: View {
     @State var selection = Tab.dashboard
     @StateObject var viewModel = UserViewModel()
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     var body: some View {
         NavigationStack {
-            if let user = viewModel.user {
+            if viewModel.user != nil {
                 TabView(selection: $selection) {
                     ForEach(Tab.allCases, id: \.self) {
                         (tab) in
@@ -37,7 +38,13 @@ struct MainTabView: View {
                             }
                         }
                     }
-                    
+                    ToolbarItem(placement: .primaryAction) {
+                        NavigationLink {
+                            GroupPageView()
+                        } label: {
+                            Image(systemName: "person.3")
+                        }
+                    }
                     ToolbarItem(placement: .primaryAction) {
                         NavigationLink {
                             SettingsPageView()
@@ -58,9 +65,13 @@ struct MainTabView: View {
                 }
             }
             
-        }.onAppear(){
-            viewModel.fetchData(uid: "5xuwvjBzryoJsQ3VGLIX")
-        }.environmentObject(viewModel)
+        }
+        .onAppear() {
+            if let uid = authViewModel.user?.uid {
+                viewModel.fetchData(uid: uid)
+            }
+        }
+        .environmentObject(viewModel)
     }
 }
     

@@ -35,10 +35,10 @@ class AuthenticationViewModel: ObservableObject {
     func signUp(name:String, email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             self.error = error?.localizedDescription
-            if authResult != nil {
+            if let result = authResult {
                 let user = User(name: name, email: email, profilePictureUrl: nil, paymentRemindersEnabled: true, paymentRemindersFrequency: "daily", newExpenseNotificationEnabled: true)
                 do {
-                    try Firestore.firestore().collection("users").addDocument(from: user)
+                    try Firestore.firestore().collection("users").document(result.user.uid).setData(from: user)
                 } catch {
                     print(error)
                 }
