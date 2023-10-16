@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 struct User: Codable, Identifiable {
     @DocumentID var id: String?
     var name: String
+    var email: String
     var profilePictureUrl: URL
     var paymentRemindersEnabled: Bool
     var paymentRemindersFrequency: String

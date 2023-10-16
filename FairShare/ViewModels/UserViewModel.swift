@@ -13,6 +13,10 @@ class UserViewModel: ObservableObject {
     
     private var db = Firestore.firestore()
     
+    func updateField(userId: String, field: String, value: Any) {
+        db.collection("users").document(userId).updateData([field: value])
+    }
+    
     func fetchData(uid: String) {
         db.collection("users").document(uid)
             .addSnapshotListener { documentSnapshot, error in

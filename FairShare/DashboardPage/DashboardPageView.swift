@@ -8,15 +8,18 @@
 import SwiftUI
 
 struct DashboardPageView: View {
+    
     var body: some View {
         VStack {
-            Divider()
-            ScrollView {
-                Text("Dashboard Page")
+            
+                Divider()
+                ScrollView {
+                    Text("Dashboard Page")
+                }
+                .padding()
             }
         }
     }
-}
 
 struct DashboardPageView_Previews: PreviewProvider {
     static var previews: some View {
