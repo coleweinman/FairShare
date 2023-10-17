@@ -77,8 +77,6 @@ struct SettingsPageView: View {
                         .onChange(of: viewModel.user!.paymentRemindersEnabled) { newValue in
                             viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersEnabled", value: newValue)
                         }
-                            
-                            
                     Button(action: {
                                     showActionSheet.toggle()
                                     }) {
@@ -110,11 +108,7 @@ struct SettingsPageView: View {
                 }
                 Section(header: Text("Account Info")) {
                     Text("Name: \(viewModel.user!.name)")
-
                     Text("Email: \(viewModel.user!.email)")
-                    
-                    //Text("Phone: (123) 456-7890")
-                    
                 }
                 LogoutButton()
             }
@@ -129,7 +123,6 @@ struct LogoutButton: View {
         HStack {
             Spacer()
             Button(action: {
-                // Add code to handle logout action here
                 print(authViewModel.signOut())
             }) {
                 Text("Logout")
