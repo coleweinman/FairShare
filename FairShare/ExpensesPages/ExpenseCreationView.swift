@@ -27,6 +27,9 @@ struct ExpenseCreationView: View {
     // View model to access db and upload new expenses
     @ObservedObject var viewModel: ExpenseViewModel = ExpenseViewModel()
     
+    // ToDo
+    @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
+    
     // State atttributes to store user inputs
     @State var expenseAmount: String = ""
     @State var expenseDate: Date = Date()
@@ -36,7 +39,7 @@ struct ExpenseCreationView: View {
     @State var showAlert = false
     @State var alertMessage: String = ""
     @State var groupName: String = ""
-    @State var groupMembers: [BasicUser] = testGroup.members
+    @State var groupMembers: [BasicUser] = testGroup2.members
     
     var body: some View {
         ScrollView {
@@ -48,7 +51,7 @@ struct ExpenseCreationView: View {
                 // Date
                 DateSelector(selectedDate: $expenseDate)
                 // Group: TODO add to expense struct
-                GroupSelect(groups: [testGroup], selectedItem: $groupName)
+                GroupSelect(groups: [testGroup, testGroup2], selectedItem: $groupName)
                 // Payer
                 SingleDropdown(labelName: "Paid By", groupMembers: testGroup.members, selectedItem: $expensePayerName)
                 // Involved members

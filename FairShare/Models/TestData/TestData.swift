@@ -13,12 +13,15 @@ let testUser2 = BasicUser(id: "6789", name: "Andrew", profilePictureUrl: URL(str
 
 let testUser3 = BasicUser(id:"54321", name: "Emily", profilePictureUrl: URL(string: "https://url.com")!)
 
+let testUser4 = BasicUser(id: "QmQzNS2JgCaMYoPxldBR6PzryRQ2", name: "Bill Bulko", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/fairshare-project.appspot.com/o/profilePictures%2FQmQzNS2JgCaMYoPxldBR6PzryRQ2.jpg?alt=media&token=a67f1905-be2c-4a34-9ed9-f7e395577cdf")!)
+
 
 // Mock data for group members
 var userList: [BasicUser] = [
     testUser,
     testUser2,
-    testUser3
+    testUser3,
+    testUser4
 ]
 
 var pendingMembers: [BasicUser] = [
@@ -31,5 +34,7 @@ let testUserAmount = UserAmount(id: "12345", name: "Cole", profilePictureUrl: UR
 let testUserAmount2 = UserAmount(id: "54321", name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/fairshare-project.appspot.com/o/profilePictures%2FwQYRiaB1rTeXt6War1AVz87ZXnb2.jpg?alt=media&token=8f3ff497-a7f4-4df7-bc45-a1eb4f8c0be9")!, amount: 12.99)
 
 let testGroup = Group(name: "Roomies", members: userList, invitedMembers: pendingMembers, involvedUserIds: userList.map {$0.id})
+
+let testGroup2 = Group(name: "My favorite students", members: userList, invitedMembers: pendingMembers, involvedUserIds: userList.map {$0.id})
 
 let testGroupNames = userList.map{$0.name}
