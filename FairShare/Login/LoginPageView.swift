@@ -25,6 +25,10 @@ public struct CustomTextFieldStyle : TextFieldStyle {
 struct LoginPageView: View {
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var forgotPasswordAlert: Bool = false
+    @State private var forgotPasswordConfirmationAlert: Bool = false
+    @State private var forgotPasswordEmail: String = ""
+    @State private var forgotPasswordResponse: String = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -72,6 +76,14 @@ struct LoginPageView: View {
                     .buttonStyle(.bordered)
                     .cornerRadius(10)
                     
+                    Button {
+                        forgotPasswordAlert = true
+                        forgotPasswordEmail = ""
+                        forgotPasswordResponse = ""
+                    } label: {
+                        Text("Forgot password")
+                    }
+                    
                     
                     
                     
@@ -82,6 +94,37 @@ struct LoginPageView: View {
             }
             .textFieldStyle(CustomTextFieldStyle())
             .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+            .alert(
+                Text("Forgot Password"),
+                isPresented: $forgotPasswordAlert,
+                actions: {
+                    TextField(
+                        "Email",
+                        text: $forgotPasswordEmail
+                    )
+                    Button("Send") {
+                        Task {
+                            let response = await viewModel.sendPasswordResetEmail(email: forgotPasswordEmail)
+                            forgotPasswordResponse = response
+                            forgotPasswordConfirmationAlert = true
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {}
+                },
+                message: {
+                    Text("Please provide your email associated with your account")
+                }
+            )
+            .alert(
+                Text("Forgot Password"),
+                isPresented: $forgotPasswordConfirmationAlert,
+                actions: {
+                    Button("Ok") {}
+                },
+                message: {
+                    Text(forgotPasswordResponse)
+                }
+            )
         }
         
         
