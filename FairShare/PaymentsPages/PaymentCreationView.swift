@@ -7,15 +7,12 @@
 
 import SwiftUI
 
-// @EnvironmentObject var viewModel: UserViewModel
-
-
 struct PaymentCreationView: View {
     
     // View model to upload pament
     @ObservedObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
-    // Attributes of payment to fill out
+    // Attributes of payment for user input
     @State var paymentAmount: String = ""
     @State var paymentDate: Date = Date()
     @State var paymentFrom: String = ""
@@ -30,10 +27,15 @@ struct PaymentCreationView: View {
         ScrollView {
             VStack {
                 Spacer(minLength: 50)
+                // Amount
                 AmountEntry(amount: $paymentAmount)
+                // Date
                 DateSelector(selectedDate: $paymentDate)
+                // Sender
                 SingleDropdown(labelName: "Payment From", groupMembers: userList, selectedItem: $paymentFrom)
+                // Receiver
                 SingleDropdown(labelName: "Payment To", groupMembers: userList, selectedItem: $paymentTo)
+                // Comments
                 CommentBox(comment: $paymentComment)
                 ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
                 ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
@@ -44,9 +46,10 @@ struct PaymentCreationView: View {
     }
     
     func attachImage() {
-        
+        // ToDo: Camera and camera roll launch
     }
     
+    // Respond to submit button press, use state vars to create and store payment
     func createPaymentOnSubmit() {
         if (paymentAmount != "" && paymentFrom != "" && paymentTo != "") {
             if let amount = Decimal(string: paymentAmount) {
@@ -73,12 +76,9 @@ struct PaymentCreationView: View {
             sendAlert = true
         }
     }
-    
-    
 }
 
-
-
+// Text field for comment entry
 struct CommentBox: View {
     @Binding var comment: String
     
@@ -87,7 +87,7 @@ struct CommentBox: View {
     }
 }
 
-
+// Generic button
 struct ButtonStyle1: View {
     
     let buttonText: String
@@ -100,21 +100,8 @@ struct ButtonStyle1: View {
     }
 }
 
-struct ReminderCheckbox: View {
-    let checkboxLabel: String
-    
-    @State private var setReminders = false
-    var body: some View {
-        HStack {
-            Toggle(isOn: $setReminders) {
-                Text(checkboxLabel)
-            }.toggleStyle(.switch).padding(.all)
-        }
-    }
-}
-
+// TODO
 struct SearchBar: View {
-    
     @State private var searchTerm = ""
     
     var body: some View {
