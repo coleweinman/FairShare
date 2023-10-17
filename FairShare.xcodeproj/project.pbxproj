@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		848DBDA32ADE8DFF008DC4F3 /* PaymentsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DBDA22ADE8DFE008DC4F3 /* PaymentsPageView.swift */; };
+		848DBDA52ADE8E2A008DC4F3 /* ExpensesPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DBDA42ADE8E2A008DC4F3 /* ExpensesPageView.swift */; };
+		848DBDA72ADE8E45008DC4F3 /* TableComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DBDA62ADE8E45008DC4F3 /* TableComponents.swift */; };
 		8C34681A2ACF0BB000E0C7B3 /* FairShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468192ACF0BB000E0C7B3 /* FairShareApp.swift */; };
 		8C34681C2ACF0BB000E0C7B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34681B2ACF0BB000E0C7B3 /* ContentView.swift */; };
 		8C34681E2ACF0BB100E0C7B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C34681D2ACF0BB100E0C7B3 /* Assets.xcassets */; };
@@ -43,6 +46,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		848DBDA22ADE8DFE008DC4F3 /* PaymentsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsPageView.swift; sourceTree = "<group>"; };
+		848DBDA42ADE8E2A008DC4F3 /* ExpensesPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesPageView.swift; sourceTree = "<group>"; };
+		848DBDA62ADE8E45008DC4F3 /* TableComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableComponents.swift; sourceTree = "<group>"; };
 		8C3468162ACF0BB000E0C7B3 /* FairShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FairShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3468192ACF0BB000E0C7B3 /* FairShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairShareApp.swift; sourceTree = "<group>"; };
 		8C34681B2ACF0BB000E0C7B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -127,6 +133,7 @@
 				8C34681F2ACF0BB100E0C7B3 /* Preview Content */,
 				8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */,
 				8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */,
+				848DBDA62ADE8E45008DC4F3 /* TableComponents.swift */,
 			);
 			path = FairShare;
 			sourceTree = "<group>";
@@ -218,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */,
+				848DBDA42ADE8E2A008DC4F3 /* ExpensesPageView.swift */,
 			);
 			path = ExpensesPages;
 			sourceTree = "<group>";
@@ -226,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				ECA904582ADE51640055A608 /* PaymentCreationView.swift */,
+				848DBDA22ADE8DFE008DC4F3 /* PaymentsPageView.swift */,
 			);
 			path = PaymentsPages;
 			sourceTree = "<group>";
@@ -324,11 +333,14 @@
 				8C3468882ADCA92700E0C7B3 /* AuthenticationViewModel.swift in Sources */,
 				ECA904572ADE50020055A608 /* TestData.swift in Sources */,
 				8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */,
+				848DBDA72ADE8E45008DC4F3 /* TableComponents.swift in Sources */,
 				8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */,
 				8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */,
 				8C3468842ADC815C00E0C7B3 /* LoginPageView.swift in Sources */,
 				8C34681C2ACF0BB000E0C7B3 /* ContentView.swift in Sources */,
 				8C3468612AD5FB3D00E0C7B3 /* SettingsPageView.swift in Sources */,
+				848DBDA32ADE8DFF008DC4F3 /* PaymentsPageView.swift in Sources */,
+				848DBDA52ADE8E2A008DC4F3 /* ExpensesPageView.swift in Sources */,
 				8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */,
 				8C34688F2ADCD6D900E0C7B3 /* GroupListViewModel.swift in Sources */,
 				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
