@@ -8,22 +8,26 @@
 import SwiftUI
 import UIKit
 
+// Hard coded values for view element colors
 let shadowColor: Color = .gray
 let clickableTextColor: Color = .blue
 
 
 // Variables to hold attributes of created expense
 var title:String?
-var description: String? //
-var date: Date? //
-var amount: Decimal? //
+var description: String?
+var date: Date?
+var amount: Decimal?
 var attachmentObjIds: [String]?
 var paidBy: String?
 var involvedUserIds: [String]?
-// Bind attributes to view model
 
+// View for expense creation page with all view elements
 struct ExpenseCreationView: View {
+    // View model to access db and upload new expenses
     @ObservedObject var viewModel: ExpenseViewModel = ExpenseViewModel()
+    
+    // State atttributes to store user inputs
     @State var expenseAmount: String = ""
     @State var expenseDate: Date = Date()
     @State var expensePayerName: String = ""
@@ -37,14 +41,20 @@ struct ExpenseCreationView: View {
     var body: some View {
         ScrollView {
             VStack {
+                // Amount
                 AmountEntry(amount: $expenseAmount)
+                // Title
                 ExpenseTitle(title: $expenseTitle)
+                // Date
                 DateSelector(selectedDate: $expenseDate)
+                // Group: TODO add to expense struct
                 GroupSelect(groups: [testGroup], selectedItem: $groupName)
+                // Payer
                 SingleDropdown(labelName: "Paid By", groupMembers: testGroup.members, selectedItem: $expensePayerName)
+                // Involved members
                 MultiSelectNav(options: testGroup.members, selections: $groupMembers).padding(.top, 15)
-                //ButtonStyle1(buttonText:"Apply Even Split", actionFunction: {self.applyEvenSplit()})
                 Divider()
+                // Comments
                 CommentBox(comment: $expenseComment)
                 ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
                 ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
@@ -54,12 +64,13 @@ struct ExpenseCreationView: View {
         }
     }
     func attachReceipt() {
-        
+        // ToDo: Camera and camera roll launch
     }
     func applyEvenSplit() {
-        
+        // ToDO
     }
     
+    // Respond to submit button press, use state vars to create and store expense
     func createExpenseOnSubmit() {
         if (expenseAmount != "" && expenseTitle != "" && expensePayerName != "") {
             if let amount = Decimal(string: expenseAmount) {
@@ -86,13 +97,11 @@ struct ExpenseCreationView: View {
             showAlert = true
         }
     }
-    
 }
 
-
+// Text field to enter expense title
 struct ExpenseTitle: View {
     @Binding var title: String
-    
     
     var body: some View {
         VStack (alignment: .leading){
@@ -100,10 +109,9 @@ struct ExpenseTitle: View {
             TextField("Enter title", text: $title).scenePadding(.all).textFieldStyle(.roundedBorder).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
         }.scenePadding()
     }
-    
 }
 
-
+// Picker to select group for expense
 struct GroupSelect: View {
     
     var groups: [Group]
@@ -122,9 +130,7 @@ struct GroupSelect: View {
     }
 }
 
-
-// Picker for single selection
-// Parameter: labelName
+// Picker for single selection of members
 struct SingleDropdown: View {
     
     // Parameters: Label for dropdown and list of options
@@ -141,8 +147,7 @@ struct SingleDropdown: View {
                 VStack (alignment: .leading){
                     Text(labelName)
                     Button("Set as Self") {
-                        // Action for set as self button
-                        // Change to use actual name of current user
+                        // ToDo: Change to use actual name of current user
                         selectedItem = "currUser"
                     }.foregroundColor(clickableTextColor).font(.footnote)
                     // Add HStack with profile picture and name
@@ -154,7 +159,7 @@ struct SingleDropdown: View {
                     }
                 }
             }.scenePadding(.all)
-                
+            // Update image on picker selection
             if (selectedItem != "") {
                 ProfileCircleImage(userName: selectedItem)
             }
@@ -170,7 +175,6 @@ struct ProfileCircleImage: View {
     var userName: String
     var body: some View {
         let user = self.setUser()
-        
         HStack (alignment: .top){
             AsyncImage(url:user.profilePictureUrl){ image in
                 image
@@ -183,8 +187,7 @@ struct ProfileCircleImage: View {
             Text(userName).padding(.trailing, 180)
         }.padding([.top, .bottom], -10)
     }
-    
-    // If select set as self, set to current user logged in
+    // If select 'set as self', set to current user logged in
     // Otherwise, hard code to testUser
     func setUser() -> BasicUser {
         if (userName == "currUser") {
@@ -195,52 +198,51 @@ struct ProfileCircleImage: View {
     }
 }
 
+// ToDo: View element for specifying amount liability per involved member
 struct UserAmountSelection: View {
     var user: BasicUser
     @Binding var currUserAmount: Decimal
     var body: some View {
         ProfileCircleImage(userName: user.name)
     }
-    
 }
 
-
-    //https://www.swiftyplace.com/blog/swiftui-picker-made-easy-tutorial-with-example
-    // Picker for date selection
-    struct DateSelector: View {
-        @Binding var selectedDate: Date
-        
-        private let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .short
-            return formatter
-        }()
-        
-        var body: some View {
-            VStack(alignment: .leading, spacing: 40) {
-                DatePicker("Date", selection: $selectedDate, displayedComponents: .date).padding(.leading, 20)
-                Button("Today") {
-                    selectedDate = Date()
-                }.padding(.top, -45).font(.footnote).padding(.leading, 20)
-            }.scenePadding().padding(.bottom, -30)
-        }
-    }
+// Picker for date selection
+struct DateSelector: View {
+    @Binding var selectedDate: Date
     
-    // Text fields for entering a dollar amount
-    struct AmountEntry: View {
-        @Binding var amount: String
-        
-        var body: some View {
-            VStack (alignment: .center) {
-                HStack{
-                    Text("$")
-                    TextField("_______", text: $amount).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
-                }.textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
-                Text("Amount")
-            }
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }()
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 40) {
+            DatePicker("Date", selection: $selectedDate, displayedComponents: .date).padding(.leading, 20)
+            Button("Today") {
+                selectedDate = Date()
+            }.padding(.top, -45).font(.footnote).padding(.leading, 20)
+        }.scenePadding().padding(.bottom, -30)
+    }
+}
+    
+// Text fields for entering a dollar amount
+struct AmountEntry: View {
+    @Binding var amount: String
+    
+    var body: some View {
+        VStack (alignment: .center) {
+            HStack{
+                Text("$")
+                TextField("_______", text: $amount).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+            }.textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
+            Text("Amount")
         }
     }
+}
 
+// Navigation to select involved users
 struct MultiSelectNav: View {
     
     var options: [BasicUser]
@@ -254,9 +256,7 @@ struct MultiSelectNav: View {
                 Label("Edit Members On Expense", systemImage: "pencil")
             }
         }.frame(maxHeight: 40)
-        
     }
-    
 }
 
 // Multi selection to add members to expense
@@ -276,17 +276,12 @@ struct MemberSelectView: View {
             }.toolbar {
                 EditButton()
             }
-            /*List(options, selection: $multiSelection) { option in
-                Text(option.name)
-            }.onDelete{
-            }*/
         }
-        // Text("\(multiSelection!.count) selections")
     }
 }
 
-    struct ExpenseCreationView_Previews: PreviewProvider {
-        static var previews: some View {
-            ExpenseCreationView()
-        }
+struct ExpenseCreationView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExpenseCreationView()
     }
+}
