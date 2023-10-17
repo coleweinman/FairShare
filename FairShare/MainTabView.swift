@@ -93,7 +93,7 @@ enum Tab: Int, CaseIterable {
             return TabConfiguation(
                 title: "Expenses",
                 image: "scroll",
-                content: AnyView(ContentView()),
+                content: AnyView(ExpensesPageView()),
                 createView: AnyView(ExpenseCreationView()),
                 createViewTitle: "Create Expense"
             )
@@ -101,7 +101,7 @@ enum Tab: Int, CaseIterable {
             return TabConfiguation(
                 title: "Payments",
                 image: "creditcard",
-                content: AnyView(ContentView()),
+                content: AnyView(PaymentsPageView()),
                 createView: AnyView(PaymentCreationView()),
                 createViewTitle: "Create Payment"
             )
