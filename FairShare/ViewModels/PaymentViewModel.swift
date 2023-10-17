@@ -1,53 +1,54 @@
 //
-//  ExpenseViewModel.swift
+//  PaymentViewModel.swift
 //  FairShare
 //
-//  Created by Cole Weinman on 10/13/23.
+//  Created by Melody Yin on 10/15/23.
 //
+
+import SwiftUI
 
 import Foundation
 import FirebaseFirestore
 
-class ExpenseViewModel: ObservableObject {
-    @Published var expense: Expense?
+class PaymentViewModel: ObservableObject {
+    @Published var payment: Payment?
         
         private var db = Firestore.firestore()
         
         func save() -> Bool {
-            guard let expense = self.expense else {
+            guard let payment = self.payment else {
                 return false
             }
-            if let expenseId = expense.id {
+            if let paymentId = payment.id {
                 do {
-                    try db.collection("expenses").document(expenseId).setData(from: expense)
+                    try db.collection("payments").document(paymentId).setData(from: payment)
                     return true
                 } catch {
-                    print("Error saving expense  \(error)")
+                    print("Error saving payment  \(error)")
                 }
             } else {
                 do {
-                    try db.collection("expenses").addDocument(from: expense)
+                    try db.collection("payments").addDocument(from: payment)
                     return true
                 } catch {
-                    print("Error creating expense \(error)")
+                    print("Error creating payment \(error)")
                 }
             }
             return false
         }
         
-        func fetchData(expenseId: String) {
-            db.collection("expenses").document(expenseId)
+        func fetchData(paymentId: String) {
+            db.collection("payments").document(paymentId)
                 .addSnapshotListener { documentSnapshot, error in
                     guard let document = documentSnapshot else {
                         print("Error fetching document: \(error!)")
                         return
                     }
                     do {
-                        self.expense = try document.data(as: Expense.self)
+                        self.payment = try document.data(as: Payment.self)
                     } catch {
                         print("Error fetching document: \(error)")
                     }
                 }
         }
 }
-

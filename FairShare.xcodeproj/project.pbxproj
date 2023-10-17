@@ -25,7 +25,6 @@
 		8C34686F2AD9F27100E0C7B3 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34686E2AD9F27100E0C7B3 /* Group.swift */; };
 		8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468742ADA001900E0C7B3 /* UserViewModel.swift */; };
 		8C3468772ADA0BA600E0C7B3 /* TestUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */; };
-		8C34687B2ADA0C8500E0C7B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */; };
 		8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */; };
 		8C34687F2ADA534800E0C7B3 /* ExpenseListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */; };
 		8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */; };
@@ -36,6 +35,8 @@
 		8C34688F2ADCD6D900E0C7B3 /* GroupListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */; };
 		8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */; };
 		8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */; };
+		ECA9044F2ADE4D120055A608 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */; };
+		ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +55,6 @@
 		8C34686E2AD9F27100E0C7B3 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		8C3468742ADA001900E0C7B3 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		8C3468762ADA0BA600E0C7B3 /* TestUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUserView.swift; sourceTree = "<group>"; };
-		8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
 		8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListViewModel.swift; sourceTree = "<group>"; };
 		8C3468802ADA549D00E0C7B3 /* TestExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestExpenseView.swift; sourceTree = "<group>"; };
@@ -65,6 +65,8 @@
 		8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupListViewModel.swift; sourceTree = "<group>"; };
 		8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditPageView.swift; sourceTree = "<group>"; };
+		ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,9 +103,9 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */,
 				8C34688B2ADCCCB800E0C7B3 /* GroupManagement */,
 				8C3468822ADC813300E0C7B3 /* Login */,
-				8C34687A2ADA0C8500E0C7B3 /* GoogleService-Info.plist */,
 				8C3468732ADA000900E0C7B3 /* ViewModels */,
 				8C3468672AD9BC2F00E0C7B3 /* Models */,
 				8C3468642AD6350800E0C7B3 /* ListsPage */,
@@ -180,6 +182,7 @@
 				8C3468872ADCA92700E0C7B3 /* AuthenticationViewModel.swift */,
 				8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */,
 				8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */,
+				ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -270,8 +273,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C3468212ACF0BB100E0C7B3 /* Preview Assets.xcassets in Resources */,
-				8C34687B2ADA0C8500E0C7B3 /* GoogleService-Info.plist in Resources */,
 				8C34681E2ACF0BB100E0C7B3 /* Assets.xcassets in Resources */,
+				ECA9044F2ADE4D120055A608 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +302,7 @@
 				8C3468772ADA0BA600E0C7B3 /* TestUserView.swift in Sources */,
 				8C34681A2ACF0BB000E0C7B3 /* FairShareApp.swift in Sources */,
 				8C34687F2ADA534800E0C7B3 /* ExpenseListViewModel.swift in Sources */,
+				ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */,
 				8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */,
 				8C34686B2AD9ED2700E0C7B3 /* Expense.swift in Sources */,
 				8C34688D2ADCCDC700E0C7B3 /* GroupPageView.swift in Sources */,
