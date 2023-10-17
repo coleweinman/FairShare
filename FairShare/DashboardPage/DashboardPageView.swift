@@ -83,7 +83,7 @@ struct DashboardPageView: View {
             }
         }
     }
-    }
+}
 
 struct DashboardPageView_Previews: PreviewProvider {
     static var previews: some View {

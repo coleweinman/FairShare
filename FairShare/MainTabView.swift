@@ -23,7 +23,6 @@ struct MainTabView: View {
                                 Label(tab.config.title, systemImage: tab.config.image)
                             }
                             .tag(tab)
-                        
                     }
                 }
                 .navigationTitle(selection.config.title)
@@ -51,7 +50,6 @@ struct MainTabView: View {
                         } label: {
                             Image(systemName: "gear")
                         }
-                        
                     }
                 }
             } else {
@@ -64,7 +62,6 @@ struct MainTabView: View {
                         .foregroundColor(.gray)
                 }
             }
-            
         }
         .onAppear() {
             if let uid = authViewModel.user?.uid {
@@ -74,7 +71,7 @@ struct MainTabView: View {
         .environmentObject(viewModel)
     }
 }
-    
+
 enum Tab: Int, CaseIterable {
     case dashboard = 1
     case expenses = 2

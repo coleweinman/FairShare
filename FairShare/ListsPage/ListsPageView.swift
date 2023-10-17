@@ -14,7 +14,6 @@ struct ListsPageView: View {
                 Text("test")
             }
         }
-        
     }
 }
 

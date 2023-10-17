@@ -11,7 +11,6 @@ import FirebaseStorage
 private let storage = Storage.storage()
 private let storageRef = storage.reference()
 
-
 struct SettingsPageView: View {
     @EnvironmentObject var viewModel: UserViewModel
 
@@ -115,7 +114,8 @@ struct SettingsPageView: View {
             .navigationTitle("Settings")
         }
 }
-    
+
+
 struct LogoutButton: View {
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
@@ -134,14 +134,13 @@ struct LogoutButton: View {
     }
 }
 
-
-
 struct SettingsPageView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsPageView()
     }
 }
 
+// Profile picture selection
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     var onImageSelected: ((UIImage?) -> Void)?
