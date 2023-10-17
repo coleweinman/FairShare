@@ -11,7 +11,7 @@ import FirebaseAuth
 public struct CustomTextFieldStyle : TextFieldStyle {
     public func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .padding() // Set the inner Text Field Padding
+            .padding()
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.gray.opacity(0.2))
             )
@@ -84,9 +84,6 @@ struct LoginPageView: View {
                         Text("Forgot password")
                     }
                     
-                    
-                    
-                    
                     if let error = viewModel.error {
                         Text(error)
                     }
@@ -126,8 +123,6 @@ struct LoginPageView: View {
                 }
             )
         }
-        
-        
     }
     
     func signIn() {

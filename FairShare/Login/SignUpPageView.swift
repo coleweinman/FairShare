@@ -63,8 +63,6 @@ struct SignUpPageView: View {
             .textFieldStyle(CustomTextFieldStyle())
             .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
         }
-        
-        
     }
     
     func signUp() {

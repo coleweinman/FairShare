@@ -65,5 +65,4 @@ class AuthenticationViewModel: ObservableObject {
             return false
         }
     }
-    
 }
