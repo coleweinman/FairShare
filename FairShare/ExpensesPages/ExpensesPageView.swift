@@ -54,8 +54,6 @@ struct ExpensesPageView: View {
                         .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
-                    Text("Past Payments")
-                        .font(.system(size: headerFontSize, weight: .semibold))
                     VStack {
 //                        ForEach(expenseViewModel.expenses) { expense in
 //                            TableCellItemView(

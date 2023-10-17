@@ -12,7 +12,7 @@ struct TestExpenseView: View {
     
     var body: some View {
         VStack {
-            ForEach(viewModel.expenses) { expense in
+            ForEach(viewModel.expenses!) { expense in
                 Text(expense.title)
             }
         }

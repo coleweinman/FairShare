@@ -22,10 +22,7 @@ var paidBy: String?
 var involvedUserIds: [String]?
 // Bind attributes to view model
 
-
 struct ExpenseCreationView: View {
-    //@State public var newExpense: Expense?
-    //@State public var expenseList: ExpenseViewModel?
     @ObservedObject var viewModel: ExpenseViewModel = ExpenseViewModel()
     @State var expenseAmount: String = ""
     @State var expenseDate: Date = Date()
@@ -34,18 +31,18 @@ struct ExpenseCreationView: View {
     @State var expenseTitle: String = ""
     @State var showAlert = false
     @State var alertMessage: String = ""
+    @State var groupName: String = ""
+    @State var groupMembers: [BasicUser] = testGroup.members
     
     var body: some View {
         ScrollView {
             VStack {
-                //AmountEntry(amount: Binding($viewModel.expense)!.totalAmount)
                 AmountEntry(amount: $expenseAmount)
-                //ExpenseTitle(title: Binding($viewModel.expense)!.title)
                 ExpenseTitle(title: $expenseTitle)
                 DateSelector(selectedDate: $expenseDate)
-                
+                GroupSelect(groups: [testGroup], selectedItem: $groupName)
                 SingleDropdown(labelName: "Paid By", groupMembers: testGroup.members, selectedItem: $expensePayerName)
-                MultiSelectNav(options: testGroup.members).padding(.top, 5)
+                MultiSelectNav(options: testGroup.members, selections: $groupMembers).padding(.top, 15)
                 //ButtonStyle1(buttonText:"Apply Even Split", actionFunction: {self.applyEvenSplit()})
                 Divider()
                 CommentBox(comment: $expenseComment)
@@ -66,7 +63,7 @@ struct ExpenseCreationView: View {
     func createExpenseOnSubmit() {
         if (expenseAmount != "" && expenseTitle != "" && expensePayerName != "") {
             if let amount = Decimal(string: expenseAmount) {
-                let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expenseDate, totalAmount: amount, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: [])
+                let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expenseDate, totalAmount: amount, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: groupMembers.map{$0.id})
                 viewModel.expense = newExpense
                 let saveSuccess = viewModel.save()
                 if (saveSuccess) {
@@ -107,7 +104,23 @@ struct ExpenseTitle: View {
 }
 
 
-
+struct GroupSelect: View {
+    
+    var groups: [Group]
+    @Binding var selectedItem: String
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Text("Group").padding(.leading, 20)
+            Spacer()
+            Picker("Select", selection: $selectedItem) {
+                ForEach(groups, id: \.self) {
+                    Text($0.name)
+                }
+            }
+        }.scenePadding(.all)
+    }
+}
 
 
 // Picker for single selection
@@ -129,6 +142,8 @@ struct SingleDropdown: View {
                     Text(labelName)
                     Button("Set as Self") {
                         // Action for set as self button
+                        // Change to use actual name of current user
+                        selectedItem = "currUser"
                     }.foregroundColor(clickableTextColor).font(.footnote)
                     // Add HStack with profile picture and name
                 }.scenePadding(.all)
@@ -141,17 +156,21 @@ struct SingleDropdown: View {
             }.scenePadding(.all)
                 
             if (selectedItem != "") {
-                ProfileCircleImage(userName: $selectedItem)
+                ProfileCircleImage(userName: selectedItem)
             }
         }
     }
 }
 
+// Profile picture + name
 struct ProfileCircleImage: View {
     
-    @Binding var userName: String
+    @EnvironmentObject var currUserViewModel: UserViewModel
+    
+    var userName: String
     var body: some View {
-        let user = testUser
+        let user = self.setUser()
+        
         HStack (alignment: .top){
             AsyncImage(url:user.profilePictureUrl){ image in
                 image
@@ -161,9 +180,28 @@ struct ProfileCircleImage: View {
                 ProgressView()
             }.frame(width: 50, height: 50).clipShape(Circle()).overlay{ Circle().stroke(.white, lineWidth: 4) }.shadow(radius: 7).padding(.leading, 35)
             Spacer()
-            Text(userName).padding(.trailing, 35)
+            Text(userName).padding(.trailing, 180)
         }.padding([.top, .bottom], -10)
     }
+    
+    // If select set as self, set to current user logged in
+    // Otherwise, hard code to testUser
+    func setUser() -> BasicUser {
+        if (userName == "currUser") {
+            return BasicUser(id: currUserViewModel.user!.id!, name: currUserViewModel.user!.name, profilePictureUrl: currUserViewModel.user!.profilePictureUrl)
+        } else {
+            return testUser
+        }
+    }
+}
+
+struct UserAmountSelection: View {
+    var user: BasicUser
+    @Binding var currUserAmount: Decimal
+    var body: some View {
+        ProfileCircleImage(userName: user.name)
+    }
+    
 }
 
 
@@ -206,37 +244,47 @@ struct ProfileCircleImage: View {
 struct MultiSelectNav: View {
     
     var options: [BasicUser]
+    @Binding var selections: [BasicUser]
     
     var body: some View {
         NavigationView{
             NavigationLink {
-                MemberSelectView(options: options)
+                MemberSelectView(options: options, multiSelection: $selections)
             } label: {
-                Label("Add Members To Expense", systemImage: "plus")
+                Label("Edit Members On Expense", systemImage: "pencil")
             }
         }.frame(maxHeight: 40)
         
     }
     
 }
-struct MemberSelectView: View {
 
+// Multi selection to add members to expense
+struct MemberSelectView: View {
     var options: [BasicUser]
-    @State private var multiSelection = Set<UUID>()
+    //@State private var multiSelection = Set<UUID>()
+    @Binding var multiSelection: [BasicUser]
 
     var body: some View {
-
         NavigationView {
-            List(options, selection: $multiSelection) {
-                Text($0.name)
-            }.navigationTitle("Group Members").toolbar { EditButton() }
+            List {
+                ForEach(multiSelection) { option in
+                    Text(option.name)
+                }.onDelete { index in
+                    multiSelection.remove(atOffsets: index)
+                }
+            }.toolbar {
+                EditButton()
+            }
+            /*List(options, selection: $multiSelection) { option in
+                Text(option.name)
+            }.onDelete{
+            }*/
         }
-        Text("\(multiSelection.count) selections")
+        // Text("\(multiSelection!.count) selections")
     }
 }
 
-    
-    
     struct ExpenseCreationView_Previews: PreviewProvider {
         static var previews: some View {
             ExpenseCreationView()
