@@ -18,9 +18,66 @@ struct PaymentsPageView: View {
     var headerFontSize: CGFloat = 18
     
     var payments: [Payment] = [
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"])
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: UserAmount(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            from: UserAmount(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            involvedUserIds: ["1", "2"]
+        ),
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: UserAmount(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            from: UserAmount(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            involvedUserIds: ["1", "2"]
+        ),
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: UserAmount(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            from: UserAmount(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"),
+                amount: Decimal(50.0)
+            ),
+            involvedUserIds: ["1", "2"]
+        )
     ]
     
     var body: some View {
