@@ -9,11 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 class ExpenseListViewModel: ObservableObject {
-    @Published var expenses: [Expense]
-    
-    init() {
-        self.expenses = []
-    }
+    @Published var expenses: [Expense]?
     
     private var db = Firestore.firestore()
     

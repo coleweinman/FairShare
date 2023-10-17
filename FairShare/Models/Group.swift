@@ -14,4 +14,8 @@ struct Group: Codable, Identifiable {
     var members: [BasicUser]
     var invitedMembers: [BasicUser]
     var involvedUserIds: [String]
+    
+    func isInvited(userId: String) -> Bool {
+        return invitedMembers.contains(where: {u in u.id == userId})
+    }
 }

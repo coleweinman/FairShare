@@ -11,45 +11,80 @@ let DEFAULT_GROUP = Group(name: "", members: [], invitedMembers: [], involvedUse
 
 struct GroupEditPageView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var viewModel: GroupViewModel = GroupViewModel()
+    @StateObject var viewModel: GroupViewModel = GroupViewModel()
     @Environment(\.dismiss) private var dismiss
+    @State var openAlert = false
+    @State var openInviteResponse = false
+    @State var inviteUserEmail: String = ""
+    @State var inviteUserResponse: String = ""
+    
     var groupId: String?
     
     init(groupId: String? = nil) {
+        print("INIT")
         self.groupId = groupId
     }
     
-    
     var body: some View {
         VStack {
+            Divider()
             if let group = viewModel.group {
                 List {
                     Section("Details") {
-                        TextField(
-                            "Name",
-                            text: Binding($viewModel.group)!.name
-                        )
+                        HStack {
+                            Text("Name")
+                                .padding(.trailing, 10)
+                            TextField(
+                                "Group Name",
+                                text: Binding($viewModel.group)!.name
+                            )
+                        }
+                        
                     }
                     
                     Section("Members") {
                         ForEach(group.members) { member in
-                            Text(member.name)
+                            HStack {
+                                if let profileUrl = member.profilePictureUrl {
+                                    AsyncImage(url: profileUrl) { image in
+                                        image.resizable()
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 32, height: 32)
+                                    .clipShape(Circle())
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .frame(width: 32, height: 32)
+                                        .clipShape(Circle())
+                                }
+                                Text(member.name)
+                            }
+                            
                         }
                     }
                     
-                    Section("Invited Members") {
-                        ForEach(group.invitedMembers) { member in
-                            Text(member.name)
+                    if group.invitedMembers.count > 0 {
+                        Section("Invited Members") {
+                            ForEach(group.invitedMembers) { member in
+                                Text(member.name)
+                            }
                         }
                     }
                     
-                    Button {
-                        
-                    } label: {
-                        Text("Invite Member")
+                    HStack {
+                        Spacer()
+                        Button {
+                            openAlert = true
+                        } label: {
+                            Text("Invite Member")
+                        }
+                        Spacer()
                     }
                 }
             } else {
+                Text(viewModel.group?.name ?? "no group")
                 ProgressView()
             }
         }
@@ -66,7 +101,39 @@ struct GroupEditPageView: View {
                 }
             }
         }
+        .alert(
+            Text("Invite Member"),
+            isPresented: $openAlert,
+            actions: {
+                TextField(
+                    "Email",
+                    text: $inviteUserEmail
+                )
+                Button("Invite") {
+                    Task {
+                        let response = await viewModel.inviteUserByEmail(email: inviteUserEmail)
+                        inviteUserResponse = response
+                        openInviteResponse = true
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            },
+            message: {
+                Text("Please type email of user to invite")
+            }
+        )
+        .alert(
+            Text("Invite Member"),
+            isPresented: $openInviteResponse,
+            actions: {
+                Button("Ok") {}
+            },
+            message: {
+                Text(inviteUserResponse)
+            }
+        )
         .onAppear() {
+            print("on appaer")
             if let id = groupId {
                 viewModel.fetchData(groupId: id)
             } else {

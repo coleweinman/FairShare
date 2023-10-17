@@ -192,11 +192,11 @@
 		8C3468732ADA000900E0C7B3 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				8C3468742ADA001900E0C7B3 /* UserViewModel.swift */,
 				8C34687C2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift */,
 				8C34687E2ADA534800E0C7B3 /* ExpenseListViewModel.swift */,
 				8C3468872ADCA92700E0C7B3 /* AuthenticationViewModel.swift */,
 				8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */,
+				8C3468742ADA001900E0C7B3 /* UserViewModel.swift */,
 				8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */,
 				ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */,
 			);
