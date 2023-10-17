@@ -29,10 +29,10 @@ struct MainTabView: View {
                 .navigationTitle(selection.config.title)
                 .toolbarBackground(.visible, for: .navigationBar)
                 .toolbar {
-                    if let createView = selection.config.createView {
+                    if let createView = selection.config.createView, let createViewTitle = selection.config.createViewTitle {
                         ToolbarItem(placement: .primaryAction) {
                             NavigationLink {
-                                createView
+                                createView.navigationTitle(createViewTitle).toolbarBackground(.visible, for: .navigationBar)
                             } label: {
                                 Image(systemName: "plus")
                             }
@@ -94,13 +94,16 @@ enum Tab: Int, CaseIterable {
                 title: "Expenses",
                 image: "scroll",
                 content: AnyView(ContentView()),
-                createView: AnyView(ContentView())
+                createView: AnyView(ExpenseCreationView()),
+                createViewTitle: "Create Expense"
             )
         case .payments:
             return TabConfiguation(
                 title: "Payments",
                 image: "creditcard",
-                content: AnyView(ContentView())
+                content: AnyView(ContentView()),
+                createView: AnyView(PaymentCreationView()),
+                createViewTitle: "Create Payment"
             )
         case .lists:
             return TabConfiguation(
@@ -123,12 +126,14 @@ class TabConfiguation {
     var image: String
     var content: AnyView
     var createView: AnyView?
+    var createViewTitle: String?
     
-    init(title: String, image: String, content: AnyView, createView: AnyView? = nil) {
+    init(title: String, image: String, content: AnyView, createView: AnyView? = nil, createViewTitle: String? = "") {
         self.title = title
         self.image = image
         self.content = content
         self.createView = createView
+        self.createViewTitle = createViewTitle
     }
 }
 

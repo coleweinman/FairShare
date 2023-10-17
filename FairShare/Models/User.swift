@@ -25,7 +25,7 @@ struct UserAmount: Codable, Identifiable {
     var amount: Decimal
 }
 
-struct BasicUser: Codable, Identifiable {
+struct BasicUser: Codable, Hashable, Identifiable {
     var id: String
     var name: String
     var profilePictureUrl: URL?
