@@ -18,4 +18,16 @@ struct Expense: Codable, Identifiable {
     var paidByDetails: [UserAmount]
     var liabilityDetails: [UserAmount]
     var involvedUserIds: [String]
+    
+    func profilePictures() -> [URL?] {
+        var pictures = Set<URL?>()
+        liabilityDetails.forEach { liability in
+            pictures.insert(liability.profilePictureUrl)
+        }
+        paidByDetails.forEach { paidBy in
+            pictures.insert(paidBy.profilePictureUrl)
+        }
+        return Array(pictures)
+//        return [URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!, URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!, URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!]
+    }
 }

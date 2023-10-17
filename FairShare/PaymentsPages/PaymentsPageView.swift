@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PaymentsPageView: View {
-    @ObservedObject private var userViewModel: UserViewModel = UserViewModel()
+    @StateObject private var userViewModel: UserViewModel = UserViewModel()
     @State private var searchText: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
@@ -86,7 +86,7 @@ struct PaymentsPageView: View {
                                 title: "Payment from \(payment.from.name)",
                                 date: payment.date,
                                 amount: "+ $\(String(describing: payment.amount))",
-                                pfps: ["Weinman"],
+                                pfps: [payment.from.profilePictureUrl!],
                                 backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
                                 cornerRadius: 8)
                         }

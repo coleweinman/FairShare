@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ExpensesPageView: View {
-    @ObservedObject private var expenseViewModel = ExpenseListViewModel()
+    @EnvironmentObject var userViewModel: UserViewModel
+    @StateObject private var expenseViewModel = ExpenseListViewModel()
     @State private var searchText: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
@@ -54,55 +55,33 @@ struct ExpensesPageView: View {
                         .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
-                    VStack {
-//                        ForEach(expenseViewModel.expenses) { expense in
-//                            TableCellItemView(
-//                                title: expense.title,
-//                                date: expense.date,
-//                                amount: "$\(String(describing: expense.totalAmount))",
-//                                pfps: tanked,
-//                                backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-//                                cornerRadius: 8)
-//                        }
-                        TableCellItemView(
-                            title: "Dinner at Roadhouse",
-                            date: Date(),
-                            amount: "$\(String(describing: 105.39))",
-                            pfps: ["Weinman", "Weinman", "Weinman", "Weinman"],
-                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                            cornerRadius: 8)
-                        TableCellItemView(
-                            title: "Dinner at North Italia",
-                            date: Date(),
-                            amount: "$\(String(describing: 217.11))",
-                            pfps: ["Weinman", "Weinman", "Weinman"],
-                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                            cornerRadius: 8)
-                        TableCellItemView(
-                            title: "August Utilities",
-                            date: Date(),
-                            amount: "$\(String(describing: 72.24))",
-                            pfps: ["Weinman", "Weinman", "Weinman", "Weinman"],
-                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                            cornerRadius: 8)
-                        TableCellItemView(
-                            title: "Tubing at San Marcos",
-                            date: Date(),
-                            amount: "$\(String(describing: 32.99))",
-                            pfps: ["Weinman", "Weinman"],
-                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                            cornerRadius: 8)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(cardPadding)
-                    .background(cardBackgroundColor)
-                    .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
-                    .onAppear() {
-                        expenseViewModel.fetchData(uid: "5xuwvjBzryoJsQ3VGLIX")
+                    if let expenses = expenseViewModel.expenses {
+                        VStack {
+                            ForEach(expenses) { expense in
+                                TableCellItemView(
+                                    title: expense.title,
+                                    date: expense.date,
+                                    amount: "$\(String(describing: expense.totalAmount))",
+                                    pfps: expense.profilePictures(),
+                                    backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
+                                    cornerRadius: 8)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(cardPadding)
+                        .background(cardBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
+                    } else {
+                        ProgressView()
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .scenePadding()
+                .onAppear() {
+                    if let user = userViewModel.user {
+                        expenseViewModel.fetchData(uid: user.id!)
+                    }
+                }
             }
         }
     }

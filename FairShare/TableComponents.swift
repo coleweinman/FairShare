@@ -23,33 +23,45 @@ struct LargePFP: View {
 }
 
 struct SmallPFP: View {
-    var image: String
+    var image: URL?
     
     var imageSize: CGFloat = 40
     
     var body: some View {
-        Image(image)
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: imageSize, height: imageSize)
-            .clipShape(Circle())
+        if let profileUrl = image {
+            AsyncImage(url: profileUrl) { imageThing in
+                imageThing
+                    .resizable()
+            } placeholder: {
+                ProgressView()
+            }
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
+        } else {
+            Image(systemName: "person.fill")
+                .resizable()
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
+        }
     }
 }
 
 struct TableCellItemView: View {
     var title: String
-    var date: Date
+    var date: Date?
     var amount: String
-    var pfps: [String]
+    var pfps: [URL?]
     var backgroundColor: Color
     var cornerRadius: CGFloat
     
     var dateFormat: String = "MM / dd / yy"
     var formattedDate: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        return dateFormatter.string(from: date)
+        if let strongDate = date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = dateFormat
+            return dateFormatter.string(from: strongDate)
+        }
+        return ""
     }
     
     var titleFontSize: CGFloat = 16
@@ -60,24 +72,37 @@ struct TableCellItemView: View {
     var shadowRadius: CGFloat = 3
     var shadowOffset: CGFloat = 2
     
+    var trailingButtonText: String?
+    var trailingButtonAction: (() -> Void)?
+    
     var body: some View {
-        VStack {
-            HStack {
-                Text(title)
-                    .font(.system(size: titleFontSize, weight: .medium))
-                Spacer()
-                Text(String(describing: amount))
-                    .font(.system(size: amountFontSize, weight: .medium))
-            }
-            HStack(alignment: .top) {
-                Text(formattedDate)
-                    .font(.system(size: dateFontSize, weight: .regular))
-                Spacer()
+        HStack {
+            VStack {
                 HStack {
-                    ForEach(pfps, id: \.self) { pfp in
-                        SmallPFP(image: pfp)
+                    Text(title)
+                        .font(.system(size: titleFontSize, weight: .medium))
+                    Spacer()
+                    Text(String(describing: amount))
+                        .font(.system(size: amountFontSize, weight: .medium))
+                }
+                HStack(alignment: .top) {
+                    if formattedDate != "" {
+                        Text(formattedDate)
+                            .font(.system(size: dateFontSize, weight: .regular))
+                    }
+                    Spacer()
+                    HStack {
+                        ForEach(pfps, id: \.self) { pfp in
+                            SmallPFP(image: pfp)
+                        }
                     }
                 }
+            }
+            if let buttonText = trailingButtonText,
+               let buttonAction = trailingButtonAction
+            {
+                Button(buttonText, action: buttonAction)
+                    .buttonStyle(.bordered)
             }
         }
         .frame(maxWidth: .infinity)

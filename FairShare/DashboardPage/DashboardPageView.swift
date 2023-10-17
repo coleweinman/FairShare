@@ -45,14 +45,14 @@ struct DashboardPageView: View {
                             title: "Dinner at Roadhouse",
                             date: Date(),
                             amount: "$\(String(describing: 105.39))",
-                            pfps: ["Weinman", "Weinman", "Weinman", "Weinman"],
+                            pfps: [],
                             backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
                             cornerRadius: 8)
                         TableCellItemView(
                             title: "Dinner at North Italia",
                             date: Date(),
                             amount: "$\(String(describing: 217.11))",
-                            pfps: ["Weinman", "Weinman", "Weinman"],
+                            pfps: [],
                             backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
                             cornerRadius: 8)
                     }
@@ -68,7 +68,7 @@ struct DashboardPageView: View {
                                 title: "Payment from \(payment.from.name)",
                                 date: payment.date,
                                 amount: "+ $\(String(describing: payment.amount))",
-                                pfps: ["Weinman"],
+                                pfps: [],
                                 backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
                                 cornerRadius: 8)
                         }

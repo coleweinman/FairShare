@@ -27,10 +27,8 @@ struct GroupPageView: View {
                                 } label: {
                                     TableCellItemView(
                                         title: group.name,
-                                        date: Date(),
                                         amount: "",
-        //                                pfps: group.members.map {m in m.profilePictureUrl},
-                                        pfps: [],
+                                        pfps: group.members.map {m in m.profilePictureUrl},
                                         backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
                                         cornerRadius: 8
                                     )
@@ -39,18 +37,17 @@ struct GroupPageView: View {
                             } else {
                                 TableCellItemView(
                                     title: group.name,
-                                    date: Date(),
                                     amount: "",
-    //                                pfps: group.members.map {m in m.profilePictureUrl},
-                                    pfps: [],
+                                    pfps: group.members.map {m in m.profilePictureUrl},
                                     backgroundColor: Color(red: 255/256, green: 240/256, blue: 205/256),
-                                    cornerRadius: 8
+                                    cornerRadius: 8,
+                                    trailingButtonText: "Accept Invite",
+                                    trailingButtonAction: {
+                                        let result = viewModel.acceptInvitation(groupId: group.id!, userId: user.id!)
+                                        acceptAlertOpen = true
+                                        acceptInvitationText = result
+                                    }
                                 )
-                                .onTapGesture {
-                                    let result = viewModel.acceptInvitation(groupId: group.id!, userId: user.id!)
-                                    acceptAlertOpen = true
-                                    acceptInvitationText = result
-                                }
                             }
                         }
                     }.padding()
