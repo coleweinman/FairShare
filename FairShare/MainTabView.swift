@@ -10,6 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     @State var selection = Tab.dashboard
     @StateObject var viewModel = UserViewModel()
+    @StateObject var balanceDataViewModel = BalanceDataViewModel()
     @StateObject var groupListViewModel: GroupListViewModel = GroupListViewModel()
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
@@ -67,10 +68,13 @@ struct MainTabView: View {
         .onAppear() {
             if let uid = authViewModel.user?.uid {
                 viewModel.fetchData(uid: uid)
+                balanceDataViewModel.fetchData(uid: uid)
                 groupListViewModel.fetchData(uid: uid)
             }
         }
-        .environmentObject(viewModel).environmentObject(groupListViewModel)
+        .environmentObject(viewModel)
+        .environmentObject(groupListViewModel)
+        .environmentObject(balanceDataViewModel)
     }
 }
 

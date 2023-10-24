@@ -38,6 +38,8 @@
 		8C34688F2ADCD6D900E0C7B3 /* GroupListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */; };
 		8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */; };
 		8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */; };
+		8C43AECB2AE834A400A37151 /* BalanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AECA2AE834A400A37151 /* BalanceData.swift */; };
+		8C43AECD2AE864DD00A37151 /* BalanceDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */; };
 		ECA9044F2ADE4D120055A608 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */; };
 		ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */; };
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
@@ -74,6 +76,8 @@
 		8C34688E2ADCD6D900E0C7B3 /* GroupListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupListViewModel.swift; sourceTree = "<group>"; };
 		8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditPageView.swift; sourceTree = "<group>"; };
+		8C43AECA2AE834A400A37151 /* BalanceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceData.swift; sourceTree = "<group>"; };
+		8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDataViewModel.swift; sourceTree = "<group>"; };
 		ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
 		ECA904562ADE50020055A608 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 				8C34686A2AD9ED2700E0C7B3 /* Expense.swift */,
 				8C34686C2AD9F10300E0C7B3 /* Payment.swift */,
 				8C34686E2AD9F27100E0C7B3 /* Group.swift */,
+				8C43AECA2AE834A400A37151 /* BalanceData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 				8C3468742ADA001900E0C7B3 /* UserViewModel.swift */,
 				8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */,
 				ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */,
+				8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -328,11 +334,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C34686F2AD9F27100E0C7B3 /* Group.swift in Sources */,
+				8C43AECD2AE864DD00A37151 /* BalanceDataViewModel.swift in Sources */,
 				8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */,
 				ECA9045B2ADE517C0055A608 /* ExpenseCreationView.swift in Sources */,
 				8C3468882ADCA92700E0C7B3 /* AuthenticationViewModel.swift in Sources */,
 				ECA904572ADE50020055A608 /* TestData.swift in Sources */,
 				8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */,
+				8C43AECB2AE834A400A37151 /* BalanceData.swift in Sources */,
 				848DBDA72ADE8E45008DC4F3 /* TableComponents.swift in Sources */,
 				8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */,
 				8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */,

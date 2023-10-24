@@ -14,7 +14,7 @@ struct Payment: Codable, Identifiable {
     var date: Date
     var amount: Decimal
     var attachmentObjectIds: [String]
-    var to: UserAmount
-    var from: UserAmount
+    var to: BasicUser
+    var from: BasicUser
     var involvedUserIds: [String]
 }
