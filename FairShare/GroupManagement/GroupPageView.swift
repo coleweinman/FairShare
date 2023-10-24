@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroupPageView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @ObservedObject var viewModel: GroupListViewModel = GroupListViewModel()
+    @EnvironmentObject var viewModel: GroupListViewModel
     @State var acceptAlertOpen = false
     @State var acceptInvitationText = ""
     
