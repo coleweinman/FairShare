@@ -40,6 +40,9 @@
 		8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */; };
 		8C43AECB2AE834A400A37151 /* BalanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AECA2AE834A400A37151 /* BalanceData.swift */; };
 		8C43AECD2AE864DD00A37151 /* BalanceDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */; };
+		8C43AED12AE86BB700A37151 /* ShoppingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AED02AE86BB700A37151 /* ShoppingList.swift */; };
+		8C43AED52AE870F100A37151 /* ShoppingListListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AED42AE870F100A37151 /* ShoppingListListViewModel.swift */; };
+		8C43AED72AE8735C00A37151 /* ShoppingListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C43AED62AE8735C00A37151 /* ShoppingListViewModel.swift */; };
 		ECA9044F2ADE4D120055A608 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */; };
 		ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */; };
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
@@ -78,6 +81,9 @@
 		8C3468922ADD9EC800E0C7B3 /* GroupEditPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditPageView.swift; sourceTree = "<group>"; };
 		8C43AECA2AE834A400A37151 /* BalanceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceData.swift; sourceTree = "<group>"; };
 		8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDataViewModel.swift; sourceTree = "<group>"; };
+		8C43AED02AE86BB700A37151 /* ShoppingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList.swift; sourceTree = "<group>"; };
+		8C43AED42AE870F100A37151 /* ShoppingListListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListListViewModel.swift; sourceTree = "<group>"; };
+		8C43AED62AE8735C00A37151 /* ShoppingListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListViewModel.swift; sourceTree = "<group>"; };
 		ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
 		ECA904562ADE50020055A608 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
@@ -190,6 +196,7 @@
 				8C34686C2AD9F10300E0C7B3 /* Payment.swift */,
 				8C34686E2AD9F27100E0C7B3 /* Group.swift */,
 				8C43AECA2AE834A400A37151 /* BalanceData.swift */,
+				8C43AED02AE86BB700A37151 /* ShoppingList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -205,6 +212,8 @@
 				8C3468902ADD9E8A00E0C7B3 /* GroupViewModel.swift */,
 				ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */,
 				8C43AECC2AE864DD00A37151 /* BalanceDataViewModel.swift */,
+				8C43AED42AE870F100A37151 /* ShoppingListListViewModel.swift */,
+				8C43AED62AE8735C00A37151 /* ShoppingListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -349,7 +358,9 @@
 				8C3468612AD5FB3D00E0C7B3 /* SettingsPageView.swift in Sources */,
 				848DBDA32ADE8DFF008DC4F3 /* PaymentsPageView.swift in Sources */,
 				848DBDA52ADE8E2A008DC4F3 /* ExpensesPageView.swift in Sources */,
+				8C43AED72AE8735C00A37151 /* ShoppingListViewModel.swift in Sources */,
 				8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */,
+				8C43AED12AE86BB700A37151 /* ShoppingList.swift in Sources */,
 				8C34688F2ADCD6D900E0C7B3 /* GroupListViewModel.swift in Sources */,
 				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
 				8C34688A2ADCC45200E0C7B3 /* SignUpPageView.swift in Sources */,
@@ -361,6 +372,7 @@
 				ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */,
 				8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */,
 				8C34686B2AD9ED2700E0C7B3 /* Expense.swift in Sources */,
+				8C43AED52AE870F100A37151 /* ShoppingListListViewModel.swift in Sources */,
 				8C34688D2ADCCDC700E0C7B3 /* GroupPageView.swift in Sources */,
 				8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */,
 				8C3468572AD5A2CD00E0C7B3 /* MainTabView.swift in Sources */,
