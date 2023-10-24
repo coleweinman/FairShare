@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ExpensesPageView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject private var expenseViewModel = ExpenseListViewModel()
+    @StateObject private var expenseListViewModel = ExpenseListViewModel()
     @State private var searchText: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
@@ -55,7 +55,7 @@ struct ExpensesPageView: View {
                         .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
-                    if let expenses = expenseViewModel.expenses {
+                    if let expenses = expenseListViewModel.expenses {
                         VStack {
                             ForEach(expenses) { expense in
                                 TableCellItemView(
@@ -64,7 +64,8 @@ struct ExpensesPageView: View {
                                     amount: "$\(String(describing: expense.totalAmount))",
                                     pfps: expense.profilePictures(),
                                     backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                                    cornerRadius: 8)
+                                    cornerRadius: 8
+                                )
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -79,7 +80,7 @@ struct ExpensesPageView: View {
                 .scenePadding()
                 .onAppear() {
                     if let user = userViewModel.user {
-                        expenseViewModel.fetchData(uid: user.id!)
+                        expenseListViewModel.fetchData(uid: user.id!)
                     }
                 }
             }

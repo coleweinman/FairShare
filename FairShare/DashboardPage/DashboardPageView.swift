@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct DashboardPageView: View {
-    
-    var payments: [Payment] = [
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"])
-    ]
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @StateObject private var paymentListViewModel = PaymentListViewModel()
+//
+//    var payments: [Payment] = [
+//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
+//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
+//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"])
+//    ]
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -62,21 +64,24 @@ struct DashboardPageView: View {
                     .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
                     Text("Recent Payments")
                         .font(.system(size: 16, weight: .semibold))
-                    VStack {
-                        ForEach(payments) { payment in
-                            TableCellItemView(
-                                title: "Payment from \(payment.from.name)",
-                                date: payment.date,
-                                amount: "+ $\(String(describing: payment.amount))",
-                                pfps: [],
-                                backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
-                                cornerRadius: 8)
+                    
+                    if let payments = paymentListViewModel.payments {
+                        VStack {
+                            ForEach(payments) { payment in
+                                TableCellItemView(
+                                    title: "Payment from \(payment.from.name)",
+                                    date: payment.date,
+                                    amount: "+ $\(String(describing: payment.amount))",
+                                    pfps: [],
+                                    backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
+                                    cornerRadius: 8)
+                            }
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding(cardPadding)
+                        .background(cardBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(cardPadding)
-                    .background(cardBackgroundColor)
-                    .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
                 }
                 .frame(maxWidth: .infinity)
                 .scenePadding()

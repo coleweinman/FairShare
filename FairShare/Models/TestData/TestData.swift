@@ -30,8 +30,8 @@ var pendingMembers: [BasicUser] = [
 ]
 
 // For payments
-let testUserAmount = UserAmount(id: "12345", name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!, amount: 12.99)
-let testUserAmount2 = UserAmount(id: "54321", name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/fairshare-project.appspot.com/o/profilePictures%2FwQYRiaB1rTeXt6War1AVz87ZXnb2.jpg?alt=media&token=8f3ff497-a7f4-4df7-bc45-a1eb4f8c0be9")!, amount: 12.99)
+let testUserAmount = BasicUser(id: "12345", name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!)
+let testUserAmount2 = BasicUser(id: "54321", name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com:443/v0/b/fairshare-project.appspot.com/o/profilePictures%2FwQYRiaB1rTeXt6War1AVz87ZXnb2.jpg?alt=media&token=8f3ff497-a7f4-4df7-bc45-a1eb4f8c0be9")!)
 
 let testGroup = Group(name: "Roomies", members: userList, invitedMembers: pendingMembers, involvedUserIds: userList.map {$0.id})
 
