@@ -49,6 +49,7 @@
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
 		ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904582ADE51640055A608 /* PaymentCreationView.swift */; };
 		ECA9045B2ADE517C0055A608 /* ExpenseCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */; };
+		ECEEF2E52AE5F2AD0022D2D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		ECA904562ADE50020055A608 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		ECA904582ADE51640055A608 /* PaymentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCreationView.swift; sourceTree = "<group>"; };
 		ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseCreationView.swift; sourceTree = "<group>"; };
+		ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,9 +129,9 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */,
 				ECA904542ADE4F8E0055A608 /* PaymentsPages */,
 				ECA904532ADE4F840055A608 /* ExpensesPages */,
-				ECA9044E2ADE4D120055A608 /* GoogleService-Info.plist */,
 				8C34688B2ADCCCB800E0C7B3 /* GroupManagement */,
 				8C3468822ADC813300E0C7B3 /* Login */,
 				8C3468732ADA000900E0C7B3 /* ViewModels */,
@@ -334,7 +336,7 @@
 			files = (
 				8C3468212ACF0BB100E0C7B3 /* Preview Assets.xcassets in Resources */,
 				8C34681E2ACF0BB100E0C7B3 /* Assets.xcassets in Resources */,
-				ECA9044F2ADE4D120055A608 /* GoogleService-Info.plist in Resources */,
+				ECEEF2E52AE5F2AD0022D2D1 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

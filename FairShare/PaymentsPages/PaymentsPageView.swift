@@ -18,6 +18,62 @@ struct PaymentsPageView: View {
     var cardPadding: CGFloat = 16
     var headerFontSize: CGFloat = 18
     
+    var payments: [Payment] = [
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: BasicUser(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            from: BasicUser(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            involvedUserIds: ["1", "2"]
+        ),
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: BasicUser(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            from: BasicUser(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            involvedUserIds: ["1", "2"]
+        ),
+        Payment(
+            id: "1",
+            description: "description",
+            date: Date(),
+            amount: Decimal(54.28),
+            attachmentObjectIds: [],
+            to: BasicUser(
+                id: "1",
+                name: "Cole",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            from: BasicUser(
+                id: "2",
+                name: "Andrew",
+                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
+            ),
+            involvedUserIds: ["1", "2"]
+        )
+    ]
     var body: some View {
         ScrollView {
             ZStack {

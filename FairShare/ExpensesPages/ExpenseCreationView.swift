@@ -25,9 +25,17 @@ var involvedUserIds: [String]?
 // View for expense creation page with all view elements
 struct ExpenseCreationView: View {
     // View model to access db and upload new expenses
-    @ObservedObject var viewModel: ExpenseViewModel = ExpenseViewModel()
+    @ObservedObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     
-    // ToDo
+    // ToDo: View model to access DB, available groups
+    // @EnvironmentObject var groupViewModel: GroupViewModel
+    
+    // View Model to access current user logged in
+    @EnvironmentObject var userViewModel: UserViewModel
+    
+    // ToDo: View model to access DB, available groups
+    @EnvironmentObject var groupListViewModel: GroupListViewModel
+    
     @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
     
     // State atttributes to store user inputs
@@ -38,8 +46,9 @@ struct ExpenseCreationView: View {
     @State var expenseTitle: String = ""
     @State var showAlert = false
     @State var alertMessage: String = ""
-    @State var groupName: String = ""
-    @State var groupMembers: [BasicUser] = testGroup2.members
+    @State var groupId: String = ""
+    // TODO: Set groupMembers based on group selection
+    @State var groupMembers: [BasicUser] = []//  = testGroup2.members
     
     var body: some View {
         ScrollView {
@@ -50,12 +59,24 @@ struct ExpenseCreationView: View {
                 ExpenseTitle(title: $expenseTitle)
                 // Date
                 DateSelector(selectedDate: $expenseDate)
-                // Group: TODO add to expense struct
-                GroupSelect(groups: [testGroup, testGroup2], selectedItem: $groupName)
+                // Pull choice of groups for logged in user
+                if let groups = groupListViewModel.groups {
+                    GroupSelect(groups: groups, selectedItem: $groupId, members: $groupMembers)
+                } else {
+                    GroupSelect(groups: [], selectedItem: $groupId, members: $groupMembers)
+                }
                 // Payer
-                SingleDropdown(labelName: "Paid By", groupMembers: testGroup.members, selectedItem: $expensePayerName)
+                // TODO: Use selected group
                 // Involved members
-                MultiSelectNav(options: testGroup.members, selections: $groupMembers).padding(.top, 15)
+                // TODO: fix to use selected group
+                // let _ = groupViewModel.fetchData(groupId: groupId)
+                if let group = groupViewModel.group {
+                    SingleDropdown(labelName: "Paid By", groupMembers: group.members, selectedItem: $expensePayerName)
+                    MultiSelectNav(options: group.members, selections: $groupMembers).padding(.top, 15)
+                } else {
+                    SingleDropdown(labelName: "Paid By", groupMembers: groupMembers, selectedItem: $expensePayerName)
+                    MultiSelectNav(options: groupMembers, selections: $groupMembers).padding(.top, 15)
+                }
                 Divider()
                 // Comments
                 CommentBox(comment: $expenseComment)
@@ -78,8 +99,8 @@ struct ExpenseCreationView: View {
         if (expenseAmount != "" && expenseTitle != "" && expensePayerName != "") {
             if let amount = Decimal(string: expenseAmount) {
                 let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expenseDate, totalAmount: amount, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: groupMembers.map{$0.id})
-                viewModel.expense = newExpense
-                let saveSuccess = viewModel.save()
+                expenseViewModel.expense = newExpense
+                let saveSuccess = expenseViewModel.save()
                 if (saveSuccess) {
                     // Successfully saved to DB
                     alertMessage = "Successfully saved expense"
@@ -116,18 +137,32 @@ struct ExpenseTitle: View {
 
 // Picker to select group for expense
 struct GroupSelect: View {
+    @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
+    //@EnvironmentObject var groupViewModel: GroupViewModel
     
     var groups: [Group]
     @Binding var selectedItem: String
+    @State var groupId: String?
+    @Binding var members: [BasicUser]
     
     var body: some View {
+        let groupNames = groups.map { $0.name }
         HStack(alignment: .center) {
             Text("Group").padding(.leading, 20)
             Spacer()
             Picker("Select", selection: $selectedItem) {
-                ForEach(groups, id: \.self) {
-                    Text($0.name)
+                ForEach(groupNames, id: \.self) {
+                    Text($0)
                 }
+            }.onReceive([self.selectedItem].publisher.first()) { value in
+                for group in groups {
+                    if (group.name == value) {
+                        groupViewModel.fetchData(groupId: selectedItem)
+                        groupId = group.id
+                        members = group.members
+                    }
+                }
+                
             }
         }.scenePadding(.all)
     }
@@ -139,6 +174,7 @@ struct SingleDropdown: View {
     // Parameters: Label for dropdown and list of options
     let labelName: String
     var groupMembers: [BasicUser]
+    @EnvironmentObject var userViewModel: UserViewModel
     
     @Binding var selectedItem: String
     
@@ -151,7 +187,7 @@ struct SingleDropdown: View {
                     Text(labelName)
                     Button("Set as Self") {
                         // ToDo: Change to use actual name of current user
-                        selectedItem = "currUser"
+                        selectedItem = userViewModel.user!.name
                     }.foregroundColor(clickableTextColor).font(.footnote)
                     // Add HStack with profile picture and name
                 }.scenePadding(.all)
@@ -173,7 +209,7 @@ struct SingleDropdown: View {
 // Profile picture + name
 struct ProfileCircleImage: View {
     
-    @EnvironmentObject var currUserViewModel: UserViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     
     var userName: String
     var body: some View {
@@ -193,8 +229,8 @@ struct ProfileCircleImage: View {
     // If select 'set as self', set to current user logged in
     // Otherwise, hard code to testUser
     func setUser() -> BasicUser {
-        if (userName == "currUser") {
-            return BasicUser(id: currUserViewModel.user!.id!, name: currUserViewModel.user!.name, profilePictureUrl: currUserViewModel.user!.profilePictureUrl)
+        if (userName == userViewModel.user!.name) {
+            return BasicUser(id: userViewModel.user!.id!, name: userViewModel.user!.name, profilePictureUrl: userViewModel.user!.profilePictureUrl)
         } else {
             return testUser
         }

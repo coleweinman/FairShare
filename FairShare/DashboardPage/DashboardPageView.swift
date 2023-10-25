@@ -10,12 +10,12 @@ import SwiftUI
 struct DashboardPageView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     @StateObject private var paymentListViewModel = PaymentListViewModel()
-//
-//    var payments: [Payment] = [
-//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"]),
-//        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: UserAmount(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), from: UserAmount(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media"), amount: Decimal(50.0)), involvedUserIds: ["1", "2"])
-//    ]
+    
+    var payments: [Payment] = [
+        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: BasicUser(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), from: BasicUser(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), involvedUserIds: ["1", "2"]),
+        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: BasicUser(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), from: BasicUser(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), involvedUserIds: ["1", "2"]),
+        Payment(id: "1", description: "description", date: Date(), amount: Decimal(54.28), attachmentObjectIds: [], to: BasicUser(id: "1",name: "Cole", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), from: BasicUser(id: "2",name: "Andrew", profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")), involvedUserIds: ["1", "2"])
+    ]
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)

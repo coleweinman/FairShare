@@ -12,16 +12,22 @@ struct PaymentCreationView: View {
     // View model to upload pament
     @ObservedObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
+    @EnvironmentObject var groupListViewModel: GroupListViewModel
+    
+    
     // Attributes of payment for user input
     @State var paymentAmount: String = ""
     @State var paymentDate: Date = Date()
     @State var paymentFrom: String = ""
+    @State var sender: BasicUser?
     @State var paymentTo: String = ""
+    @State var receiver: BasicUser?
     @State var paymentComment: String = ""
-    @State var paymentTItle: String = ""
+    @State var paymentTitle: String = ""
     
     @State var sendAlert = false
     @State var alertMessage = ""
+    @State var allMembers: [BasicUser] = []
 
     var body: some View {
         ScrollView {
@@ -32,14 +38,28 @@ struct PaymentCreationView: View {
                 // Date
                 DateSelector(selectedDate: $paymentDate)
                 // Sender
-                SingleDropdown(labelName: "Payment From", groupMembers: userList, selectedItem: $paymentFrom)
+                SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
                 // Receiver
-                SingleDropdown(labelName: "Payment To", groupMembers: userList, selectedItem: $paymentTo)
+                SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
                 // Comments
                 CommentBox(comment: $paymentComment)
                 ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
                 ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
                     Button("OK", role: .cancel) { }
+                }
+            }.onAppear() {
+                self.setAllMembers()
+            }
+        }
+    }
+    
+    func setAllMembers() {
+        if let groups = groupListViewModel.groups {
+            for group in groups {
+                for user in group.members {
+                    if (!allMembers.contains(user)) {
+                        allMembers.append(user)
+                    }
                 }
             }
         }
@@ -54,10 +74,16 @@ struct PaymentCreationView: View {
         if (paymentAmount != "" && paymentFrom != "" && paymentTo != "") {
             if let amount = Decimal(string: paymentAmount) {
                 // Set payment title
-                let sender = testUserAmount
-                let receiver = testUserAmount2
-                let involvedUsers = [sender.id, receiver.id]
-                let newPayment = Payment(description: paymentComment, date: paymentDate, amount: amount, attachmentObjectIds: [], to: receiver, from: sender, involvedUserIds: involvedUsers)
+                for user in allMembers {
+                    if (user.name == paymentFrom) {
+                        sender = user
+                    }
+                    if (user.name == paymentTo) {
+                        receiver = user
+                    }
+                }
+                let involvedUsers = [sender?.id, receiver?.id]
+                let newPayment = Payment(description: paymentComment, date: paymentDate, amount: amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
                 paymentViewModel.payment = newPayment
                 let success = paymentViewModel.save()
                 if (success) {
