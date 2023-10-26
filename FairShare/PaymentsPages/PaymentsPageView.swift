@@ -10,6 +10,7 @@ import SwiftUI
 struct PaymentsPageView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     @StateObject private var paymentListViewModel = PaymentListViewModel()
+    @StateObject private var balanceDataViewModel = BalanceDataViewModel()
     @State private var searchText: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
@@ -18,62 +19,6 @@ struct PaymentsPageView: View {
     var cardPadding: CGFloat = 16
     var headerFontSize: CGFloat = 18
     
-    var payments: [Payment] = [
-        Payment(
-            id: "1",
-            description: "description",
-            date: Date(),
-            amount: Decimal(54.28),
-            attachmentObjectIds: [],
-            to: BasicUser(
-                id: "1",
-                name: "Cole",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            from: BasicUser(
-                id: "2",
-                name: "Andrew",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            involvedUserIds: ["1", "2"]
-        ),
-        Payment(
-            id: "1",
-            description: "description",
-            date: Date(),
-            amount: Decimal(54.28),
-            attachmentObjectIds: [],
-            to: BasicUser(
-                id: "1",
-                name: "Cole",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            from: BasicUser(
-                id: "2",
-                name: "Andrew",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            involvedUserIds: ["1", "2"]
-        ),
-        Payment(
-            id: "1",
-            description: "description",
-            date: Date(),
-            amount: Decimal(54.28),
-            attachmentObjectIds: [],
-            to: BasicUser(
-                id: "1",
-                name: "Cole",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            from: BasicUser(
-                id: "2",
-                name: "Andrew",
-                profilePictureUrl: URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")
-            ),
-            involvedUserIds: ["1", "2"]
-        )
-    ]
     var body: some View {
         ScrollView {
             ZStack {
@@ -83,21 +28,22 @@ struct PaymentsPageView: View {
                 VStack(spacing: 16) {
                     Text("Net Balance")
                         .font(.system(size: headerFontSize, weight: .semibold))
-                    VStack {
-                        if let user = userViewModel.user {
-                            NetBalanceView(pfp: "Weinman", name: user.name, amount: "+ $32.15")
-                            NetBalanceView(pfp: "Weinman", name: user.name, amount: "+ $32.15")
-                            NetBalanceView(pfp: "Weinman", name: user.name, amount: "+ $32.15")
-                        } else {
-                            Text("tanked")
+                    if let netBalances = balanceDataViewModel.balanceData?.netBalances {
+                        VStack {
+                            ForEach(Array(netBalances.keys), id: \.self) { key in
+                                NetBalanceView(
+                                    pfp: String(describing: netBalances[key]?.profilePictureUrl?.absoluteString),
+                                    name: String(describing: netBalances[key]?.name),
+                                    amount: String(describing: netBalances[key]?.amount)
+                                )
+                            }
                         }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(cardPadding)
-                    .background(cardBackgroundColor)
-                    .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
-                    .onAppear() {
-                        userViewModel.fetchData(uid: "5xuwvjBzryoJsQ3VGLIX")
+                        .frame(maxWidth: .infinity)
+                        .padding(cardPadding)
+                        .background(cardBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
+                    } else {
+                        ProgressView()
                     }
                     HStack(spacing: 12) {
                         Button(action: {
@@ -155,6 +101,7 @@ struct PaymentsPageView: View {
                 .onAppear() {
                     if let user = userViewModel.user {
                         paymentListViewModel.fetchData(uid: user.id!)
+                        balanceDataViewModel.fetchData(uid: user.id!)
                     }
                 }
             }
