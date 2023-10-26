@@ -31,11 +31,13 @@ struct PaymentsPageView: View {
                     if let netBalances = balanceDataViewModel.balanceData?.netBalances {
                         VStack {
                             ForEach(Array(netBalances.keys), id: \.self) { key in
-                                NetBalanceView(
-                                    pfp: String(describing: netBalances[key]?.profilePictureUrl?.absoluteString),
-                                    name: String(describing: netBalances[key]?.name),
-                                    amount: String(describing: netBalances[key]?.amount)
-                                )
+                                if let pfp = netBalances[key]?.profilePictureUrl?.absoluteString, let name = netBalances[key]?.name, let amount = netBalances[key]?.amount {
+                                    NetBalanceView(
+                                        pfp: pfp,
+                                        name: name,
+                                        amount: String(describing: amount)
+                                    )
+                                }
                             }
                         }
                         .frame(maxWidth: .infinity)
