@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import GoogleSignInSwift
 
 public struct CustomTextFieldStyle : TextFieldStyle {
     public func _body(configuration: TextField<Self._Label>) -> some View {
@@ -83,6 +84,13 @@ struct LoginPageView: View {
                     } label: {
                         Text("Forgot password")
                     }
+                    
+                    GoogleSignInButton(action: {
+                        Task { @MainActor in
+                            await viewModel.signInWithGoogle()
+                            
+                        }
+                    })
                     
                     if let error = viewModel.error {
                         Text(error)

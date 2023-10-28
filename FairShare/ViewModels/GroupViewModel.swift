@@ -7,11 +7,13 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseFunctions
 
 class GroupViewModel: ObservableObject {
     @Published var group: Group?
     
     private var db = Firestore.firestore()
+    private lazy var functions = Functions.functions()
     
     func save() -> Bool {
         guard let group = self.group else {
@@ -38,32 +40,31 @@ class GroupViewModel: ObservableObject {
     }
     
     func inviteUserByEmail(email: String) async -> String {
-        // TODO: This should be a cloud function instead
+        guard let group = self.group else {
+            return "Group not loaded"
+        }
+        guard email != "" else {
+            return "No email specified"
+        }
+        let functionData = ["invitedUserEmail": email, "groupId": group.id!]
         do {
-            guard let group = self.group else {
-                return "Group not loaded"
-            }
-            guard email != "" else {
-                return "No email specified"
-            }
-            let docs = try await db.collection("users").whereField("email", isEqualTo: email).getDocuments()
-            guard docs.count > 0 else {
-                return "No user found"
-            }
-            let firstDoc = docs.documents.first
-            guard let userDoc = firstDoc else {
+            let result = try await functions.httpsCallable("onGroupInviteRequest").call(functionData)
+            if let data = result.data as? [String: Any], let message = data["message"] as? String {
+                return message
+            } else {
+                print("Couldn't parse function response!")
                 return "Error inviting user"
             }
-            let user = try userDoc.data(as: User.self)
-            let basicUser = BasicUser(id: user.id!, name: user.name, profilePictureUrl: user.profilePictureUrl)
-            guard !group.involvedUserIds.contains(basicUser.id) else {
-                return "User already invited or member of group"
-            }
-            self.group?.invitedMembers.append(basicUser)
-            self.group?.involvedUserIds.append(basicUser.id)
-            return "Invited user successfully"
         } catch {
-            return "Error inviting user"
+            if let error = error as NSError? {
+                if error.domain == FunctionsErrorDomain {
+                    let code = FunctionsErrorCode(rawValue: error.code)
+                    let message = error.localizedDescription
+                    let details = error.userInfo[FunctionsErrorDetailsKey]
+                    return message
+                }
+                return "Error inviting user"
+            }
         }
     }
     
