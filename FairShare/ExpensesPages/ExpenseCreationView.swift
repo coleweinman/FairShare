@@ -27,9 +27,6 @@ struct ExpenseCreationView: View {
     // View model to access db and upload new expenses
     @ObservedObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     
-    // ToDo: View model to access DB, available groups
-    // @EnvironmentObject var groupViewModel: GroupViewModel
-    
     // View Model to access current user logged in
     @EnvironmentObject var userViewModel: UserViewModel
     
@@ -49,6 +46,8 @@ struct ExpenseCreationView: View {
     @State var groupId: String = ""
     // TODO: Set groupMembers based on group selection
     @State var groupMembers: [BasicUser] = []//  = testGroup2.members
+    // Don't reload on update of this
+    @State var userAmounts: [UserAmount] = []
     
     var body: some View {
         ScrollView {
@@ -61,8 +60,11 @@ struct ExpenseCreationView: View {
                 DateSelector(selectedDate: $expenseDate)
                 // Pull choice of groups for logged in user
                 if let groups = groupListViewModel.groups {
+                    let _ = print("TEST PRINT")
+                    let _ = print(groups.count)
                     GroupSelect(groups: groups, selectedItem: $groupId, members: $groupMembers)
                 } else {
+                    let _ = print(" NO GROUP OPTIONS")
                     GroupSelect(groups: [], selectedItem: $groupId, members: $groupMembers)
                 }
                 // Payer
@@ -75,7 +77,17 @@ struct ExpenseCreationView: View {
                     MultiSelectNav(options: group.members, selections: $groupMembers).padding(.top, 15)
                 } else {
                     SingleDropdown(labelName: "Paid By", groupMembers: groupMembers, selectedItem: $expensePayerName)
-                    MultiSelectNav(options: groupMembers, selections: $groupMembers).padding(.top, 15)
+                    MultiSelectNav(options: groupMembers, selections: $groupMembers).padding(.top, 15)/*.onChange(of: groupMembers){ value in
+                        for member in groupMembers {
+                            // TODO: Make an entry box for each user
+                            UserSplitAmount(userAmounts: $userAmounts, user: member)
+                        }*/
+                    VStack (alignment: .leading) {
+                        ForEach(groupMembers) {member in
+                            Spacer()
+                            UserSplitAmount(userAmounts: $userAmounts, user: member, groupMembers: groupMembers).padding([.top, .bottom], 20)
+                        }
+                    }
                 }
                 Divider()
                 // Comments
@@ -120,6 +132,24 @@ struct ExpenseCreationView: View {
             alertMessage = "Please fill in all information"
             showAlert = true
         }
+    }
+}
+
+struct UserSplitAmount: View {
+    
+    @Binding var userAmounts: [UserAmount]
+    var user: BasicUser
+    @State var amount: String = ""
+    
+    var groupMembers:[BasicUser]
+    
+    var body: some View {
+        HStack (alignment: .top){
+            ProfileCircleImage(userName: user.name, groupMembers: groupMembers)
+            Spacer()
+            TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
+            
+        }.scenePadding()
     }
 }
 
@@ -200,7 +230,7 @@ struct SingleDropdown: View {
             }.scenePadding(.all)
             // Update image on picker selection
             if (selectedItem != "") {
-                ProfileCircleImage(userName: selectedItem)
+                ProfileCircleImage(userName: selectedItem, groupMembers: groupMembers)
             }
         }
     }
@@ -212,6 +242,9 @@ struct ProfileCircleImage: View {
     @EnvironmentObject var userViewModel: UserViewModel
     
     var userName: String
+    
+    let groupMembers: [BasicUser]
+    
     var body: some View {
         let user = self.setUser()
         HStack (alignment: .top){
@@ -221,9 +254,9 @@ struct ProfileCircleImage: View {
                     .scaledToFill()
             } placeholder: {
                 ProgressView()
-            }.frame(width: 50, height: 50).clipShape(Circle()).overlay{ Circle().stroke(.white, lineWidth: 4) }.shadow(radius: 7).padding(.leading, 35)
-            Spacer()
-            Text(userName).padding(.trailing, 180)
+            }.frame(width: 50, height: 50, alignment: .leading).clipShape(Circle()).overlay{ Circle().stroke(.white, lineWidth: 4) }.shadow(radius: 7)
+            // Spacer()
+            Text(userName).padding(.leading, 60)
         }.padding([.top, .bottom], -10)
     }
     // If select 'set as self', set to current user logged in
@@ -232,19 +265,17 @@ struct ProfileCircleImage: View {
         if (userName == userViewModel.user!.name) {
             return BasicUser(id: userViewModel.user!.id!, name: userViewModel.user!.name, profilePictureUrl: userViewModel.user!.profilePictureUrl)
         } else {
-            return testUser
+            for member in groupMembers {
+                if member.name == userName {
+                    return member
+                }
+            }
+            // TODO: Find correct default, this should not happen
+            return BasicUser(id: userViewModel.user!.id!, name: userViewModel.user!.name, profilePictureUrl: userViewModel.user!.profilePictureUrl)
         }
     }
 }
 
-// ToDo: View element for specifying amount liability per involved member
-struct UserAmountSelection: View {
-    var user: BasicUser
-    @Binding var currUserAmount: Decimal
-    var body: some View {
-        ProfileCircleImage(userName: user.name)
-    }
-}
 
 // Picker for date selection
 struct DateSelector: View {
@@ -288,20 +319,23 @@ struct MultiSelectNav: View {
     @Binding var selections: [BasicUser]
     
     var body: some View {
-        NavigationView{
-            NavigationLink {
-                MemberSelectView(options: options, multiSelection: $selections)
-            } label: {
-                Label("Edit Members On Expense", systemImage: "pencil")
-            }
-        }.frame(maxHeight: 40)
+        VStack{
+            NavigationView{
+                NavigationLink {
+                    MemberSelectView(options: options, multiSelection: $selections)
+                } label: {
+                    Label("Edit Members On Expense", systemImage: "pencil")
+                }
+            }.frame(maxHeight: 40)
+            Spacer()
+        }
+        
     }
 }
 
 // Multi selection to add members to expense
 struct MemberSelectView: View {
     var options: [BasicUser]
-    //@State private var multiSelection = Set<UUID>()
     @Binding var multiSelection: [BasicUser]
 
     var body: some View {
