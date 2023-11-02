@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+let DEFAULT_USER = BasicUser(id: "", name: "")
+
+let DEFAULT_PAYMENT = Payment(description: "", date: Date(), amount: 0.0, attachmentObjectIds: [], to: DEFAULT_USER, from: DEFAULT_USER, involvedUserIds: [])
+
 struct PaymentCreationView: View {
     
     // View model to upload pament
@@ -14,6 +18,7 @@ struct PaymentCreationView: View {
     
     @EnvironmentObject var groupListViewModel: GroupListViewModel
     
+    @State var newPayment = DEFAULT_PAYMENT
     
     // Attributes of payment for user input
     @State var paymentAmount: String = ""
@@ -28,17 +33,21 @@ struct PaymentCreationView: View {
     @State var sendAlert = false
     @State var alertMessage = ""
     @State var allMembers: [BasicUser] = []
+    
+    //TODO: Write init where set newPayment to either default or fetch data
 
     var body: some View {
         ScrollView {
             VStack {
-                Spacer(minLength: 50)
+                Spacer(minLength: 20)
                 // Amount
                 AmountEntry(amount: $paymentAmount)
                 // Date
-                DateSelector(selectedDate: $paymentDate)
+                // DateSelector(selectedDate: $paymentDate)
+                DateSelector(selectedDate: $newPayment.date)
                 // Sender
                 SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
+                //SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $newPayment.from)
                 // Receiver
                 SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
                 // Comments
@@ -72,7 +81,7 @@ struct PaymentCreationView: View {
     // Respond to submit button press, use state vars to create and store payment
     func createPaymentOnSubmit() {
         if (paymentAmount != "" && paymentFrom != "" && paymentTo != "") {
-            if let amount = Decimal(string: paymentAmount) {
+            if let amount = Decimal(string: paymentAmount){
                 // Set payment title
                 for user in allMembers {
                     if (user.name == paymentFrom) {
@@ -123,6 +132,7 @@ struct ButtonStyle1: View {
             // What to do on button press
             actionFunction()
         }.buttonStyle(.bordered).foregroundColor(.white).background(.mint).cornerRadius(10).font(Font.system(size: 16, design: .default))
+            .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
     }
 }
 
