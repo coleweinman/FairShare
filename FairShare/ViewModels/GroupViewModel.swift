@@ -46,7 +46,10 @@ class GroupViewModel: ObservableObject {
         guard email != "" else {
             return "No email specified"
         }
-        let functionData = ["invitedUserEmail": email, "groupId": group.id!]
+        guard let groupId = group.id else {
+            return "Must save group before inviting members"
+        }
+        let functionData = ["invitedUserEmail": email, "groupId": groupId]
         do {
             let result = try await functions.httpsCallable("onGroupInviteRequest").call(functionData)
             if let data = result.data as? [String: Any], let message = data["message"] as? String {

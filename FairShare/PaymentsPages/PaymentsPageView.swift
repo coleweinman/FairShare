@@ -31,13 +31,9 @@ struct PaymentsPageView: View {
                     if let netBalances = balanceDataViewModel.balanceData?.netBalances {
                         VStack {
                             ForEach(Array(netBalances.keys), id: \.self) { key in
-                                if let pfp = netBalances[key]?.profilePictureUrl?.absoluteString, let name = netBalances[key]?.name, let amount = netBalances[key]?.amount {
-                                    NetBalanceView(
-                                        pfp: pfp,
-                                        name: name,
-                                        amount: String(describing: amount)
-                                    )
-                                }
+                                NetBalanceView(
+                                    user: netBalances[key]!
+                                )
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -86,7 +82,7 @@ struct PaymentsPageView: View {
                                     title: "Payment from \(payment.from.name)",
                                     date: payment.date,
                                     amount: "+ $\(String(describing: payment.amount))",
-                                    pfps: [payment.from.profilePictureUrl!],
+                                    pfps: [payment.from.profilePictureUrl],
                                     backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
                                     cornerRadius: 8
                                 )

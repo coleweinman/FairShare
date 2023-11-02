@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseMessaging
 
 class UserViewModel: ObservableObject {
     @Published var user: User?
@@ -26,6 +27,16 @@ class UserViewModel: ObservableObject {
                 }
                 do {
                     self.user = try document.data(as: User.self)
+                    Messaging.messaging().token { token, error in
+                        if let error = error {
+                            print("Error fetching FCM registration token: \(error)")
+                        } else if let token = token {
+                            print("FCM registration token: \(token)")
+                            if let uid = self.user?.id {
+                                self.updateField(userId: uid, field: "fcmToken", value: token)
+                            }
+                        }
+                    }
                 } catch {
                     print("Error fetching document: \(error)")
                 }

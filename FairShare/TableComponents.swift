@@ -6,26 +6,12 @@
 //
 
 import SwiftUI
+import FirebaseFunctions
 
 struct LargePFP: View {
-    var image: String
-    
-    var imageSize: CGFloat = 56
-    
-    var body: some View {
-        Image(image)
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: imageSize, height: imageSize)
-            .clipShape(Circle())
-    }
-}
-
-struct SmallPFP: View {
     var image: URL?
     
-    var imageSize: CGFloat = 40
+    var imageSize: CGFloat = 56
     
     var body: some View {
         if let profileUrl = image {
@@ -35,12 +21,36 @@ struct SmallPFP: View {
             } placeholder: {
                 ProgressView()
             }
-                .frame(width: 32, height: 32)
+                .frame(width: imageSize, height: imageSize)
                 .clipShape(Circle())
         } else {
             Image(systemName: "person.fill")
                 .resizable()
-                .frame(width: 32, height: 32)
+                .frame(width: imageSize, height: imageSize)
+                .clipShape(Circle())
+        }
+    }
+}
+
+struct SmallPFP: View {
+    var image: URL?
+    
+    var imageSize: CGFloat = 32
+    
+    var body: some View {
+        if let profileUrl = image {
+            AsyncImage(url: profileUrl) { imageThing in
+                imageThing
+                    .resizable()
+            } placeholder: {
+                ProgressView()
+            }
+                .frame(width: imageSize, height: imageSize)
+                .clipShape(Circle())
+        } else {
+            Image(systemName: "person.fill")
+                .resizable()
+                .frame(width: imageSize, height: imageSize)
                 .clipShape(Circle())
         }
     }
@@ -114,9 +124,7 @@ struct TableCellItemView: View {
 }
 
 struct NetBalanceView: View {
-    var pfp: String
-    var name: String
-    var amount: String
+    var user: UserAmount
     
     var buttonBackgroundColor: Color = Color(red: 0.671, green: 0.827, blue: 0.996)
     var buttonForegroundColor: Color = Color.black
@@ -133,18 +141,44 @@ struct NetBalanceView: View {
     var nameFontSize: CGFloat = 16
     var balanceFontSize: CGFloat = 16
     
+    func remind() async {
+        let functionData = ["userId": user.id]
+        do {
+            let functions = Functions.functions()
+            let result = try await functions.httpsCallable("onPaymentReminderRequest").call(functionData)
+            if let data = result.data as? [String: Any], let message = data["message"] as? String {
+                print(message)
+                return
+            } else {
+                print("Couldn't parse function response!")
+                return
+            }
+        } catch {
+            if let error = error as NSError? {
+                if error.domain == FunctionsErrorDomain {
+                    let message = error.localizedDescription
+                    print(message)
+                    return
+                }
+                return
+            }
+        }
+    }
+    
     var body: some View {
         HStack {
-            LargePFP(image: pfp)
-            Text(name)
+            LargePFP(image: user.profilePictureUrl)
+            Text(user.name)
                 .font(.system(size: nameFontSize, weight: .medium))
             Spacer()
             VStack(alignment: .center, spacing: balanceSpacing) {
-                Text(amount)
+                Text("$\(user.amount.formatted())")
                     .font(.system(size: balanceFontSize, weight: .regular))
                     .foregroundColor(positiveBalanceColor)
                 Button(action: {
-                    print("tanked")
+                    Task {
+                        await remind()
+                    }
                 }) {
                     Text("Remind")
                         .font(.system(size: actionFontSize, weight: .regular))

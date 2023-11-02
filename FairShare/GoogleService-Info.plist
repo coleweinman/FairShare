@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>961606826032-3c07fju2ii4mivl6uts2kdj97oda4ftu.apps.googleusercontent.com</string>
+	<string>961606826032-vht805gnicikv7fulrmjlnjfaiche85j.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.961606826032-3c07fju2ii4mivl6uts2kdj97oda4ftu</string>
+	<string>com.googleusercontent.apps.961606826032-vht805gnicikv7fulrmjlnjfaiche85j</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDpqJCXWUOGQNS8nFvQH2T962m_jQk_S-M</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,22 +13,22 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.FairShare</string>
+	<string>com.scam.fairshare</string>
 	<key>PROJECT_ID</key>
 	<string>fairshare-project</string>
 	<key>STORAGE_BUCKET</key>
 	<string>fairshare-project.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:961606826032:ios:94279bef298511225715f5</string>
+	<string>1:961606826032:ios:2b316c89b23252f15715f5</string>
 </dict>
 </plist>

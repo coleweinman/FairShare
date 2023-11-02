@@ -59,6 +59,7 @@
 		848DBDA42ADE8E2A008DC4F3 /* ExpensesPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesPageView.swift; sourceTree = "<group>"; };
 		848DBDA62ADE8E45008DC4F3 /* TableComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableComponents.swift; sourceTree = "<group>"; };
 		84908E1F2AE875D60008FC40 /* PaymentListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentListViewModel.swift; sourceTree = "<group>"; };
+		8C0C5BB72AF189D6006DB621 /* FairShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FairShare.entitlements; sourceTree = "<group>"; };
 		8C3468162ACF0BB000E0C7B3 /* FairShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FairShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3468192ACF0BB000E0C7B3 /* FairShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FairShareApp.swift; sourceTree = "<group>"; };
 		8C34681B2ACF0BB000E0C7B3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				8C0C5BB72AF189D6006DB621 /* FairShare.entitlements */,
 				8C82B6712AECA7B900DC8097 /* Info.plist */,
 				ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */,
 				ECA904542ADE4F8E0055A608 /* PaymentsPages */,
@@ -525,6 +527,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FairShare/FairShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FairShare/Preview Content\"";
@@ -542,7 +545,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.FairShare;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scam.fairshare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -555,6 +558,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FairShare/FairShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FairShare/Preview Content\"";
@@ -572,7 +576,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.FairShare;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scam.fairshare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

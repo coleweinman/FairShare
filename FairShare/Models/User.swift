@@ -16,6 +16,7 @@ struct User: Codable, Identifiable, Equatable {
     var paymentRemindersEnabled: Bool
     var paymentRemindersFrequency: String
     var newExpenseNotificationEnabled: Bool
+    var fcmToken: String?
 }
 
 struct UserAmount: Codable, Identifiable {
