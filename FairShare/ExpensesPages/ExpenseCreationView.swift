@@ -442,9 +442,12 @@ struct MemberSelectView: View {
                             backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
                             cornerRadius: 8
                         )
-                    }/*.toolbar {
-                        EditButton()
-                      }*/.navigationTitle("Choose a Group")
+                    }.toolbar {
+                        Button("Done") {
+                            // Trigger on change for edit mode
+                            editMode = EditMode.inactive
+                        }.foregroundColor(.blue)
+                      }.navigationTitle("Choose a Group")
                 } else {
                     // Add individual members
                     let _ = print(userOptions.count)
