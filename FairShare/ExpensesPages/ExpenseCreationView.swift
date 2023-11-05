@@ -502,74 +502,74 @@ struct MemberSelectView: View {
         }
     }
     
-    
-    /*func removeCurrUser() {
-        if let currUser = userViewModel.user {
-            for index in userOptions.indices {
-                if (userOptions[index].user.id == currUser.id) {
-                    userOptions.remove(at: index)
-                }
-            }
-        }
-        
-        
-    }*/
-    
 }
 
 struct PersonSelection: View {
     
-    var userOptions: [UserListItem] = []
+    var userOptions: [UserListItem]
     @State var multiSelection = Set<UUID>()
+    
+    @State var editMode = EditMode.active
+    @Environment(\.dismiss) private var dismiss
+    
+    @Binding var selectedUsers: [BasicUser]
     
     struct UserListItem: Identifiable, Hashable {
         let user: BasicUser
         let id = UUID()
     }
+    init(userOptions: [BasicUser], selectedUsers: Binding<[BasicUser]>) {
+        self._selectedUsers = selectedUsers
+        self.userOptions = []
+        for user in userOptions {
+            self.userOptions.append(UserListItem(user: user))
+        }
+    }
     
     var body: some View {
-        Text("Test")
-    }
-}
-
-struct ExpenseCreationView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpenseCreationView()
-    }
-}
-
-
-
-
-
-
-
-struct Test_list: View {
-    var array: [String] = ["test", "test2"]
-    @State var selected = Set<UUID>()
-    @State var isEditing = false
-    var body: some View {
-        
         NavigationView {
-                List {
-                    ForEach(array, id: \.self) { item in
-                        Text(item)
+            List (userOptions, selection: $multiSelection) {
+                Text($0.user.name)
+            }.toolbar {
+                EditButton()
+            }.navigationTitle("Select Members")
+                .environment(\.editMode, $editMode)
+            Text("Selection: \(multiSelection.count)")
+            Spacer()
+        }.onChange(of: editMode) { newVal in
+            print("Clicked done")
+            var members: [BasicUser] = []
+                // By user
+                for item in multiSelection {
+                    print("ITEMS")
+                    print(item)
+                    // Need to search through groups and userOptions using UUID and return list of users
+                    // item is a UUID
+                    // Groups
+                    let result = userOptions.filter{$0.id == item}
+                    if result.count >= 1 {
+                        members.append(result[0].user)
                     }
                 }
-                .navigationTitle("Editable List")
-                .navigationBarItems(trailing: Button(action: {
-                    self.$isEditing.wrappedValue.toggle()
-                    if !self.isEditing {
-                        
-                    }
-                }, label: {
-                    if self.isEditing {
-                        Text("Done")
-                    } else {
-                        Text("Edit")
-                    }
-                })).environment(\.editMode, .constant(self.isEditing ? EditMode.active: EditMode.inactive))
-            }
+                selectedUsers = members
+                dismiss()
+        }
+    }
+}
+
+/*struct test: View {
+    @State var testUsers: [BasicUser] = []
+    
+    var body: some View {
+        PersonSelection(userOptions: userList, selectedUsers: $testUsers)
+    }
+}*/
+
+
+struct ExpenseCreationView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        ExpenseCreationView()
     }
 }
 
