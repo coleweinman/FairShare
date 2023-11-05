@@ -489,12 +489,19 @@ struct MemberSelectView: View {
                             members.append(result[0].user)
                         }
                     }
+                    // Add back in current logged in user
+                    // TODO: At least 1 group MUST exist --> Put in safeguards for this (check that user is in at least 1 group when starting up creation screen)
+                    // Assumption, currUser is a member in all groups in "groups"
+                    let someGroup = groups[0].group.members
+                    let currUser = someGroup.filter{$0.id == currUserId}
+                    members.insert(currUser[0], at: 0)
                 }
                 involvedUsers = members
                 dismiss()
             }
         }
     }
+    
     
     /*func removeCurrUser() {
         if let currUser = userViewModel.user {
@@ -508,6 +515,21 @@ struct MemberSelectView: View {
         
     }*/
     
+}
+
+struct PersonSelection: View {
+    
+    var userOptions: [UserListItem] = []
+    @State var multiSelection = Set<UUID>()
+    
+    struct UserListItem: Identifiable, Hashable {
+        let user: BasicUser
+        let id = UUID()
+    }
+    
+    var body: some View {
+        Text("Test")
+    }
 }
 
 struct ExpenseCreationView_Previews: PreviewProvider {
@@ -551,31 +573,3 @@ struct Test_list: View {
     }
 }
 
-
-struct TestView: View {
-    struct Ocean: Identifiable, Hashable {
-        let name: String
-        let id = UUID()
-    }
-    
-    private var oceans = [
-        Ocean(name: "Pacific"),
-        Ocean(name: "Atlantic"),
-        Ocean(name: "Indian"),
-        Ocean(name: "Southern"),
-        Ocean(name: "Arctic")
-    ]
-    
-    @State private var multiSelection = Set<UUID>()
-    
-    var body: some View {
-        NavigationView {
-            List(oceans, selection: $multiSelection) {
-                Text($0.name)
-            }
-            .navigationTitle("Oceans")
-            .toolbar { EditButton() }
-        }
-        Text("\(multiSelection.count) selections")
-    }
-}

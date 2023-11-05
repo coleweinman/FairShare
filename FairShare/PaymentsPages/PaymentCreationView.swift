@@ -84,10 +84,10 @@ struct PaymentCreationView: View {
             if let amount = Decimal(string: paymentAmount){
                 // Set payment title
                 for user in allMembers {
-                    if (user.name == paymentFrom) {
+                    if (user.id == paymentFrom) {
                         sender = user
                     }
-                    if (user.name == paymentTo) {
+                    if (user.id == paymentTo) {
                         receiver = user
                     }
                 }
