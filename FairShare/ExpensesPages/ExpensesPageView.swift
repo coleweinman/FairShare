@@ -58,14 +58,18 @@ struct ExpensesPageView: View {
                     if let expenses = expenseListViewModel.expenses {
                         VStack {
                             ForEach(expenses) { expense in
-                                TableCellItemView(
-                                    title: expense.title,
-                                    date: expense.date,
-                                    amount: expense.totalAmount.moneyString,
-                                    pfps: expense.profilePictures(),
-                                    backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                                    cornerRadius: 8
-                                )
+                                NavigationLink {
+                                    ExpenseCreationView().navigationTitle("Edit Expense")
+                                } label: {
+                                    TableCellItemView(
+                                        title: expense.title,
+                                        date: expense.date,
+                                        amount: expense.totalAmount.moneyString,
+                                        pfps: expense.profilePictures(),
+                                        backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
+                                        cornerRadius: 8
+                                    )
+                                }.buttonStyle(PlainButtonStyle())
                             }
                         }
                         .frame(maxWidth: .infinity)
