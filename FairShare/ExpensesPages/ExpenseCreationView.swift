@@ -14,8 +14,25 @@ let clickableTextColor: Color = .blue
 
 let DEFAULT_EXPENSE = Expense(title: "", description: "", date: Date(), totalAmount: 0.0, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: [])
 
+class UserAmountList: ObservableObject {
+    @Published var id: String
+    @Published var name: String
+    @Published var profilePictureUrl: URL?
+    @Published var amount: Decimal
+    
+    init(id: String, name: String, profilePictureUrl: URL? = nil, amount: Decimal) {
+        self.id = id
+        self.name = name
+        self.profilePictureUrl = profilePictureUrl
+        self.amount = amount
+    }
+    
+}
+
 // View for expense creation page with all view elements
 struct ExpenseCreationView: View {
+    
+    
     // View model to access db and upload new expenses
     @ObservedObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     
@@ -30,8 +47,8 @@ struct ExpenseCreationView: View {
     @State var expense = DEFAULT_EXPENSE
     
     // State atttributes to store user inputs
-    @State var expenseAmount: String = ""
-    @State var expenseDate: Date = Date()
+    //@State var expenseAmount: String = ""
+    //@State var expenseDate: Date = Date()
     @State var expensePayerId: String = ""
     @State var expenseComment: String = ""
     @State var expenseTitle: String = ""
@@ -39,7 +56,7 @@ struct ExpenseCreationView: View {
     @State var alertMessage: String = ""
     @State var groupId: String = ""
     // TODO: Set groupMembers based on group selection
-    @State var groupMembers: [BasicUser] = []//  = testGroup2.members
+    //@State var groupMembers: [BasicUser] = []//  = testGroup2.members
     // @State var groupMembers = Set<String>()
     @State var expenseMembers: [BasicUser] = []
     // Don't reload on update of this
@@ -51,42 +68,33 @@ struct ExpenseCreationView: View {
         ScrollView {
             VStack {
                 // Amount
-                AmountEntry(amount: $expenseAmount)
+                //AmountEntry(amount: $expenseAmount)
+                AmountEntry(amount: $expense.totalAmount)
                 // Title
                 ExpenseTitle(title: $expenseTitle)
                 // Date
-                DateSelector(selectedDate: $expenseDate)
+                // DateSelector(selectedDate: $expenseDate)
+                DateSelector(selectedDate: $expense.date)
                 // Pull choice of groups for logged in user
                 if let groups = groupListViewModel.groups {
                     let _ = print(groups.count)
-                    // GroupSelect(groups: groups, selectedItem: $groupId, members: $groupMembers)
                     MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
                 } else {
                     let _ = print(" NO GROUP OPTIONS")
-                    //GroupSelect(groups: [], selectedItem: $groupId, members: $groupMembers)
                 }
                 // Payer
-                // TODO: Use selected group
+                SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
                 // Involved members
-                // TODO: fix to use selected group
-                // let _ = groupViewModel.fetchData(groupId: groupId)
-                //SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
-                if let group = groupViewModel.group {
-                    SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
-                    //MultiSelectNav(options: group.members, selections: $groupMembers).padding(.top, 15)
-                } else {
-                    SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
-                    //MultiSelectNav(options: groupMembers, selections: $groupMembers).padding(.top, 15)
-                    /*.onChange(of: groupMembers){ value in
-                        for member in groupMembers {
-                            // TODO: Make an entry box for each user
-                            UserSplitAmount(userAmounts: $userAmounts, user: member)
-                        }*/
-                    VStack (alignment: .leading) {
-                        ForEach(expenseMembers) {member in
-                            Spacer()
-                            UserSplitAmount(userAmounts: $userAmounts, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
-                        }
+                VStack (alignment: .leading) {
+                    ForEach(expenseMembers) {member in
+                        Spacer()
+                        //var currAmount = userAmounts.filter { $0.id == member.id }
+                        
+                        // TODO: Check that input can be converted to decimal
+                        //let _ = print("THIS IS A TEST")
+                        //results[0].amount = Decimal(string: amount)!
+                        UserSplitAmount(userAmounts: $userAmounts, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
+                        // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                     }
                 }
                 Divider()
@@ -99,6 +107,17 @@ struct ExpenseCreationView: View {
             }.onAppear() {
                 currUserId = userViewModel.user!.id
             }
+            .onChange(of: expenseMembers) { newVal in
+                // Create new UserAmount for curr member
+                // Set the amount by default to 0
+                for member in expenseMembers {
+                    if (!userAmounts.contains(where: {$0.id == member.id})) {
+                        // Do not have entry for user yet, create
+                        userAmounts.append(UserAmount(id: member.id, name: member.name, amount: 0.0))
+                    }
+                    // TODO: Handle deletions of users?
+                }
+            }
         }
     }
     func attachReceipt() {
@@ -108,11 +127,31 @@ struct ExpenseCreationView: View {
         // ToDO
     }
     
+    func findSplitSum() -> Decimal {
+        var sum: Decimal = 0.0
+        for user in userAmounts {
+            let currAmount = user.amount
+            sum += currAmount
+        }
+        return sum
+    }
+    
     // Respond to submit button press, use state vars to create and store expense
     func createExpenseOnSubmit() {
-        if (expenseAmount != "" && expenseTitle != "" && expensePayerId != "") {
-            if let expenseAmount = Decimal(string: expenseAmount) {
-                let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expenseDate, totalAmount: expenseAmount, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: groupMembers.map{$0.id})
+        let _ = print("SUM \(findSplitSum())")
+        if (expenseTitle != "" && expensePayerId != "") {
+            if (expense.totalAmount > 0) {
+                // TODO: Add back in later when user amount update works
+                /*if (findSplitSum() != expenseAmount) {
+                    // Liability amounts don't sum to expense amount
+                    alertMessage = "Sum of dues does not equal expense"
+                    showAlert = true
+                    return
+                }*/
+                let _ = print("EXPENSE AMOUNT: \(expense.totalAmount)")
+                let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
+                let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expense.totalAmount)
+                let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts, involvedUserIds: expenseMembers.map{$0.id})
                 expenseViewModel.expense = newExpense
                 let saveSuccess = expenseViewModel.save()
                 if (saveSuccess) {
@@ -125,7 +164,7 @@ struct ExpenseCreationView: View {
                     showAlert = true
                 }
             } else {
-                // Invalid amount string
+                // Invalid amount
                 alertMessage = "Invalid amount"
                 showAlert = true
             }
@@ -173,6 +212,14 @@ struct UserSplitAmount: View {
             TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
             
         }.scenePadding()
+        .onChange(of: amount) { newVal in
+            var results = userAmounts.filter { $0.id == user.id }
+            if (!results.isEmpty) {
+                // TODO: Check that input can be converted to decimal
+                let _ = print("THIS IS A TEST")
+                results[0].amount = Decimal(string: amount)!
+            }
+        }
     }
 }
 
@@ -341,15 +388,26 @@ struct DateSelector: View {
     
 // Text fields for entering a dollar amount
 struct AmountEntry: View {
-    @Binding var amount: String
+    
+    @State var userInput: String = ""
+    @Binding var amount: Decimal
+    @State var textColor: Color = .green
     
     var body: some View {
         VStack (alignment: .center) {
             HStack{
                 Text("$")
-                TextField("_______", text: $amount).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+                TextField("_______", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5).foregroundColor(textColor)
             }.textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
             Text("Amount")
+        }.onChange(of: userInput) { newVal in
+            if let currAmount = Decimal(string: userInput) {
+                amount = currAmount
+                textColor = .green
+            } else {
+                amount = -1
+                textColor = .red
+            }
         }
     }
 }

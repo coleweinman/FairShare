@@ -21,8 +21,8 @@ struct PaymentCreationView: View {
     @State var newPayment = DEFAULT_PAYMENT
     
     // Attributes of payment for user input
-    @State var paymentAmount: String = ""
-    @State var paymentDate: Date = Date()
+    //@State var paymentAmount: String = ""
+    //@State var paymentDate: Date = Date()
     @State var paymentFrom: String = ""
     @State var sender: BasicUser?
     @State var paymentTo: String = ""
@@ -41,7 +41,7 @@ struct PaymentCreationView: View {
             VStack {
                 Spacer(minLength: 20)
                 // Amount
-                AmountEntry(amount: $paymentAmount)
+                AmountEntry(amount: $newPayment.amount)
                 // Date
                 // DateSelector(selectedDate: $paymentDate)
                 DateSelector(selectedDate: $newPayment.date)
@@ -80,8 +80,8 @@ struct PaymentCreationView: View {
     
     // Respond to submit button press, use state vars to create and store payment
     func createPaymentOnSubmit() {
-        if (paymentAmount != "" && paymentFrom != "" && paymentTo != "") {
-            if let amount = Decimal(string: paymentAmount){
+        if (paymentFrom != "" && paymentTo != "") {
+            if (newPayment.amount > 0){
                 // Set payment title
                 for user in allMembers {
                     if (user.id == paymentFrom) {
@@ -92,7 +92,7 @@ struct PaymentCreationView: View {
                     }
                 }
                 let involvedUsers = [sender?.id, receiver?.id]
-                let newPayment = Payment(description: paymentComment, date: paymentDate, amount: amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
+                let newPayment = Payment(description: paymentComment, date: newPayment.date, amount: newPayment.amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
                 paymentViewModel.payment = newPayment
                 let success = paymentViewModel.save()
                 if (success) {
