@@ -61,7 +61,7 @@ struct ExpensesPageView: View {
                                 TableCellItemView(
                                     title: expense.title,
                                     date: expense.date,
-                                    amount: "$\(String(describing: expense.totalAmount))",
+                                    amount: expense.totalAmount.moneyString,
                                     pfps: expense.profilePictures(),
                                     backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
                                     cornerRadius: 8

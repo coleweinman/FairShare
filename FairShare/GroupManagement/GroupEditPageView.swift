@@ -20,11 +20,6 @@ struct GroupEditPageView: View {
     
     var groupId: String?
     
-    init(groupId: String? = nil) {
-        print("INIT")
-        self.groupId = groupId
-    }
-    
     var body: some View {
         VStack {
             Divider()
@@ -60,6 +55,14 @@ struct GroupEditPageView: View {
                                         .clipShape(Circle())
                                 }
                                 Text(member.name)
+                                Spacer()
+                                Button(action: {
+                                    viewModel.group?.involvedUserIds.removeAll(where: {id in member.id == id})
+                                    viewModel.group?.members.removeAll(where: {m in member.id == m.id})
+                                }, label: {
+                                    Label("trash", systemImage: "trash")
+                                            .labelStyle(.iconOnly)
+                                })
                             }
                             
                         }
@@ -68,7 +71,17 @@ struct GroupEditPageView: View {
                     if group.invitedMembers.count > 0 {
                         Section("Invited Members") {
                             ForEach(group.invitedMembers) { member in
-                                Text(member.name)
+                                HStack {
+                                    Text(member.name)
+                                    Spacer()
+                                    Button(action: {
+                                        viewModel.group?.involvedUserIds.removeAll(where: {id in member.id == id})
+                                        viewModel.group?.invitedMembers.removeAll(where: {m in member.id == m.id})
+                                    }, label: {
+                                        Label("trash", systemImage: "trash")
+                                                .labelStyle(.iconOnly)
+                                    })
+                                }
                             }
                         }
                     }
@@ -133,7 +146,6 @@ struct GroupEditPageView: View {
             }
         )
         .onAppear() {
-            print("on appaer")
             if let id = groupId {
                 viewModel.fetchData(groupId: id)
             } else {

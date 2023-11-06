@@ -158,7 +158,7 @@ struct ExpenseCreationView: View {
                 let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts, involvedUserIds: expenseMembers.map{$0.id})
                 expenseViewModel.expense = newExpense
                 let saveSuccess = expenseViewModel.save()
-                if (saveSuccess) {
+                if ((saveSuccess) != nil) {
                     // Successfully saved to DB
                     alertMessage = "Successfully saved expense"
                     showAlert = true

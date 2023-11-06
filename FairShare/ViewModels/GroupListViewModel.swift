@@ -43,8 +43,6 @@ class GroupListViewModel: ObservableObject {
                     let newGroups = try documents.map { doc in
                         return try doc.data(as: Group.self)
                     }
-                    print(newGroups)
-                    print(documents.count)
                     self.groups = newGroups
                 } catch {
                     print(error)

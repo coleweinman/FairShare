@@ -172,9 +172,9 @@ struct NetBalanceView: View {
                 .font(.system(size: nameFontSize, weight: .medium))
             Spacer()
             VStack(alignment: .center, spacing: balanceSpacing) {
-                Text("$\(user.amount.formatted())")
+                Text(user.amount.moneyString)
                     .font(.system(size: balanceFontSize, weight: .regular))
-                    .foregroundColor(positiveBalanceColor)
+                    .foregroundColor(user.amount >= 0 ? positiveBalanceColor : negativeBalanceColor)
                 Button(action: {
                     Task {
                         await remind()

@@ -20,14 +20,34 @@ struct Expense: Codable, Identifiable {
     var involvedUserIds: [String]
     
     func profilePictures() -> [URL?] {
-        var pictures = Set<URL?>()
-        liabilityDetails.forEach { liability in
-            pictures.insert(liability.profilePictureUrl)
-        }
+        var pictures: [URL?] = []
         paidByDetails.forEach { paidBy in
-            pictures.insert(paidBy.profilePictureUrl)
+            if let pfpUrl = paidBy.profilePictureUrl {
+                if !pictures.contains(pfpUrl) {
+                    pictures.append(pfpUrl)
+                }
+            } else {
+                pictures.append(nil)
+            }
+        }
+        liabilityDetails.forEach { liability in
+            if let pfpUrl = liability.profilePictureUrl {
+                if !pictures.contains(pfpUrl) {
+                    pictures.append(pfpUrl)
+                }
+            } else {
+                pictures.append(nil)
+            }
         }
         return Array(pictures)
-//        return [URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!, URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!, URL(string: "https://firebasestorage.googleapis.com/v0/b/fairshare-project.appspot.com/o/profilePictures%2FGPFP.png?alt=media")!]
+    }
+    
+    func getAttachmentPaths() -> [String] {
+        guard let id = self.id else {
+            return []
+        }
+        return attachmentObjectIds.reduce(into: [String]()) { result, objId in
+            result.append("expenseAttachments/\(id)/\(objId)")
+        }
     }
 }

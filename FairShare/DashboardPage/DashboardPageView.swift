@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DashboardPageView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var balanceDataViewModel: BalanceDataViewModel
     @StateObject private var paymentListViewModel = PaymentListViewModel()
     @StateObject private var expenseListViewModel = ExpenseListViewModel()
     
@@ -27,9 +28,21 @@ struct DashboardPageView: View {
                     Text("Net Balance")
                         .font(.system(size: 16, weight: .semibold))
                     VStack {
-                        Text("$0.00")
-                            .font(.system(size: 52, weight: .semibold))
-                            .foregroundColor(Color.green)
+                        if let balanceData = balanceDataViewModel.balanceData {
+                            if balanceData.netBalance >= 0 {
+                                Text(balanceData.netBalance.moneyString)
+                                    .font(.system(size: 52, weight: .semibold))
+                                    .foregroundColor(Color.green)
+                            } else {
+                                Text(balanceData.netBalance.moneyString)
+                                    .font(.system(size: 52, weight: .semibold))
+                                    .foregroundColor(Color.red)
+                            }
+                            
+                        } else {
+                            
+                        }
+                        
                     }
                     .frame(maxWidth: .infinity)
                     .padding(cardPadding)
