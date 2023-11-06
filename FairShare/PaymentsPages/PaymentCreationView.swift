@@ -13,6 +13,8 @@ let DEFAULT_PAYMENT = Payment(description: "", date: Date(), amount: 0.0, attach
 
 struct PaymentCreationView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     // View model to upload pament
     @ObservedObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
@@ -98,6 +100,7 @@ struct PaymentCreationView: View {
                 if (success) {
                     alertMessage = "Payment successfully created"
                     sendAlert = true
+                    dismiss()
                 } else {
                     alertMessage = "Failed to create payment"
                     sendAlert = true
@@ -118,7 +121,10 @@ struct CommentBox: View {
     @Binding var comment: String
     
     var body: some View {
-        TextField("Comments...", text: $comment, axis: .vertical).textFieldStyle(.roundedBorder).padding().lineLimit(5, reservesSpace: true).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+        VStack {
+            Divider().padding(.top, 20)
+            TextField("Comments...", text: $comment, axis: .vertical).textFieldStyle(.roundedBorder).padding().lineLimit(5, reservesSpace: true).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+        }
     }
 }
 

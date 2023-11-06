@@ -32,6 +32,7 @@ class UserAmountList: ObservableObject {
 // View for expense creation page with all view elements
 struct ExpenseCreationView: View {
     
+    @Environment(\.dismiss) private var dismiss
     
     // View model to access db and upload new expenses
     @ObservedObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
@@ -82,8 +83,11 @@ struct ExpenseCreationView: View {
                 } else {
                     let _ = print(" NO GROUP OPTIONS")
                 }
-                // Payer
-                SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
+                if (!expenseMembers.isEmpty) {
+                    // Payer
+                    SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
+                    Divider().padding(.top, 20)
+                }
                 // Involved members
                 VStack (alignment: .leading) {
                     ForEach(expenseMembers) {member in
@@ -97,7 +101,6 @@ struct ExpenseCreationView: View {
                         // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                     }
                 }
-                Divider()
                 // Comments
                 CommentBox(comment: $expenseComment)
                 ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
@@ -106,6 +109,7 @@ struct ExpenseCreationView: View {
                 }
             }.onAppear() {
                 currUserId = userViewModel.user!.id
+                expensePayerId = currUserId!
             }
             .onChange(of: expenseMembers) { newVal in
                 // Create new UserAmount for curr member
@@ -113,7 +117,7 @@ struct ExpenseCreationView: View {
                 for member in expenseMembers {
                     if (!userAmounts.contains(where: {$0.id == member.id})) {
                         // Do not have entry for user yet, create
-                        userAmounts.append(UserAmount(id: member.id, name: member.name, amount: 0.0))
+                        userAmounts.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
                     // TODO: Handle deletions of users?
                 }
@@ -158,6 +162,7 @@ struct ExpenseCreationView: View {
                     // Successfully saved to DB
                     alertMessage = "Successfully saved expense"
                     showAlert = true
+                    dismiss()
                 } else {
                     // Save unsuccessful
                     alertMessage = "Unsuccessful save"
