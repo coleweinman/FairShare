@@ -1,3 +1,6 @@
+
+
+
 //
 //  ExpenseCreationView.swift
 //  FairShare
@@ -40,7 +43,7 @@ struct ExpenseCreationView: View {
     
     @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
     
-    @State var expense = DEFAULT_EXPENSE
+    //@State var expense = DEFAULT_EXPENSE
     
     // State atttributes to store user inputs
     // TODO: Bind to expense
@@ -52,7 +55,6 @@ struct ExpenseCreationView: View {
     // TODO: Bind to expense
     @State var expensePayerId: String = ""
     @State var expenseMembers: [BasicUser] = []
-    //@State var userAmounts: [UserAmount] = []
     @State var userAmounts: UserAmountList = UserAmountList(userAmountList: [])
     //@State var userAmounts: [UserAmountList] = []
     
@@ -60,77 +62,93 @@ struct ExpenseCreationView: View {
     @State var currUserId: String?
     @State var expenseId: String?
     
-    
     @State var pendingImages: [Data] = []
     @State var savingAlert = false
+    
+    
     
     var body: some View {
         ScrollView {
             VStack {
-                // Amount
-                //AmountEntry(amount: $expenseAmount)
-                AmountEntry(amount: $expense.totalAmount)
-                // Title
-                //ExpenseTitle(title: $expenseTitle)
-                ExpenseTitle(title: $expense.title)
-                // Date
-                // DateSelector(selectedDate: $expenseDate)
-                DateSelector(selectedDate: $expense.date)
-                // Pull choice of groups for logged in user
-                if let groups = groupListViewModel.groups {
-                    let _ = print(groups.count)
-                    MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
+                if (expenseViewModel.expense != nil) {
+                    // Amount
+                    //AmountEntry(amount: $expenseAmount)
+                    AmountEntry(amount: Binding($expenseViewModel.expense)!.totalAmount)
+                    // Title
+                    //ExpenseTitle(title: $expenseTitle)
+                    ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
+                    // Date
+                    // DateSelector(selectedDate: $expenseDate)
+                    DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
+                    // Pull choice of groups for logged in user
+                    if let groups = groupListViewModel.groups {
+                        let _ = print(groups.count)
+                        MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
+                    } else {
+                        let _ = print(" NO GROUP OPTIONS")
+                    }
+                    if (!expenseMembers.isEmpty) {
+                        // Payer
+                        SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
+                        Divider().padding(.top, 20)
+                    }
+                    // Involved members
+                    VStack (alignment: .leading) {
+                        ForEach($userAmounts.userAmountList) {$member in
+                            Spacer()
+                            //var currAmount = userAmounts.filter { $0.id == member.id }
+                            
+                            // TODO: Check that input can be converted to decimal
+                            //let _ = print("THIS IS A TEST")
+                            //results[0].amount = Decimal(string: amount)!
+                            UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
+                            // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
+                        }
+                    }
+                    // Comments
+                    // CommentBox(comment: $expenseComment)
+                    CommentBox(comment: Binding($expenseViewModel.expense)!.description)
+                    //ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
+                    //ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
+                     //Alert(title: Text(expenseViewModel.expense!.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                     //}
+                    
+                    
+                    // TODO: Comment back in
+                    /*Divider()
+                    Text("Attachments")
+                    AttachmentsListView(existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [], pendingImages: pendingImages, onSelect: { images in pendingImages = images }, onRemoveExisting: { path in expenseViewModel.expense?.attachmentObjectIds.removeAll(where: { p in p == path }) })
+                    Divider()
+                    ButtonStyle1(buttonText: "Submit", actionFunction: {
+                        Task {
+                            await self.createExpenseOnSubmit()
+                        }
+                    })
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text(expenseViewModel.expense.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }*/
                 } else {
-                    let _ = print(" NO GROUP OPTIONS")
-                }
-                if (!expenseMembers.isEmpty) {
-                    // Payer
-                    SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
-                    Divider().padding(.top, 20)
-                }
-                // Involved members
-                VStack (alignment: .leading) {
-                    ForEach($userAmounts.userAmountList) {$member in
-                        Spacer()
-                        //var currAmount = userAmounts.filter { $0.id == member.id }
-                        
-                        // TODO: Check that input can be converted to decimal
-                        //let _ = print("THIS IS A TEST")
-                        //results[0].amount = Decimal(string: amount)!
-                        UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
-                        // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
-                    }
-                }
-                // Comments
-                // CommentBox(comment: $expenseComment)
-                CommentBox(comment: $expense.description)
-                Divider()
-                Text("Attachments")
-                AttachmentsListView(existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [], pendingImages: pendingImages, onSelect: { images in pendingImages = images }, onRemoveExisting: { path in expenseViewModel.expense?.attachmentObjectIds.removeAll(where: { p in p == path }) })
-                Divider()
-                ButtonStyle1(buttonText: "Submit", actionFunction: {
-                    Task {
-                        await self.createExpenseOnSubmit()
-                    }
-                })
-                .alert(isPresented: $showAlert) {
-                    Alert(title: Text(expense.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    ProgressView()
                 }
             }.onAppear() {
                 currUserId = userViewModel.user!.id
                 expensePayerId = currUserId!
-                // TODO: Add in code for editing
-                // Do lookup of expenseId
-                if (expenseId != nil) {
-                    let _ = print("EXPENSE ID: \(expenseId)")
+                if (expenseId == nil) {
+                    // No expenseId given
+                    expenseViewModel.expense = DEFAULT_EXPENSE
+                } else {
                     expenseViewModel.fetchData(expenseId: expenseId!)
-                    let currExpense = expenseViewModel.expense
-                    // expense = currExpense!
-                    let _ = print("EXPENSE LOADED")
-                    //expense = expenseViewModel.expense!
                 }
-            }
-            .onChange(of: expenseMembers) { newVal in
+            }.onChange(of: expenseMembers) { newVal in
+                
+                // Iterate through userAmounts and delete if not in expenseMembers??
+                for index in userAmounts.userAmountList.indices {
+                    let user = userAmounts.userAmountList[index]
+                    if (!expenseMembers.contains(where: {$0.id == user.id})) {
+                        userAmounts.userAmountList.remove(at: index)
+                    }
+                }
+                
                 // Create new UserAmount for curr member
                 // Set the amount by default to 0
                 for member in expenseMembers {
@@ -138,90 +156,92 @@ struct ExpenseCreationView: View {
                         // Do not have entry for user yet, create
                         userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
-                    // TODO: Handle deletions of users?
                 }
-            }
-        }/*.onChange(of: expenseViewModel) { newVal in
-            print("EXPENSE VIEW MODEL LOADED ")
-            print ("TITLE OF EXPENSE: \(expenseViewModel.expense)")
-            
-        }*/
-        .overlay() {
-            GeometryReader { geometry in
-                if savingAlert {
-                    ZStack(alignment: .center) {
-                        Color.gray.opacity(0.6).frame(width: geometry.size.width, height: geometry.size.height)
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Color.white)
-                            .frame(width: 100, height: 100)
-                        VStack {
-                            ProgressView()
-                            Text("Loading")
+            }.overlay() {
+                GeometryReader { geometry in
+                    if savingAlert {
+                        ZStack(alignment: .center) {
+                            Color.gray.opacity(0.6).frame(width: geometry.size.width, height: geometry.size.height)
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                .fill(Color.white)
+                                .frame(width: 100, height: 100)
+                            VStack {
+                                ProgressView()
+                                Text("Loading")
+                            }
                         }
                     }
                 }
             }
         }
     }
-    func attachReceipt() {
-        // ToDo: Camera and camera roll launch
-    }
-    func applyEvenSplit() {
-        // ToDO
-    }
     
-    func findSplitSum() -> Decimal {
-        var sum: Decimal = 0.0
-        for user in userAmounts.userAmountList {
-            let currAmount = user.amount
-            sum += currAmount
+        func attachReceipt() {
+            // ToDo: Camera and camera roll launch
         }
-        return sum
-    }
-    
-    // Respond to submit button press, use state vars to create and store expense
-    func createExpenseOnSubmit() async {
-        let _ = print("SUM \(findSplitSum())")
-        if (expense.title != "" && expensePayerId != "") {
-            if (expense.totalAmount > 0) {
-                // TODO: Add back in later when user amount update works
-                /*if (findSplitSum() != expenseAmount) {
-                    // Liability amounts don't sum to expense amount
-                    alertMessage = "Sum of dues does not equal expense"
-                    showAlert = true
-                    return
-                }*/
-                let _ = print("EXPENSE AMOUNT: \(expense.totalAmount)")
-                let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
-                let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expense.totalAmount)
-                let newExpense = Expense(title: expense.title, description: expense.description, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts.userAmountList, involvedUserIds: expenseMembers.map{$0.id})
-                expenseViewModel.expense = newExpense
-                await MainActor.run {
-                    self.savingAlert = true
-                }
-                let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
-                await MainActor.run {
-                    self.savingAlert = false
-                    alertMessage = saveSuccess
-                    showAlert = true
-                    if (saveSuccess == "Expense saved successfully") {
-                        // Successfully saved to DB
-                        showAlert = true
-                        dismiss()
+        func applyEvenSplit() {
+            // ToDO
+        }
+        
+        func findSplitSum() -> Decimal {
+            var sum: Decimal = 0.0
+            for user in userAmounts.userAmountList {
+                let currAmount = user.amount
+                sum += currAmount
+            }
+            return sum
+        }
+        
+        // Respond to submit button press, use state vars to create and store expense
+        func createExpenseOnSubmit() {
+            let _ = print("SUM \(findSplitSum())")
+            if (expenseViewModel.expense!.title != "" && expensePayerId != "") {
+                if (expenseViewModel.expense!.totalAmount > 0) {
+                    // TODO: Add back in later when user amount update works
+                    if (findSplitSum() != expenseViewModel.expense?.totalAmount) {
+                     // Liability amounts don't sum to expense amount
+                     alertMessage = "Sum of dues does not equal expense"
+                     showAlert = true
+                     return
+                     }
+                    //let _ = print("EXPENSE AMOUNT: \(expense.totalAmount)")
+                    let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
+                    let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expenseViewModel.expense!.totalAmount)
+                    //let newExpense = Expense(title: expense.title, description: expense.description, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts.userAmountList, involvedUserIds: expenseMembers.map{$0.id})
+                    expenseViewModel.expense?.paidByDetails = [paidByAmount]
+                    expenseViewModel.expense?.liabilityDetails = userAmounts.userAmountList
+                    expenseViewModel.expense?.involvedUserIds = expenseMembers.map{$0.id}
+                    let saveSuccess = expenseViewModel.save()
+                    
+                    // TODO: Comment back in
+                    /*await MainActor.run {
+                        self.savingAlert = true
                     }
+                    let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
+                    await MainActor.run {
+                        self.savingAlert = false
+                        alertMessage = saveSuccess
+                        showAlert = true
+                        if (saveSuccess == "Expense saved successfully") {
+                            // Successfully saved to DB
+                            showAlert = true
+                            dismiss()
+                        }
+                    }*/
+                    
+                } else {
+                    // Invalid amount
+                    alertMessage = "Invalid amount"
+                    showAlert = true
                 }
             } else {
-                // Invalid amount
-                alertMessage = "Invalid amount"
+                // Some necessary information not given
+                alertMessage = "Please fill in all information"
                 showAlert = true
             }
-        } else {
-            // Some necessary information not given
-            alertMessage = "Please fill in all information"
-            showAlert = true
         }
-    }
-}
+    } // End of ExpenseCreationView()
+
 
 
 struct UserSplitAmount: View {
@@ -249,36 +269,6 @@ struct UserSplitAmount: View {
         }
     }
 }
-
-/*struct UserSplitAmount: View {
-    
-    // List of all user amounts for liability
-    @Binding var userAmounts: UserAmountList
-    // User amount associated with this view: TODO set this
-    //@Binding var currUserAmount: UserAmount
-    // BasicUser associated with this view
-    @State var user: BasicUser
-    @State var amount: String = ""
-    
-    var groupMembers:[BasicUser]
-    
-    var body: some View {
-        HStack (alignment: .top){
-            ProfileCircleImage(userId: $user.id, groupMembers: groupMembers)
-            Spacer()
-            TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
-            
-        }.scenePadding()
-        .onChange(of: amount) { newVal in
-            var results = userAmounts.userAmountList.filter { $0.id == user.id }
-            if (!results.isEmpty) {
-                // TODO: Check that input can be converted to decimal
-                let _ = print("THIS IS A TEST")
-                results[0].amount = Decimal(string: amount)!
-            }
-        }
-    }
-}*/
 
 // Text field to enter expense title
 struct ExpenseTitle: View {
