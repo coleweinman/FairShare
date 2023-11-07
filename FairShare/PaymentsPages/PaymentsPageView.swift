@@ -193,7 +193,7 @@ struct PaymentsPageView: View {
                          VStack {
                             ForEach(payments) { payment in
                                 NavigationLink {
-                                    PaymentCreationView().navigationTitle("Edit Payment")
+                                    PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
                                 } label: {
                                     TableCellItemView(
                                         title: "Payment from \(payment.from.name)",

@@ -15,16 +15,11 @@ let clickableTextColor: Color = .blue
 let DEFAULT_EXPENSE = Expense(title: "", description: "", date: Date(), totalAmount: 0.0, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: [])
 
 class UserAmountList: ObservableObject {
-    @Published var id: String
-    @Published var name: String
-    @Published var profilePictureUrl: URL?
-    @Published var amount: Decimal
     
-    init(id: String, name: String, profilePictureUrl: URL? = nil, amount: Decimal) {
-        self.id = id
-        self.name = name
-        self.profilePictureUrl = profilePictureUrl
-        self.amount = amount
+    @Published var userAmountList: [UserAmount]
+    
+    init(userAmountList: [UserAmount]) {
+        self.userAmountList = userAmountList
     }
     
 }
@@ -40,7 +35,7 @@ struct ExpenseCreationView: View {
     // View Model to access current user logged in
     @EnvironmentObject var userViewModel: UserViewModel
     
-    // ToDo: View model to access DB, available groups
+    // View model to access DB, available groups
     @EnvironmentObject var groupListViewModel: GroupListViewModel
     
     @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
@@ -48,22 +43,23 @@ struct ExpenseCreationView: View {
     @State var expense = DEFAULT_EXPENSE
     
     // State atttributes to store user inputs
-    //@State var expenseAmount: String = ""
-    //@State var expenseDate: Date = Date()
-    @State var expensePayerId: String = ""
-    @State var expenseComment: String = ""
-    @State var expenseTitle: String = ""
+    // TODO: Bind to expense
+    
+    // Alert attrbutes on submission of expense
     @State var showAlert = false
     @State var alertMessage: String = ""
-    @State var groupId: String = ""
-    // TODO: Set groupMembers based on group selection
-    //@State var groupMembers: [BasicUser] = []//  = testGroup2.members
-    // @State var groupMembers = Set<String>()
-    @State var expenseMembers: [BasicUser] = []
-    // Don't reload on update of this
-    @State var userAmounts: [UserAmount] = []
     
+    // TODO: Bind to expense
+    @State var expensePayerId: String = ""
+    @State var expenseMembers: [BasicUser] = []
+    //@State var userAmounts: [UserAmount] = []
+    @State var userAmounts: UserAmountList = UserAmountList(userAmountList: [])
+    //@State var userAmounts: [UserAmountList] = []
+    
+    // Set on appear
     @State var currUserId: String?
+    @State var expenseId: String?
+    
     
     var body: some View {
         ScrollView {
@@ -72,7 +68,8 @@ struct ExpenseCreationView: View {
                 //AmountEntry(amount: $expenseAmount)
                 AmountEntry(amount: $expense.totalAmount)
                 // Title
-                ExpenseTitle(title: $expenseTitle)
+                //ExpenseTitle(title: $expenseTitle)
+                ExpenseTitle(title: $expense.title)
                 // Date
                 // DateSelector(selectedDate: $expenseDate)
                 DateSelector(selectedDate: $expense.date)
@@ -90,39 +87,54 @@ struct ExpenseCreationView: View {
                 }
                 // Involved members
                 VStack (alignment: .leading) {
-                    ForEach(expenseMembers) {member in
+                    ForEach($userAmounts.userAmountList) {$member in
                         Spacer()
                         //var currAmount = userAmounts.filter { $0.id == member.id }
                         
                         // TODO: Check that input can be converted to decimal
                         //let _ = print("THIS IS A TEST")
                         //results[0].amount = Decimal(string: amount)!
-                        UserSplitAmount(userAmounts: $userAmounts, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
+                        UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                         // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                     }
                 }
                 // Comments
-                CommentBox(comment: $expenseComment)
+                // CommentBox(comment: $expenseComment)
+                CommentBox(comment: $expense.description)
                 ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
                 ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
-                    Alert(title: Text(expenseTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    Alert(title: Text(expense.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
             }.onAppear() {
                 currUserId = userViewModel.user!.id
                 expensePayerId = currUserId!
+                // TODO: Add in code for editing
+                // Do lookup of expenseId
+                if (expenseId != nil) {
+                    let _ = print("EXPENSE ID: \(expenseId)")
+                    expenseViewModel.fetchData(expenseId: expenseId!)
+                    let currExpense = expenseViewModel.expense
+                    // expense = currExpense!
+                    let _ = print("EXPENSE LOADED")
+                    //expense = expenseViewModel.expense!
+                }
             }
             .onChange(of: expenseMembers) { newVal in
                 // Create new UserAmount for curr member
                 // Set the amount by default to 0
                 for member in expenseMembers {
-                    if (!userAmounts.contains(where: {$0.id == member.id})) {
+                    if (!userAmounts.userAmountList.contains(where: {$0.id == member.id})) {
                         // Do not have entry for user yet, create
-                        userAmounts.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
+                        userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
                     // TODO: Handle deletions of users?
                 }
             }
-        }
+        }/*.onChange(of: expenseViewModel) { newVal in
+            print("EXPENSE VIEW MODEL LOADED ")
+            print ("TITLE OF EXPENSE: \(expenseViewModel.expense)")
+            
+        }*/
     }
     func attachReceipt() {
         // ToDo: Camera and camera roll launch
@@ -133,7 +145,7 @@ struct ExpenseCreationView: View {
     
     func findSplitSum() -> Decimal {
         var sum: Decimal = 0.0
-        for user in userAmounts {
+        for user in userAmounts.userAmountList {
             let currAmount = user.amount
             sum += currAmount
         }
@@ -143,7 +155,7 @@ struct ExpenseCreationView: View {
     // Respond to submit button press, use state vars to create and store expense
     func createExpenseOnSubmit() {
         let _ = print("SUM \(findSplitSum())")
-        if (expenseTitle != "" && expensePayerId != "") {
+        if (expense.title != "" && expensePayerId != "") {
             if (expense.totalAmount > 0) {
                 // TODO: Add back in later when user amount update works
                 /*if (findSplitSum() != expenseAmount) {
@@ -155,7 +167,7 @@ struct ExpenseCreationView: View {
                 let _ = print("EXPENSE AMOUNT: \(expense.totalAmount)")
                 let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
                 let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expense.totalAmount)
-                let newExpense = Expense(title: expenseTitle, description: expenseComment, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts, involvedUserIds: expenseMembers.map{$0.id})
+                let newExpense = Expense(title: expense.title, description: expense.description, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts.userAmountList, involvedUserIds: expenseMembers.map{$0.id})
                 expenseViewModel.expense = newExpense
                 let saveSuccess = expenseViewModel.save()
                 if ((saveSuccess) != nil) {
@@ -181,30 +193,40 @@ struct ExpenseCreationView: View {
     }
 }
 
-// Segmented view for adding members individually or by group
-struct ChooseMemberOption: View {
-    @State private var selection = 0
-    
-    
-    var body: some View {
-        VStack {
-            Picker("Choose member add option", selection: $selection) {
-                       Text("Add Group").tag(0)
-                       Text("Add Individual Members").tag(1)
-                   }.pickerStyle(.segmented)
-            if (selection == 0) {
-                // Add by group
-            } else {
-                // Add individual members
-            }
-         }
-    }
-    
-}
 
 struct UserSplitAmount: View {
     
-    @Binding var userAmounts: [UserAmount]
+    // List of all user amounts for liability
+    @Binding var currUserAmount: UserAmount
+    // User amount associated with this view: TODO set this
+    //@Binding var currUserAmount: UserAmount
+    // BasicUser associated with this view
+    //@State var user: BasicUser
+    @State var amount: String = ""
+    
+    var groupMembers:[BasicUser]
+    
+    var body: some View {
+        HStack (alignment: .top){
+            ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers)
+            Spacer()
+            TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
+            
+        }.scenePadding()
+        .onChange(of: amount) { newVal in
+            currUserAmount.amount = Decimal(string: amount)!
+            // TODO: Error check !!
+        }
+    }
+}
+
+/*struct UserSplitAmount: View {
+    
+    // List of all user amounts for liability
+    @Binding var userAmounts: UserAmountList
+    // User amount associated with this view: TODO set this
+    //@Binding var currUserAmount: UserAmount
+    // BasicUser associated with this view
     @State var user: BasicUser
     @State var amount: String = ""
     
@@ -218,7 +240,7 @@ struct UserSplitAmount: View {
             
         }.scenePadding()
         .onChange(of: amount) { newVal in
-            var results = userAmounts.filter { $0.id == user.id }
+            var results = userAmounts.userAmountList.filter { $0.id == user.id }
             if (!results.isEmpty) {
                 // TODO: Check that input can be converted to decimal
                 let _ = print("THIS IS A TEST")
@@ -226,7 +248,7 @@ struct UserSplitAmount: View {
             }
         }
     }
-}
+}*/
 
 // Text field to enter expense title
 struct ExpenseTitle: View {

@@ -32,11 +32,15 @@ struct PaymentCreationView: View {
     @State var paymentComment: String = ""
     @State var paymentTitle: String = ""
     
+    // Alert attributes for submission
     @State var sendAlert = false
     @State var alertMessage = ""
-    @State var allMembers: [BasicUser] = []
     
-    //TODO: Write init where set newPayment to either default or fetch data
+    // Set on appear
+    @State var allMembers: [BasicUser] = []
+    var paymentId: String?
+    
+    //TODO: Write init where set newPayment to either default or fetch data ?? or do in on appear
 
     var body: some View {
         ScrollView {

@@ -179,7 +179,7 @@ struct ExpensesPageView: View {
                         VStack {
                             ForEach(expenses) { expense in
                                 NavigationLink {
-                                    ExpenseCreationView().navigationTitle("Edit Expense")
+                                    ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
                                 } label: {
                                     TableCellItemView(
                                         title: expense.title,
