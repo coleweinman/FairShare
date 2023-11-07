@@ -8,10 +8,9 @@
 import SwiftUI
 import FirebaseFunctions
 
-struct LargePFP: View {
+struct PFP: View {
     var image: URL?
-    
-    var imageSize: CGFloat = 56
+    var size: CGFloat = 32
     
     var body: some View {
         if let profileUrl = image {
@@ -21,36 +20,12 @@ struct LargePFP: View {
             } placeholder: {
                 ProgressView()
             }
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: size, height: size)
                 .clipShape(Circle())
         } else {
             Image(systemName: "person.fill")
                 .resizable()
-                .frame(width: imageSize, height: imageSize)
-                .clipShape(Circle())
-        }
-    }
-}
-
-struct SmallPFP: View {
-    var image: URL?
-    
-    var imageSize: CGFloat = 32
-    
-    var body: some View {
-        if let profileUrl = image {
-            AsyncImage(url: profileUrl) { imageThing in
-                imageThing
-                    .resizable()
-            } placeholder: {
-                ProgressView()
-            }
-                .frame(width: imageSize, height: imageSize)
-                .clipShape(Circle())
-        } else {
-            Image(systemName: "person.fill")
-                .resizable()
-                .frame(width: imageSize, height: imageSize)
+                .frame(width: size, height: size)
                 .clipShape(Circle())
         }
     }
@@ -103,7 +78,7 @@ struct TableCellItemView: View {
                     Spacer()
                     HStack {
                         ForEach(pfps, id: \.self) { pfp in
-                            SmallPFP(image: pfp)
+                            PFP(image: pfp)
                         }
                     }
                 }
@@ -141,6 +116,8 @@ struct NetBalanceView: View {
     var nameFontSize: CGFloat = 16
     var balanceFontSize: CGFloat = 16
     
+    @State private var remindConfirmationAlert: Bool = false
+    
     func remind() async {
         let functionData = ["userId": user.id]
         do {
@@ -167,7 +144,7 @@ struct NetBalanceView: View {
     
     var body: some View {
         HStack {
-            LargePFP(image: user.profilePictureUrl)
+            PFP(image: user.profilePictureUrl, size: 48)
             Text(user.name)
                 .font(.system(size: nameFontSize, weight: .medium))
             Spacer()
@@ -175,21 +152,36 @@ struct NetBalanceView: View {
                 Text(user.amount.moneyString)
                     .font(.system(size: balanceFontSize, weight: .regular))
                     .foregroundColor(user.amount >= 0 ? positiveBalanceColor : negativeBalanceColor)
-                Button(action: {
-                    Task {
-                        await remind()
+                if user.amount < 0 {
+                    Button(action: {
+                        remindConfirmationAlert = true
+                    }) {
+                        Text("Remind")
+                            .font(.system(size: actionFontSize, weight: .regular))
+                            .padding(.vertical, buttonPadding)
+                            .padding(.horizontal, buttonPadding * buttonSizeRatio)
+                            .foregroundColor(buttonForegroundColor)
+                            .background(buttonBackgroundColor)
+                            .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius))
+                            .shadow(color: shadowColor, radius: shadowRadius, y: shadowOffset)
                     }
-                }) {
-                    Text("Remind")
-                        .font(.system(size: actionFontSize, weight: .regular))
-                        .padding(.vertical, buttonPadding)
-                        .padding(.horizontal, buttonPadding * buttonSizeRatio)
-                        .foregroundColor(buttonForegroundColor)
-                        .background(buttonBackgroundColor)
-                        .clipShape(RoundedRectangle(cornerRadius: buttonCornerRadius))
-                        .shadow(color: shadowColor, radius: shadowRadius, y: shadowOffset)
                 }
             }
+        }
+        .alert(isPresented: $remindConfirmationAlert) {
+            Alert(
+                title: Text("Payment Reminder"),
+                message: Text("Are you sure you want to send a payment reminder to \(user.name)"),
+                primaryButton: .default(
+                    Text("Send Reminder"),
+                    action: {
+                        Task {
+                            await remind()
+                        }
+                    }
+                ),
+                secondaryButton: .cancel()
+            )
         }
     }
 }

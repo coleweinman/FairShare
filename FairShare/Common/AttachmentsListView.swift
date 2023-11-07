@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import AVFoundation
 
 struct ImagePopoverData: Identifiable {
     var id: String { selectedImagePath ?? selectedImageData?.description ?? "" }
@@ -22,6 +23,9 @@ struct AttachmentsListView: View {
     @State var selectedImagePath: String?
     @State var selectedImageData: Data?
     @State var imagePopoverData: ImagePopoverData?
+    @State var cameraOpen: Bool = false
+    @State var errorAlert: Bool = false
+    @State var errorAlertMessage: String = ""
     
     init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void, onRemoveExisting: @escaping (String) -> Void) {
         self.existingImages = existingImages
@@ -73,7 +77,7 @@ struct AttachmentsListView: View {
             PhotosPicker(selection: $selectedItems,
                          matching: .images,
                          photoLibrary: .shared()) {
-                Label("Add", systemImage: "plus")
+                Label("Add from Photos", systemImage: "photo")
             }
              .onChange(of: selectedItems, perform: { photos in
                  Task {
@@ -85,6 +89,11 @@ struct AttachmentsListView: View {
                      
                  }
              })
+            Button(action: {
+                self.openCamera()
+            }, label: {
+                Label("Add from Camera", systemImage: "camera")
+            })
         }
         .sheet(item: $imagePopoverData) { data in
             Button("Remove", systemImage: "trash", action: {
@@ -108,6 +117,39 @@ struct AttachmentsListView: View {
                 }
             }
             
+        }
+        .fullScreenCover(isPresented: $cameraOpen) {
+            CameraView(
+                onImageSelected: { image in
+                    pendingImages.append(image)
+                    self.onSelect(pendingImages)
+                }, 
+                onDismiss: {
+                    self.cameraOpen = false
+                }
+            ).ignoresSafeArea(.all)
+        }
+        .alert(isPresented: $errorAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(errorAlertMessage)
+            )
+        }
+    }
+    
+    func openCamera() {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status != .authorized {
+            AVCaptureDevice.requestAccess(for: .video) { authorized in
+                if authorized {
+                    self.cameraOpen = true
+                } else {
+                    errorAlert = true
+                    errorAlertMessage = "Please grant camera permission"
+                }
+            }
+        } else {
+            self.cameraOpen = true
         }
     }
 }

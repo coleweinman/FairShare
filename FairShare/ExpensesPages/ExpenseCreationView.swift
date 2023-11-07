@@ -115,7 +115,7 @@ struct ExpenseCreationView: View {
                     
                     
                     // TODO: Comment back in
-                    /*Divider()
+                    Divider()
                     Text("Attachments")
                     AttachmentsListView(existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [], pendingImages: pendingImages, onSelect: { images in pendingImages = images }, onRemoveExisting: { path in expenseViewModel.expense?.attachmentObjectIds.removeAll(where: { p in p == path }) })
                     Divider()
@@ -125,8 +125,8 @@ struct ExpenseCreationView: View {
                         }
                     })
                     .alert(isPresented: $showAlert) {
-                        Alert(title: Text(expenseViewModel.expense.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                    }*/
+                        Alert(title: Text(expenseViewModel.expense!.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }
                 } else {
                     ProgressView()
                 }
@@ -193,7 +193,7 @@ struct ExpenseCreationView: View {
         }
         
         // Respond to submit button press, use state vars to create and store expense
-        func createExpenseOnSubmit() {
+        func createExpenseOnSubmit() async {
             let _ = print("SUM \(findSplitSum())")
             if (expenseViewModel.expense!.title != "" && expensePayerId != "") {
                 if (expenseViewModel.expense!.totalAmount > 0) {
@@ -211,10 +211,9 @@ struct ExpenseCreationView: View {
                     expenseViewModel.expense?.paidByDetails = [paidByAmount]
                     expenseViewModel.expense?.liabilityDetails = userAmounts.userAmountList
                     expenseViewModel.expense?.involvedUserIds = expenseMembers.map{$0.id}
-                    let saveSuccess = expenseViewModel.save()
                     
                     // TODO: Comment back in
-                    /*await MainActor.run {
+                    await MainActor.run {
                         self.savingAlert = true
                     }
                     let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
@@ -227,7 +226,7 @@ struct ExpenseCreationView: View {
                             showAlert = true
                             dismiss()
                         }
-                    }*/
+                    }
                     
                 } else {
                     // Invalid amount
