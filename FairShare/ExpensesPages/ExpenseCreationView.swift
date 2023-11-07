@@ -260,8 +260,11 @@ struct UserSplitAmount: View {
             
         }.scenePadding()
         .onChange(of: amount) { newVal in
-            currUserAmount.amount = Decimal(string: amount)!
+            if let currAmount = Decimal(string: amount) {
+                currUserAmount.amount = currAmount
+            }
             // TODO: Error check !!
+            
         }
     }
 }
