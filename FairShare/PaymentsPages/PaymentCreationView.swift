@@ -18,19 +18,19 @@ struct PaymentCreationView: View {
     // View model to upload pament
     @ObservedObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
+    // View Model to access current user logged in
+    @EnvironmentObject var userViewModel: UserViewModel
+    
     @EnvironmentObject var groupListViewModel: GroupListViewModel
     
-    @State var newPayment = DEFAULT_PAYMENT
+    //@State var newPayment = DEFAULT_PAYMENT
     
-    // Attributes of payment for user input
-    //@State var paymentAmount: String = ""
-    //@State var paymentDate: Date = Date()
     @State var paymentFrom: String = ""
     @State var sender: BasicUser?
     @State var paymentTo: String = ""
     @State var receiver: BasicUser?
-    @State var paymentComment: String = ""
-    @State var paymentTitle: String = ""
+    //@State var paymentComment: String = ""
+    //@State var paymentTitle: String = ""
     
     // Alert attributes for submission
     @State var sendAlert = false
@@ -39,31 +39,55 @@ struct PaymentCreationView: View {
     // Set on appear
     @State var allMembers: [BasicUser] = []
     var paymentId: String?
+    @State var currUserId: String?
     
     //TODO: Write init where set newPayment to either default or fetch data ?? or do in on appear
 
     var body: some View {
         ScrollView {
             VStack {
-                Spacer(minLength: 20)
-                // Amount
-                AmountEntry(amount: $newPayment.amount)
-                // Date
-                // DateSelector(selectedDate: $paymentDate)
-                DateSelector(selectedDate: $newPayment.date)
-                // Sender
-                SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
-                //SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $newPayment.from)
-                // Receiver
-                SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
-                // Comments
-                CommentBox(comment: $paymentComment)
-                ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
-                ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
-                    Button("OK", role: .cancel) { }
+                if (paymentViewModel.payment != nil) {
+                    Spacer(minLength: 20)
+                    VStack {
+                        // Amount
+                        AmountEntry(amount: Binding($paymentViewModel.payment)!.amount)
+                        // Date
+                        DateSelector(selectedDate: Binding($paymentViewModel.payment)!.date)
+                    }.onAppear() {
+                        if let currPayment = paymentViewModel.payment {
+                            if (paymentFrom == "") {
+                                paymentFrom = currPayment.from.id
+                            }
+                            if (paymentTo == "") {
+                                paymentTo = currPayment.to.id
+                            }
+                        }
+                    }
+                    // Sender
+                    SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
+                    //SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $newPayment.from)
+                    // Receiver
+                    SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
+                    // Comments
+                    CommentBox(comment: Binding($paymentViewModel.payment)!.description)
+                    ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
+                    ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
+                } else {
+                    ProgressView()
                 }
             }.onAppear() {
                 self.setAllMembers()
+                currUserId = userViewModel.user!.id
+                if (paymentId == nil) {
+                    // No paymentID given
+                    if (paymentViewModel.payment == nil) {
+                        paymentViewModel.payment = DEFAULT_PAYMENT
+                    }
+                } else {
+                    paymentViewModel.fetchData(paymentId: paymentId!)
+                }
             }
         }
     }
@@ -87,7 +111,7 @@ struct PaymentCreationView: View {
     // Respond to submit button press, use state vars to create and store payment
     func createPaymentOnSubmit() {
         if (paymentFrom != "" && paymentTo != "") {
-            if (newPayment.amount > 0){
+            if (paymentViewModel.payment!.amount > 0){
                 // Set payment title
                 for user in allMembers {
                     if (user.id == paymentFrom) {
@@ -98,8 +122,12 @@ struct PaymentCreationView: View {
                     }
                 }
                 let involvedUsers = [sender?.id, receiver?.id]
-                let newPayment = Payment(description: paymentComment, date: newPayment.date, amount: newPayment.amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
-                paymentViewModel.payment = newPayment
+                //let newPayment = Payment(description: paymentComment, date: newPayment.date, amount: newPayment.amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
+                //paymentViewModel.payment = newPayment
+                paymentViewModel.payment?.to = receiver!
+                paymentViewModel.payment?.from = sender!
+                paymentViewModel.payment?.involvedUserIds = involvedUsers as! [String]
+                
                 let success = paymentViewModel.save()
                 if (success) {
                     alertMessage = "Payment successfully created"

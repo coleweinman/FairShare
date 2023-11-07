@@ -56,7 +56,6 @@ struct ExpenseCreationView: View {
     @State var expensePayerId: String = ""
     @State var expenseMembers: [BasicUser] = []
     @State var userAmounts: UserAmountList = UserAmountList(userAmountList: [])
-    //@State var userAmounts: [UserAmountList] = []
     
     // Set on appear
     @State var currUserId: String?
@@ -78,6 +77,23 @@ struct ExpenseCreationView: View {
                         ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
                         // Date
                         DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
+                    }.onAppear() {
+                        // Do rest of initialization for editing here
+                        if let currExpense = expenseViewModel.expense {
+                            if (expensePayerId == "") {
+                                expensePayerId = currExpense.paidByDetails[0].id
+                            }
+                            if (userAmounts.userAmountList.isEmpty) {
+                                userAmounts.userAmountList = currExpense.liabilityDetails
+                            }
+                            // NEED TO SET EXPENSE MEMBERS
+                            if (expenseMembers.isEmpty) {
+                                for user in userAmounts.userAmountList {
+                                    expenseMembers.append(BasicUser(id: user.id, name: user.name, profilePictureUrl: user.profilePictureUrl))
+                                }
+                            }
+                        }
+                        
                     }
                     // Pull choice of groups for logged in user
                     if let groups = groupListViewModel.groups {
@@ -265,8 +281,10 @@ struct UserSplitAmount: View {
             if let currAmount = Decimal(string: amount) {
                 currUserAmount.amount = currAmount
             }
-            // TODO: Error check !!
-            
+        }.onAppear() {
+            if (amount == "" && currUserAmount.amount != 0) {
+                amount = "\(currUserAmount.amount)"
+            }
         }
     }
 }
@@ -455,6 +473,10 @@ struct AmountEntry: View {
             } else {
                 amount = -1
                 textColor = .red
+            }
+        }.onAppear() {
+            if (amount != 0) {
+                userInput = "\(amount)"
             }
         }
     }
