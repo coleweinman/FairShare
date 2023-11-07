@@ -23,14 +23,16 @@ struct AttachmentsListView: View {
     @State var selectedImageData: Data?
     @State var imagePopoverData: ImagePopoverData?
     
-    init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void) {
+    init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void, onRemoveExisting: @escaping (String) -> Void) {
         self.existingImages = existingImages
         self.pendingImages = pendingImages
         self.onSelect = onSelect
+        self.onRemoveExisting = onRemoveExisting
         print(existingImages)
     }
     
     var onSelect: (([Data]) -> Void)
+    var onRemoveExisting: ((String) -> Void)
     
     func loadImages(photos: [PhotosPickerItem]) async throws -> [Data] {
         var images: [Data] = []
@@ -53,7 +55,7 @@ struct AttachmentsListView: View {
     var body: some View {
         ScrollView {
             ForEach(existingImages, id: \.self) { path in
-                StorageImageView(path: path)
+                StorageImageView(path: path, maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
                         imagePopoverData = ImagePopoverData(selectedImagePath: path)
                     }
@@ -61,8 +63,9 @@ struct AttachmentsListView: View {
             ForEach(pendingImages, id: \.self) { image in
                 Image(uiImage: UIImage(data: image)!)
                     .resizable()
-                    .frame(width: 100, height: 100)
+                    .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
                         imagePopoverData = ImagePopoverData(selectedImageData: image)
                     }
@@ -70,10 +73,7 @@ struct AttachmentsListView: View {
             PhotosPicker(selection: $selectedItems,
                          matching: .images,
                          photoLibrary: .shared()) {
-            Image(systemName: "pencil.circle.fill")
-                    .symbolRenderingMode(.multicolor)
-                    .font(.system(size: 30))
-                    .foregroundColor(.accentColor)
+                Label("Add", systemImage: "plus")
             }
              .onChange(of: selectedItems, perform: { photos in
                  Task {
@@ -86,22 +86,32 @@ struct AttachmentsListView: View {
                  }
              })
         }
-        .popover(item: $imagePopoverData, attachmentAnchor: .point(.center)) { data in
-            if let path = data.selectedImagePath {
-                StorageImageView(path: path, maxWidth: UIScreen.main.bounds.width - 20, maxHeight: UIScreen.main.bounds.height - 50)
-                    .presentationCompactAdaptation(.popover)
-            } else {
-                Image(uiImage: UIImage(data: data.selectedImageData!)!)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: UIScreen.main.bounds.width - 20, maxHeight: UIScreen.main.bounds.height - 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .presentationCompactAdaptation(.popover)
+        .sheet(item: $imagePopoverData) { data in
+            Button("Remove", systemImage: "trash", action: {
+                if data.selectedImageData != nil {
+                    self.pendingImages.removeAll(where: {pi in pi == data.selectedImageData})
+                    self.onSelect(self.pendingImages)
+                } else {
+                    self.onRemoveExisting(data.selectedImagePath!)
+                }
+                imagePopoverData = nil
+            }).padding()
+            GeometryReader { geo in
+                if let path = data.selectedImagePath {
+                    StorageImageView(path: path, maxWidth: geo.size.width, maxHeight: geo.size.height)
+                } else {
+                    Image(uiImage: UIImage(data: data.selectedImageData!)!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
             }
+            
         }
     }
 }
 
 #Preview {
-    AttachmentsListView(existingImages: [], pendingImages: [], onSelect: {_ in })
+    AttachmentsListView(existingImages: [], pendingImages: [], onSelect: {_ in }, onRemoveExisting: {_ in })
 }

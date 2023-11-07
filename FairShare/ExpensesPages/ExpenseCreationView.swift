@@ -61,6 +61,9 @@ struct ExpenseCreationView: View {
     @State var expenseId: String?
     
     
+    @State var pendingImages: [Data] = []
+    @State var savingAlert = false
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -101,8 +104,16 @@ struct ExpenseCreationView: View {
                 // Comments
                 // CommentBox(comment: $expenseComment)
                 CommentBox(comment: $expense.description)
-                ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
-                ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
+                Divider()
+                Text("Attachments")
+                AttachmentsListView(existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [], pendingImages: pendingImages, onSelect: { images in pendingImages = images }, onRemoveExisting: { path in expenseViewModel.expense?.attachmentObjectIds.removeAll(where: { p in p == path }) })
+                Divider()
+                ButtonStyle1(buttonText: "Submit", actionFunction: {
+                    Task {
+                        await self.createExpenseOnSubmit()
+                    }
+                })
+                .alert(isPresented: $showAlert) {
                     Alert(title: Text(expense.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
             }.onAppear() {
@@ -135,6 +146,22 @@ struct ExpenseCreationView: View {
             print ("TITLE OF EXPENSE: \(expenseViewModel.expense)")
             
         }*/
+        .overlay() {
+            GeometryReader { geometry in
+                if savingAlert {
+                    ZStack(alignment: .center) {
+                        Color.gray.opacity(0.6).frame(width: geometry.size.width, height: geometry.size.height)
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(Color.white)
+                            .frame(width: 100, height: 100)
+                        VStack {
+                            ProgressView()
+                            Text("Loading")
+                        }
+                    }
+                }
+            }
+        }
     }
     func attachReceipt() {
         // ToDo: Camera and camera roll launch
@@ -153,7 +180,7 @@ struct ExpenseCreationView: View {
     }
     
     // Respond to submit button press, use state vars to create and store expense
-    func createExpenseOnSubmit() {
+    func createExpenseOnSubmit() async {
         let _ = print("SUM \(findSplitSum())")
         if (expense.title != "" && expensePayerId != "") {
             if (expense.totalAmount > 0) {
@@ -169,16 +196,19 @@ struct ExpenseCreationView: View {
                 let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expense.totalAmount)
                 let newExpense = Expense(title: expense.title, description: expense.description, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts.userAmountList, involvedUserIds: expenseMembers.map{$0.id})
                 expenseViewModel.expense = newExpense
-                let saveSuccess = expenseViewModel.save()
-                if ((saveSuccess) != nil) {
-                    // Successfully saved to DB
-                    alertMessage = "Successfully saved expense"
+                await MainActor.run {
+                    self.savingAlert = true
+                }
+                let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
+                await MainActor.run {
+                    self.savingAlert = false
+                    alertMessage = saveSuccess
                     showAlert = true
-                    dismiss()
-                } else {
-                    // Save unsuccessful
-                    alertMessage = "Unsuccessful save"
-                    showAlert = true
+                    if (saveSuccess == "Expense saved successfully") {
+                        // Successfully saved to DB
+                        showAlert = true
+                        dismiss()
+                    }
                 }
             } else {
                 // Invalid amount
