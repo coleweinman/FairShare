@@ -43,16 +43,10 @@ struct ExpenseCreationView: View {
     
     @StateObject var groupViewModel: GroupViewModel = GroupViewModel()
     
-    //@State var expense = DEFAULT_EXPENSE
-    
-    // State atttributes to store user inputs
-    // TODO: Bind to expense
-    
     // Alert attrbutes on submission of expense
     @State var showAlert = false
     @State var alertMessage: String = ""
     
-    // TODO: Bind to expense
     @State var expensePayerId: String = ""
     @State var expenseMembers: [BasicUser] = []
     @State var userAmounts: UserAmountList = UserAmountList(userAmountList: [])
@@ -63,8 +57,6 @@ struct ExpenseCreationView: View {
     
     @State var pendingImages: [Data] = []
     @State var savingAlert = false
-    
-    
     
     var body: some View {
         ScrollView {
@@ -86,7 +78,6 @@ struct ExpenseCreationView: View {
                             if (userAmounts.userAmountList.isEmpty) {
                                 userAmounts.userAmountList = currExpense.liabilityDetails
                             }
-                            // NEED TO SET EXPENSE MEMBERS
                             if (expenseMembers.isEmpty) {
                                 for user in userAmounts.userAmountList {
                                     expenseMembers.append(BasicUser(id: user.id, name: user.name, profilePictureUrl: user.profilePictureUrl))
@@ -97,7 +88,6 @@ struct ExpenseCreationView: View {
                     }
                     // Pull choice of groups for logged in user
                     if let groups = groupListViewModel.groups {
-                        let _ = print(groups.count)
                         MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
                     } else {
                         // Debug print
@@ -119,10 +109,6 @@ struct ExpenseCreationView: View {
                     }
                     // Comments/ expense description
                     CommentBox(comment: Binding($expenseViewModel.expense)!.description)
-                    //ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
-                    //ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
-                     //Alert(title: Text(expenseViewModel.expense!.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                     //}
                     
                     
                     // TODO: Comment back in
@@ -207,7 +193,6 @@ struct ExpenseCreationView: View {
         
         // Respond to submit button press, use state vars to create and store expense
         func createExpenseOnSubmit() async {
-            let _ = print("SUM \(findSplitSum())")
             if (expenseViewModel.expense!.title != "" && expensePayerId != "") {
                 if (expenseViewModel.expense!.totalAmount > 0) {
                     // TODO: Add back in later when user amount update works
@@ -217,10 +202,8 @@ struct ExpenseCreationView: View {
                      showAlert = true
                      return
                      }
-                    //let _ = print("EXPENSE AMOUNT: \(expense.totalAmount)")
                     let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
                     let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expenseViewModel.expense!.totalAmount)
-                    //let newExpense = Expense(title: expense.title, description: expense.description, date: expense.date, totalAmount: expense.totalAmount, attachmentObjectIds: [], paidByDetails: [paidByAmount], liabilityDetails: userAmounts.userAmountList, involvedUserIds: expenseMembers.map{$0.id})
                     expenseViewModel.expense?.paidByDetails = [paidByAmount]
                     expenseViewModel.expense?.liabilityDetails = userAmounts.userAmountList
                     expenseViewModel.expense?.involvedUserIds = expenseMembers.map{$0.id}
@@ -373,7 +356,6 @@ struct SingleDropdown: View {
             }.scenePadding(.all)
             // Update image on picker selection
             if (selectedItem != "") {
-                let _ = print("SELECTED ITEM: \(selectedItem)")
                 ProfileCircleImage(userId: $selectedItem, groupMembers: groupMembers)
             }
         }
@@ -401,7 +383,6 @@ struct ProfileCircleImage: View {
     var body: some View {
         HStack (alignment: .top){
             let currUser = setUser()
-            let _ = print("ID OF CURRENT USER: \(currUser.id)")
             AsyncImage(url:currUser.profilePictureUrl){ image in
                 image
                     .resizable()
@@ -539,14 +520,11 @@ struct MemberSelectView: View {
         //currUser = userViewModel.user
         for group in groups {
             self.groups.append(GroupListItem(group: group))
-            print(group.name)
             for user in group.members {
                 let currUserItem = UserListItem(user: user)
                 // TODO: Check that can unwrap userViewModel, exclude current user
                 if (!userOptions.contains(currUserItem) && currUserId != user.id) {
-                    print("ADDING USER")
                     self.userOptions.append(currUserItem)
-                    print(self.userOptions.count)
                 }
             }
         }
@@ -578,7 +556,6 @@ struct MemberSelectView: View {
                       }.navigationTitle("Choose a Group")
                 } else {
                     // Add individual members
-                    let _ = print(userOptions.count)
                     List (userOptions, selection: $multiSelection) {
                         Text($0.user.name)
                     }.toolbar {
@@ -589,7 +566,6 @@ struct MemberSelectView: View {
                 Text("Selection: \(multiSelection.count)")
                 Spacer()
             }.onChange(of: editMode) { newVal in
-                print("Clicked done")
                 var members: [BasicUser] = []
                 if (selection == 0) {
                     // By group
@@ -661,7 +637,6 @@ struct PersonSelection: View {
             Text("Selection: \(multiSelection.count)")
             Spacer()
         }.onChange(of: editMode) { newVal in
-            print("Clicked done")
             var members: [BasicUser] = []
                 // By user
                 for item in multiSelection {
