@@ -57,7 +57,7 @@ class PaymentListViewModel: ObservableObject {
             }
     }
     
-    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, involved: [String]?, sortBy: Sort?, sortOrder: Bool?) {
+    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?) {
         let paymentsRef = db.collection("payments")
         var query = paymentsRef.whereField("involvedUserIds", arrayContains: uid)
         if let startDate = startDate, let endDate = endDate {
@@ -70,10 +70,6 @@ class PaymentListViewModel: ObservableObject {
                 .whereField("amount", isGreaterThanOrEqualTo: minAmount)
                 .whereField("amount", isLessThanOrEqualTo: maxAmount)
         }
-        if let involved = involved {
-            query = query.whereField("involved", arrayContainsAny: involved)
-        }
-        
         if let sortBy = sortBy, let sortOrder = sortOrder {
             switch sortBy {
                 case .date:
@@ -82,7 +78,6 @@ class PaymentListViewModel: ObservableObject {
                     query = query.order(by: "amount", descending: !sortOrder)
             }
         }
-        
         var _ = query.addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error!)")

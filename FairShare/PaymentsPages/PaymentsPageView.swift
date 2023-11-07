@@ -15,7 +15,6 @@ struct PaymentsPageView: View {
     @State private var ascending = true
     @State private var showDateFilter: Bool = false
     @State private var showAmountFilter: Bool = false
-    @State private var showPeopleFilter: Bool = false
     @State private var showSort: Bool = false
     @State private var startDate = Date()
     @State private var endDate = Date()
@@ -60,7 +59,7 @@ struct PaymentsPageView: View {
                             isPresented.toggle()
                         }) {
                             Spacer()
-                            Text("the button that does the thing")
+                            Text("Filter and Sort")
                             Spacer()
                         }
                         .frame(maxHeight: .infinity)
@@ -80,8 +79,6 @@ struct PaymentsPageView: View {
                                     Toggle("Filter by Date", isOn: $showDateFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
                                     Toggle("Filter by Amount", isOn: $showAmountFilter)
-                                        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                    Toggle("Filter by People", isOn: $showPeopleFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
                                     Toggle("Sort", isOn: $showSort)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
@@ -140,12 +137,6 @@ struct PaymentsPageView: View {
                                         }
                                     }
                                 }
-                                if showPeopleFilter {
-                                    // people filter
-                                    HStack {
-                                        Text("[the thing to filter by people]")
-                                    }
-                                }
                                 if showSort {
                                     // SORTS
                                     HStack {
@@ -159,8 +150,6 @@ struct PaymentsPageView: View {
                                         Button(action: {
                                             ascending.toggle()
                                         }) {
-                                            // jesus is 0
-                                            // now is a million
                                             Image(systemName: ascending ? "chevron.up" : "chevron.down")
                                                 .imageScale(.large)
                                                 .foregroundColor(.black)
@@ -173,7 +162,6 @@ struct PaymentsPageView: View {
                                     Button(action: {
                                         showDateFilter = false
                                         showAmountFilter = false
-                                        showPeopleFilter = false
                                         showSort = false
                                         ascending = true
                                         selectedSort = .date
@@ -246,10 +234,7 @@ struct PaymentsPageView: View {
         let sortBy = showSort ? selectedSort : nil
         let sortOrder = showSort ? ascending : nil
         if let user = userViewModel.user {
-            paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, involved: nil, sortBy: sortBy, sortOrder: sortOrder)
-            print("success")
-        } else {
-            print("TANKED")
+            paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)
         }
     }
     
