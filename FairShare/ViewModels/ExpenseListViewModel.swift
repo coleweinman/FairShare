@@ -49,7 +49,6 @@ class ExpenseListViewModel: ObservableObject {
                     let expenses = try documents.map { doc in
                         return try doc.data(as: Expense.self)
                     }
-                    print(expenses)
                     self.expenses = expenses
                 } catch {
                     self.expenses = []

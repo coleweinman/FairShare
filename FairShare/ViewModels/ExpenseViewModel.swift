@@ -49,10 +49,11 @@ class ExpenseViewModel: ObservableObject {
             return "Failed to save expense"
         }
         do {
-            var objectIds = try await withThrowingTaskGroup(of: StorageMetadata.self, returning: [String].self) { group in
+            let objectIds = try await withThrowingTaskGroup(of: StorageMetadata.self, returning: [String].self) { group in
                 for data in attachments {
                     group.addTask {
                         let imageUuid = UUID()
+                        print(imageUuid)
                         let imageRef = self.storage.reference(withPath: "expenseAttachments/\(id)/\(imageUuid).png")
                         return try await imageRef.putDataAsync(data)
                     }
@@ -62,6 +63,7 @@ class ExpenseViewModel: ObservableObject {
                 }
             }
             self.expense?.attachmentObjectIds.append(contentsOf: objectIds)
+            self.expense?.id = id
             let result = self.save()
             if result != nil {
                 return "Expense saved successfully"

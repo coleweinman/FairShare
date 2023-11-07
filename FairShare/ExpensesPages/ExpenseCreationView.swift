@@ -154,18 +154,18 @@ struct ExpenseCreationView: View {
                         userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
                 }
-            }.overlay() {
-                GeometryReader { geometry in
-                    if savingAlert {
-                        ZStack(alignment: .center) {
-                            Color.gray.opacity(0.6).frame(width: geometry.size.width, height: geometry.size.height)
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 100, height: 100)
-                            VStack {
-                                ProgressView()
-                                Text("Loading")
-                            }
+            }
+        }.overlay() {
+            GeometryReader { geometry in
+                if savingAlert {
+                    ZStack(alignment: .center) {
+                        Color.gray.opacity(0.6).frame(width: geometry.size.width, height: geometry.size.height)
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(Color.white)
+                            .frame(width: 100, height: 100)
+                        VStack {
+                            ProgressView()
+                            Text("Loading")
                         }
                     }
                 }
@@ -213,7 +213,9 @@ struct ExpenseCreationView: View {
                     await MainActor.run {
                         self.savingAlert = true
                     }
+                    expenseViewModel.expense?.date = Date.now
                     let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
+                    
                     await MainActor.run {
                         self.savingAlert = false
                         alertMessage = saveSuccess
@@ -570,8 +572,6 @@ struct MemberSelectView: View {
                 if (selection == 0) {
                     // By group
                     for item in multiSelection {
-                        print("ITEMS")
-                        print(item)
                         // Need to search through groups and userOptions using UUID and return list of users
                         // item is a UUID
                         // Groups
@@ -583,8 +583,6 @@ struct MemberSelectView: View {
                 } else {
                     // By user
                     for item in multiSelection {
-                        print("ITEMS")
-                        print(item)
                         // Need to search through groups and userOptions using UUID and return list of users
                         // item is a UUID
                         // Groups
@@ -645,8 +643,6 @@ struct PersonSelection: View {
             var members: [BasicUser] = []
                 // By user
                 for item in multiSelection {
-                    print("ITEMS")
-                    print(item)
                     // Need to search through groups and userOptions using UUID and return list of users
                     // item is a UUID
                     // Groups

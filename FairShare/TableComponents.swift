@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFunctions
+import NukeUI
 
 struct PFP: View {
     var image: URL?
@@ -14,11 +15,12 @@ struct PFP: View {
     
     var body: some View {
         if let profileUrl = image {
-            AsyncImage(url: profileUrl) { imageThing in
-                imageThing
-                    .resizable()
-            } placeholder: {
-                ProgressView()
+            LazyImage(url: profileUrl) { state in
+                if let image = state.image {
+                    image.resizable()
+                } else {
+                    ProgressView()
+                }
             }
                 .frame(width: size, height: size)
                 .clipShape(Circle())

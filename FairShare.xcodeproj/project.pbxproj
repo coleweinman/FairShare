@@ -51,6 +51,10 @@
 		8C82B6762AECA8B000DC8097 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8C82B6752AECA8B000DC8097 /* GoogleSignInSwift */; };
 		8CE18F9A2AF96300004C1A58 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE18F992AF96300004C1A58 /* Extentions.swift */; };
 		8CE18F9C2AFAA369004C1A58 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE18F9B2AFAA369004C1A58 /* CameraView.swift */; };
+		8CE18F9F2AFAC316004C1A58 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE18F9E2AFAC316004C1A58 /* Nuke */; };
+		8CE18FA12AFAC316004C1A58 /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE18FA02AFAC316004C1A58 /* NukeExtensions */; };
+		8CE18FA32AFAC316004C1A58 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE18FA22AFAC316004C1A58 /* NukeUI */; };
+		8CE18FA52AFAC316004C1A58 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE18FA42AFAC316004C1A58 /* NukeVideo */; };
 		ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */; };
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
 		ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904582ADE51640055A608 /* PaymentCreationView.swift */; };
@@ -116,8 +120,12 @@
 				8C82B6762AECA8B000DC8097 /* GoogleSignInSwift in Frameworks */,
 				8C82B6702AEB2FEC00DC8097 /* FirebaseFunctions in Frameworks */,
 				8C34682B2ACF45F800E0C7B3 /* FirebaseAuth in Frameworks */,
+				8CE18FA32AFAC316004C1A58 /* NukeUI in Frameworks */,
 				8C34682D2ACF45F800E0C7B3 /* FirebaseFirestoreSwift in Frameworks */,
 				8C82B6742AECA8B000DC8097 /* GoogleSignIn in Frameworks */,
+				8CE18F9F2AFAC316004C1A58 /* Nuke in Frameworks */,
+				8CE18FA52AFAC316004C1A58 /* NukeVideo in Frameworks */,
+				8CE18FA12AFAC316004C1A58 /* NukeExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +327,10 @@
 				8C82B66F2AEB2FEC00DC8097 /* FirebaseFunctions */,
 				8C82B6732AECA8B000DC8097 /* GoogleSignIn */,
 				8C82B6752AECA8B000DC8097 /* GoogleSignInSwift */,
+				8CE18F9E2AFAC316004C1A58 /* Nuke */,
+				8CE18FA02AFAC316004C1A58 /* NukeExtensions */,
+				8CE18FA22AFAC316004C1A58 /* NukeUI */,
+				8CE18FA42AFAC316004C1A58 /* NukeVideo */,
 			);
 			productName = FairShare;
 			productReference = 8C3468162ACF0BB000E0C7B3 /* FairShare.app */;
@@ -351,6 +363,7 @@
 			packageReferences = (
 				8C3468292ACF45F800E0C7B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				8C82B6722AECA8B000DC8097 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = 8C3468172ACF0BB000E0C7B3 /* Products */;
 			projectDirPath = "";
@@ -640,6 +653,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.1.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -677,6 +698,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C82B6722AECA8B000DC8097 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		8CE18F9E2AFAC316004C1A58 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		8CE18FA02AFAC316004C1A58 /* NukeExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeExtensions;
+		};
+		8CE18FA22AFAC316004C1A58 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
+		8CE18FA42AFAC316004C1A58 /* NukeVideo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CE18F9D2AFAC316004C1A58 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeVideo;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
