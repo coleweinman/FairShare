@@ -33,7 +33,7 @@ struct ExpenseCreationView: View {
     @Environment(\.dismiss) private var dismiss
     
     // View model to access db and upload new expenses
-    @ObservedObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
+    @StateObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     
     // View Model to access current user logged in
     @EnvironmentObject var userViewModel: UserViewModel
@@ -41,7 +41,7 @@ struct ExpenseCreationView: View {
     // View model to access DB, available groups
     @EnvironmentObject var groupListViewModel: GroupListViewModel
     
-    @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
+    @StateObject var groupViewModel: GroupViewModel = GroupViewModel()
     
     //@State var expense = DEFAULT_EXPENSE
     
@@ -71,20 +71,20 @@ struct ExpenseCreationView: View {
         ScrollView {
             VStack {
                 if (expenseViewModel.expense != nil) {
-                    // Amount
-                    //AmountEntry(amount: $expenseAmount)
-                    AmountEntry(amount: Binding($expenseViewModel.expense)!.totalAmount)
-                    // Title
-                    //ExpenseTitle(title: $expenseTitle)
-                    ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
-                    // Date
-                    // DateSelector(selectedDate: $expenseDate)
-                    DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
+                    VStack {
+                        // Amount
+                        AmountEntry(amount: Binding($expenseViewModel.expense)!.totalAmount)
+                        // Title
+                        ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
+                        // Date
+                        DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
+                    }
                     // Pull choice of groups for logged in user
                     if let groups = groupListViewModel.groups {
                         let _ = print(groups.count)
                         MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
                     } else {
+                        // Debug print
                         let _ = print(" NO GROUP OPTIONS")
                     }
                     if (!expenseMembers.isEmpty) {
@@ -96,17 +96,12 @@ struct ExpenseCreationView: View {
                     VStack (alignment: .leading) {
                         ForEach($userAmounts.userAmountList) {$member in
                             Spacer()
-                            //var currAmount = userAmounts.filter { $0.id == member.id }
                             
                             // TODO: Check that input can be converted to decimal
-                            //let _ = print("THIS IS A TEST")
-                            //results[0].amount = Decimal(string: amount)!
                             UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
-                            // UserSplitAmount(userAmounts: Binding(userAmounts[0]).amount, user: member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                         }
                     }
-                    // Comments
-                    // CommentBox(comment: $expenseComment)
+                    // Comments/ expense description
                     CommentBox(comment: Binding($expenseViewModel.expense)!.description)
                     //ButtonStyle1(buttonText:"Attach Receipt", actionFunction: {self.attachReceipt()})
                     //ButtonStyle1(buttonText: "Submit", actionFunction: {self.createExpenseOnSubmit()}).alert(isPresented: $showAlert) {
@@ -135,7 +130,9 @@ struct ExpenseCreationView: View {
                 expensePayerId = currUserId!
                 if (expenseId == nil) {
                     // No expenseId given
-                    expenseViewModel.expense = DEFAULT_EXPENSE
+                    if (expenseViewModel.expense == nil) {
+                        expenseViewModel.expense = DEFAULT_EXPENSE
+                    }
                 } else {
                     expenseViewModel.fetchData(expenseId: expenseId!)
                 }
