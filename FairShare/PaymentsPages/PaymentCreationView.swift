@@ -23,14 +23,10 @@ struct PaymentCreationView: View {
     
     @EnvironmentObject var groupListViewModel: GroupListViewModel
     
-    //@State var newPayment = DEFAULT_PAYMENT
-    
     @State var paymentFrom: String = ""
     @State var sender: BasicUser?
     @State var paymentTo: String = ""
     @State var receiver: BasicUser?
-    //@State var paymentComment: String = ""
-    //@State var paymentTitle: String = ""
     
     // Alert attributes for submission
     @State var sendAlert = false
@@ -40,8 +36,6 @@ struct PaymentCreationView: View {
     @State var allMembers: [BasicUser] = []
     var paymentId: String?
     @State var currUserId: String?
-    
-    //TODO: Write init where set newPayment to either default or fetch data ?? or do in on appear
 
     var body: some View {
         ScrollView {
@@ -65,7 +59,6 @@ struct PaymentCreationView: View {
                     }
                     // Sender
                     SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
-                    //SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $newPayment.from)
                     // Receiver
                     SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
                     // Comments

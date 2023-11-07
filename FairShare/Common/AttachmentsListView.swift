@@ -96,27 +96,30 @@ struct AttachmentsListView: View {
             })
         }
         .sheet(item: $imagePopoverData) { data in
-            Button("Remove", systemImage: "trash", action: {
-                if data.selectedImageData != nil {
-                    self.pendingImages.removeAll(where: {pi in pi == data.selectedImageData})
-                    self.onSelect(self.pendingImages)
-                } else {
-                    self.onRemoveExisting(data.selectedImagePath!)
-                }
-                imagePopoverData = nil
-            }).padding()
-            GeometryReader { geo in
-                if let path = data.selectedImagePath {
-                    StorageImageView(path: path, maxWidth: geo.size.width, maxHeight: geo.size.height)
-                } else {
-                    Image(uiImage: UIImage(data: data.selectedImageData!)!)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-            }
-            
+                    
+                    Button(role:.destructive) {
+                                if data.selectedImageData != nil {
+                                    self.pendingImages.removeAll(where: {pi in pi == data.selectedImageData})
+                                    self.onSelect(self.pendingImages)
+                                } else {
+                                    self.onRemoveExisting(data.selectedImagePath!)
+                                }
+                                imagePopoverData = nil
+                    } label: {
+                        Label("Remove", systemImage: "trash")
+                    }.padding()
+                            GeometryReader { geo in
+                                if let path = data.selectedImagePath {
+                                    StorageImageView(path: path, maxWidth: geo.size.width, maxHeight: geo.size.height)
+                                } else {
+                                    Image(uiImage: UIImage(data: data.selectedImageData!)!)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                            
         }
         .fullScreenCover(isPresented: $cameraOpen) {
             CameraView(
@@ -154,6 +157,6 @@ struct AttachmentsListView: View {
     }
 }
 
-#Preview {
+/*#Preview {
     AttachmentsListView(existingImages: [], pendingImages: [], onSelect: {_ in }, onRemoveExisting: {_ in })
-}
+}*/

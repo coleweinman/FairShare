@@ -61,6 +61,13 @@
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
 		ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904582ADE51640055A608 /* PaymentCreationView.swift */; };
 		ECA9045B2ADE517C0055A608 /* ExpenseCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */; };
+		ECAEBB922AFB003500EC7B11 /* UserSplitAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB912AFB003500EC7B11 /* UserSplitAmount.swift */; };
+		ECAEBB942AFB009300EC7B11 /* GroupSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB932AFB009300EC7B11 /* GroupSelect.swift */; };
+		ECAEBB962AFB00BB00EC7B11 /* SingleDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB952AFB00BB00EC7B11 /* SingleDropdown.swift */; };
+		ECAEBB982AFB013000EC7B11 /* ProfileCircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB972AFB013000EC7B11 /* ProfileCircleImage.swift */; };
+		ECAEBB9A2AFB02B200EC7B11 /* AmountEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB992AFB02B200EC7B11 /* AmountEntry.swift */; };
+		ECAEBB9C2AFB02F100EC7B11 /* MultiSelectNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB9B2AFB02F100EC7B11 /* MultiSelectNav.swift */; };
+		ECAEBB9E2AFB031C00EC7B11 /* PersonSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB9D2AFB031C00EC7B11 /* PersonSelection.swift */; };
 		ECEEF2E52AE5F2AD0022D2D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +118,13 @@
 		ECA904562ADE50020055A608 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		ECA904582ADE51640055A608 /* PaymentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCreationView.swift; sourceTree = "<group>"; };
 		ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseCreationView.swift; sourceTree = "<group>"; };
+		ECAEBB912AFB003500EC7B11 /* UserSplitAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSplitAmount.swift; sourceTree = "<group>"; };
+		ECAEBB932AFB009300EC7B11 /* GroupSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSelect.swift; sourceTree = "<group>"; };
+		ECAEBB952AFB00BB00EC7B11 /* SingleDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleDropdown.swift; sourceTree = "<group>"; };
+		ECAEBB972AFB013000EC7B11 /* ProfileCircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCircleImage.swift; sourceTree = "<group>"; };
+		ECAEBB992AFB02B200EC7B11 /* AmountEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountEntry.swift; sourceTree = "<group>"; };
+		ECAEBB9B2AFB02F100EC7B11 /* MultiSelectNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectNav.swift; sourceTree = "<group>"; };
+		ECAEBB9D2AFB031C00EC7B11 /* PersonSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSelection.swift; sourceTree = "<group>"; };
 		ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -204,6 +218,13 @@
 				8C0C5BDA2AF58DA6006DB621 /* StorageImageView.swift */,
 				8CE18F992AF96300004C1A58 /* Extentions.swift */,
 				8CE18F9B2AFAA369004C1A58 /* CameraView.swift */,
+				ECAEBB912AFB003500EC7B11 /* UserSplitAmount.swift */,
+				ECAEBB932AFB009300EC7B11 /* GroupSelect.swift */,
+				ECAEBB952AFB00BB00EC7B11 /* SingleDropdown.swift */,
+				ECAEBB972AFB013000EC7B11 /* ProfileCircleImage.swift */,
+				ECAEBB992AFB02B200EC7B11 /* AmountEntry.swift */,
+				ECAEBB9B2AFB02F100EC7B11 /* MultiSelectNav.swift */,
+				ECAEBB9D2AFB031C00EC7B11 /* PersonSelection.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -403,12 +424,14 @@
 				8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */,
 				ECA9045B2ADE517C0055A608 /* ExpenseCreationView.swift in Sources */,
 				8C3468882ADCA92700E0C7B3 /* AuthenticationViewModel.swift in Sources */,
+				ECAEBB982AFB013000EC7B11 /* ProfileCircleImage.swift in Sources */,
 				ECA904572ADE50020055A608 /* TestData.swift in Sources */,
 				8CE18F9A2AF96300004C1A58 /* Extentions.swift in Sources */,
 				8C3468932ADD9EC800E0C7B3 /* GroupEditPageView.swift in Sources */,
 				8C43AECB2AE834A400A37151 /* BalanceData.swift in Sources */,
 				848DBDA72ADE8E45008DC4F3 /* TableComponents.swift in Sources */,
 				8C3468812ADA549D00E0C7B3 /* TestExpenseView.swift in Sources */,
+				ECAEBB9C2AFB02F100EC7B11 /* MultiSelectNav.swift in Sources */,
 				8C34687D2ADA4AEA00E0C7B3 /* ExpenseViewModel.swift in Sources */,
 				8C3468842ADC815C00E0C7B3 /* LoginPageView.swift in Sources */,
 				8C34681C2ACF0BB000E0C7B3 /* ContentView.swift in Sources */,
@@ -425,6 +448,7 @@
 				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
 				8C34688A2ADCC45200E0C7B3 /* SignUpPageView.swift in Sources */,
 				8C3468692AD9BC4900E0C7B3 /* User.swift in Sources */,
+				ECAEBB9E2AFB031C00EC7B11 /* PersonSelection.swift in Sources */,
 				D83FA3CC2AFAF35D0064663C /* ItemListPage.swift in Sources */,
 				ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */,
 				8C3468772ADA0BA600E0C7B3 /* TestUserView.swift in Sources */,
@@ -432,13 +456,17 @@
 				8C34687F2ADA534800E0C7B3 /* ExpenseListViewModel.swift in Sources */,
 				ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */,
 				8C3468752ADA001900E0C7B3 /* UserViewModel.swift in Sources */,
+				ECAEBB962AFB00BB00EC7B11 /* SingleDropdown.swift in Sources */,
 				8C34686B2AD9ED2700E0C7B3 /* Expense.swift in Sources */,
 				8C0C5BD92AF45638006DB621 /* AttachmentsListView.swift in Sources */,
+				ECAEBB9A2AFB02B200EC7B11 /* AmountEntry.swift in Sources */,
 				8C43AED52AE870F100A37151 /* ShoppingListListViewModel.swift in Sources */,
 				8C34688D2ADCCDC700E0C7B3 /* GroupPageView.swift in Sources */,
 				D83FA3CA2AFAF3540064663C /* ListCreationView.swift in Sources */,
+				ECAEBB922AFB003500EC7B11 /* UserSplitAmount.swift in Sources */,
 				8C3468662AD6351A00E0C7B3 /* ListsPageView.swift in Sources */,
 				8C3468572AD5A2CD00E0C7B3 /* MainTabView.swift in Sources */,
+				ECAEBB942AFB009300EC7B11 /* GroupSelect.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

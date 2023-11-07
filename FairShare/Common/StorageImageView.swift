@@ -49,6 +49,6 @@ struct StorageImageView: View {
     }
 }
 
-#Preview {
+/*#Preview {
     StorageImageView(path: "")
-}
+}*/
