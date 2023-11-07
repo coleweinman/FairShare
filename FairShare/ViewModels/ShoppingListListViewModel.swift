@@ -49,8 +49,10 @@ class ShoppingListListViewModel: ObservableObject {
                     let shoppingLists = try documents.map { doc in
                         return try doc.data(as: ShoppingList.self)
                     }
+                    print(shoppingLists)
                     self.shoppingLists = shoppingLists
                 } catch {
+                    print(error)
                     self.shoppingLists = []
                 }
             }

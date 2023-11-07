@@ -13,7 +13,7 @@ struct ShoppingList: Codable, Identifiable, Equatable {
     var name: String
     var groupId: String?
     var users: [BasicUser]
-    var involvedUserIds: String?
+    var involvedUserIds: [String]
     var items: [ListItem]
     var createDate: Date
     var lastEditDate: Date
