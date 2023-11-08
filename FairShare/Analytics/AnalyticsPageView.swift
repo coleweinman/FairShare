@@ -16,13 +16,17 @@ struct AnalyticsPageView: View {
         ScrollView {
             VStack {
                 if let totalOwed = viewModel.totalOwed {
-                    Text("Balance from expenses over the last year")
-                    Chart {
-                        ForEach(Array(totalOwed)) { userAmount in
-                            BarMark (
-                                x: .value("Name", userAmount.name),
-                                y: .value("Amount", userAmount.amount)
-                            )
+                    if totalOwed.isEmpty {
+                        Text("No analytics data for users with no expenses")
+                    } else {
+                        Text("Balance from expenses over the last year")
+                        Chart {
+                            ForEach(Array(totalOwed)) { userAmount in
+                                BarMark (
+                                    x: .value("Name", userAmount.name),
+                                    y: .value("Amount", userAmount.amount)
+                                )
+                            }
                         }
                     }
                 } else {

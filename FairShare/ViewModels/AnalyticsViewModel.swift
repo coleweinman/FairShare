@@ -28,7 +28,10 @@ class AnalyticsViewModel: ObservableObject {
                     let decodedData = try decoder.decode(UserAmount.self, from: data) as UserAmount
                     newTotalOwed.append(decodedData)
                 }
-                self.totalOwed = newTotalOwed
+                let totalOwed = newTotalOwed
+                await MainActor.run {
+                    self.totalOwed = totalOwed
+                }
             } else if let data = result.data as? [String: Any], let message = data["message"] as? String {
                 print(message)
             } else if let data = result.data as? [String: Any] {
