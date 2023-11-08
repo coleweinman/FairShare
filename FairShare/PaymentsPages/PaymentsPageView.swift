@@ -173,9 +173,13 @@ struct PaymentsPageView: View {
                                     }
                                     .scenePadding()
                                 }
+                            }.onTapGesture() {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             }
                             Spacer()
                         }
+                    }.onTapGesture() {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     Text("Past Payments")
@@ -196,6 +200,8 @@ struct PaymentsPageView: View {
                                     )
                                 }.buttonStyle(PlainButtonStyle())
                             }
+                         }.onTapGesture() {
+                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                          }
                          .frame(maxWidth: .infinity)
                          .padding(cardPadding)
@@ -204,6 +210,8 @@ struct PaymentsPageView: View {
                     } else {
                         ProgressView()
                     }
+                }.onTapGesture() {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .frame(maxWidth: .infinity)
                 .scenePadding()

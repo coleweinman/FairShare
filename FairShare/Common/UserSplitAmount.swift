@@ -30,6 +30,8 @@ struct UserSplitAmount: View {
             if (amount == "" && currUserAmount.amount != 0) {
                 amount = "\(currUserAmount.amount)"
             }
+        }.onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }

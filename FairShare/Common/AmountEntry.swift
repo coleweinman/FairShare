@@ -20,6 +20,9 @@ struct AmountEntry: View {
                 Text("$")
                 TextField("_______", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5).foregroundColor(textColor)
             }.textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
+                .onTapGesture() {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
             Text("Amount")
         }.onChange(of: userInput) { newVal in
             if let currAmount = Decimal(string: userInput) {
@@ -33,6 +36,9 @@ struct AmountEntry: View {
             if (amount != 0) {
                 userInput = "\(amount)"
             }
+        }
+        .onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }

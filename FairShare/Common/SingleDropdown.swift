@@ -31,6 +31,9 @@ struct SingleDropdown: View {
                     }.foregroundColor(clickableTextColor).font(.footnote)
                     // Add HStack with profile picture and name
                 }.scenePadding(.all)
+                    .onTapGesture() {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
                 Spacer()
                 /*Picker("Select", selection: $selectedItem) {
                     ForEach(memberNames, id: \.self) {
@@ -44,10 +47,16 @@ struct SingleDropdown: View {
                 }
                 //Text("Selected item: \(selectedItem)")
             }.scenePadding(.all)
+            .onTapGesture() {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
             // Update image on picker selection
             if (selectedItem != "") {
                 ProfileCircleImage(userId: $selectedItem, groupMembers: groupMembers)
             }
+        }
+        .onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }

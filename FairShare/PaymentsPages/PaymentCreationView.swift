@@ -56,6 +56,8 @@ struct PaymentCreationView: View {
                                 paymentTo = currPayment.to.id
                             }
                         }
+                    }.onTapGesture() {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                     // Sender
                     SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
@@ -83,6 +85,11 @@ struct PaymentCreationView: View {
                     paymentViewModel.fetchData(paymentId: paymentId!)
                 }
             }
+            .onTapGesture() {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
+        }.onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
     
@@ -150,6 +157,8 @@ struct CommentBox: View {
         VStack {
             Divider().padding(.top, 20)
             TextField("Comments...", text: $comment, axis: .vertical).textFieldStyle(.roundedBorder).padding().lineLimit(5, reservesSpace: true).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+        }.onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }

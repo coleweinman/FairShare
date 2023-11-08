@@ -86,6 +86,9 @@ struct ExpenseCreationView: View {
                         }
                         
                     }
+                    .onTapGesture() {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
                     // Pull choice of groups for logged in user
                     if let groups = groupListViewModel.groups {
                         MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
@@ -105,6 +108,8 @@ struct ExpenseCreationView: View {
                             // User input for liability amount
                             UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
                         }
+                    }.onTapGesture() {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                     // Comments/ expense description
                     CommentBox(comment: Binding($expenseViewModel.expense)!.description)
@@ -146,7 +151,7 @@ struct ExpenseCreationView: View {
             }.onChange(of: expenseMembers) { newVal in
                 
                 // Iterate through userAmounts and delete if not in expenseMembers??
-                userAmounts.userAmountList.removeAll(where: { ua in !expenseMembers.contains(where: { em in em.id == ua.id })})
+                //userAmounts.userAmountList.removeAll(where: { ua in !expenseMembers.contains(where: { em in em.id == ua.id })})
                 
                 // Create new UserAmount for curr member
                 // Set the amount by default to 0
@@ -156,6 +161,9 @@ struct ExpenseCreationView: View {
                         userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
                 }
+            }
+            .onTapGesture() {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }.overlay() {
             GeometryReader { geometry in
@@ -172,6 +180,8 @@ struct ExpenseCreationView: View {
                     }
                 }
             }
+        }.onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
     
@@ -212,7 +222,6 @@ struct ExpenseCreationView: View {
                     await MainActor.run {
                         self.savingAlert = true
                     }
-                    expenseViewModel.expense?.date = Date.now
                     let saveSuccess = await expenseViewModel.saveWithAttachments(attachments: pendingImages)
                     
                     await MainActor.run {
@@ -249,6 +258,9 @@ struct ExpenseTitle: View {
             Text("Expense Description").scenePadding(.all).padding(.bottom, -30)
             TextField("Enter title", text: $title).scenePadding(.all).textFieldStyle(.roundedBorder).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
         }.scenePadding()
+        .onTapGesture() {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
     }
 }
 

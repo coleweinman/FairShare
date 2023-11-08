@@ -43,6 +43,9 @@ struct ProfileCircleImage: View {
             Text(currUser.name).padding(.leading, 60)
             
         }.padding([.top, .bottom], -10)
+            .onTapGesture() {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
     }
     // If select 'set as self', set to current user logged in
     // Otherwise, hard code to testUser

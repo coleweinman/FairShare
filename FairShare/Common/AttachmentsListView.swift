@@ -96,6 +96,8 @@ struct AttachmentsListView: View {
             }, label: {
                 Label("Add from Camera", systemImage: "camera")
             }).padding()
+        }.onTapGesture() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .sheet(item: $imagePopoverData) { data in
             Button("Remove", systemImage: "trash", action: {
