@@ -21,15 +21,6 @@ struct Expense: Codable, Identifiable {
     
     func profilePictures() -> [URL?] {
         var pictures: [URL?] = []
-        paidByDetails.forEach { paidBy in
-            if let pfpUrl = paidBy.profilePictureUrl {
-                if !pictures.contains(pfpUrl) {
-                    pictures.append(pfpUrl)
-                }
-            } else {
-                pictures.append(nil)
-            }
-        }
         liabilityDetails.forEach { liability in
             if let pfpUrl = liability.profilePictureUrl {
                 if !pictures.contains(pfpUrl) {
