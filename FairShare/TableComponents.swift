@@ -79,8 +79,9 @@ struct TableCellItemView: View {
                     }
                     Spacer()
                     HStack {
-                        ForEach(pfps, id: \.self) { pfp in
-                            PFP(image: pfp)
+                        ForEach(pfps.indices, id: \.self) { index in
+                            
+                            PFP(image: pfps[index])
                         }
                     }
                 }

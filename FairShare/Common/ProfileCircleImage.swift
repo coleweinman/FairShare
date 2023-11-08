@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 // Profile picture + name
 struct ProfileCircleImage: View {
@@ -18,15 +19,26 @@ struct ProfileCircleImage: View {
     let groupMembers: [BasicUser]
     
     var body: some View {
-        HStack (alignment: .top){
+        HStack (alignment: .center){
             let currUser = setUser()
-            AsyncImage(url:currUser.profilePictureUrl){ image in
-                image
+            if let url = currUser.profilePictureUrl {
+                LazyImage(url: url) { state in
+                    if let image = state.image {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        ProgressView()
+                    }
+                    
+                }.frame(width: 50, height: 50, alignment: .leading).clipShape(Circle()).overlay{ Circle().stroke(.white, lineWidth: 4) }.shadow(radius: 7)
+            } else {
+                Image(systemName: "person.fill")
                     .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }.frame(width: 50, height: 50, alignment: .leading).clipShape(Circle()).overlay{ Circle().stroke(.white, lineWidth: 4) }.shadow(radius: 7)
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+            }
+            
             // Spacer()
             Text(currUser.name).padding(.leading, 60)
             

@@ -16,7 +16,7 @@ struct UserSplitAmount: View {
     var groupMembers:[BasicUser]
     
     var body: some View {
-        HStack (alignment: .top){
+        HStack (alignment: .center){
             ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers)
             Spacer()
             TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
