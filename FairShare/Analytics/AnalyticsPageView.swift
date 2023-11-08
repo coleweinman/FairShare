@@ -16,6 +16,7 @@ struct AnalyticsPageView: View {
         ScrollView {
             VStack {
                 if let totalOwed = viewModel.totalOwed {
+                    Text("Balance from expenses over the last year")
                     Chart {
                         ForEach(Array(totalOwed)) { userAmount in
                             BarMark (
