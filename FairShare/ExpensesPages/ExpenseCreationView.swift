@@ -111,7 +111,15 @@ struct ExpenseCreationView: View {
                     
                     Divider()
                     Text("Attachments")
-                    AttachmentsListView(existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [], pendingImages: pendingImages, onSelect: { images in pendingImages = images }, onRemoveExisting: { path in expenseViewModel.expense?.attachmentObjectIds.removeAll(where: { p in p == path }) })
+                    AttachmentsListView(
+                        existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [],
+                        pendingImages: pendingImages, onSelect: { images in pendingImages = images },
+                        onRemoveExisting: { index in
+                            print(expenseViewModel.expense?.attachmentObjectIds)
+                            expenseViewModel.expense?.attachmentObjectIds.remove(at: index)
+                            print(expenseViewModel.expense?.attachmentObjectIds)
+                        }
+                    )
                     Divider()
                     ButtonStyle1(buttonText: "Submit", actionFunction: {
                         Task {

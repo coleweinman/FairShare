@@ -49,7 +49,6 @@ class PaymentListViewModel: ObservableObject {
                     let payments = try documents.map { doc in
                         return try doc.data(as: Payment.self)
                     }
-                    print(payments)
                     self.payments = payments
                 } catch {
                     self.payments = []

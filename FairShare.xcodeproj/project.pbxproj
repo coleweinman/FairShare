@@ -57,6 +57,8 @@
 		8CE18FA52AFAC316004C1A58 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 8CE18FA42AFAC316004C1A58 /* NukeVideo */; };
 		D83FA3CA2AFAF3540064663C /* ListCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FA3C92AFAF3530064663C /* ListCreationView.swift */; };
 		D83FA3CC2AFAF35D0064663C /* ItemListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FA3CB2AFAF35D0064663C /* ItemListPage.swift */; };
+		8CE18FA82AFAE5E9004C1A58 /* AnalyticsPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE18FA72AFAE5E9004C1A58 /* AnalyticsPageView.swift */; };
+		8CE18FAA2AFAE771004C1A58 /* AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE18FA92AFAE771004C1A58 /* AnalyticsViewModel.swift */; };
 		ECA904512ADE4DED0055A608 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */; };
 		ECA904572ADE50020055A608 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904562ADE50020055A608 /* TestData.swift */; };
 		ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA904582ADE51640055A608 /* PaymentCreationView.swift */; };
@@ -114,6 +116,8 @@
 		8CE18F9B2AFAA369004C1A58 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		D83FA3C92AFAF3530064663C /* ListCreationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCreationView.swift; sourceTree = "<group>"; };
 		D83FA3CB2AFAF35D0064663C /* ItemListPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListPage.swift; sourceTree = "<group>"; };
+		8CE18FA72AFAE5E9004C1A58 /* AnalyticsPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPageView.swift; sourceTree = "<group>"; };
+		8CE18FA92AFAE771004C1A58 /* AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewModel.swift; sourceTree = "<group>"; };
 		ECA904502ADE4DED0055A608 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
 		ECA904562ADE50020055A608 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		ECA904582ADE51640055A608 /* PaymentCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCreationView.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 		8C3468182ACF0BB000E0C7B3 /* FairShare */ = {
 			isa = PBXGroup;
 			children = (
+				8CE18FA62AFAE59C004C1A58 /* Analytics */,
 				8C0C5BB72AF189D6006DB621 /* FairShare.entitlements */,
 				8C82B6712AECA7B900DC8097 /* Info.plist */,
 				ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */,
@@ -275,6 +280,7 @@
 				8C43AED42AE870F100A37151 /* ShoppingListListViewModel.swift */,
 				8C43AED62AE8735C00A37151 /* ShoppingListViewModel.swift */,
 				84908E1F2AE875D60008FC40 /* PaymentListViewModel.swift */,
+				8CE18FA92AFAE771004C1A58 /* AnalyticsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -302,6 +308,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8CE18FA62AFAE59C004C1A58 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				8CE18FA72AFAE5E9004C1A58 /* AnalyticsPageView.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		ECA904532ADE4F840055A608 /* ExpensesPages */ = {
@@ -421,6 +435,7 @@
 			files = (
 				8C34686F2AD9F27100E0C7B3 /* Group.swift in Sources */,
 				8C43AECD2AE864DD00A37151 /* BalanceDataViewModel.swift in Sources */,
+				8CE18FA82AFAE5E9004C1A58 /* AnalyticsPageView.swift in Sources */,
 				8C3468632AD62F9D00E0C7B3 /* DashboardPageView.swift in Sources */,
 				ECA9045B2ADE517C0055A608 /* ExpenseCreationView.swift in Sources */,
 				8C3468882ADCA92700E0C7B3 /* AuthenticationViewModel.swift in Sources */,
@@ -445,6 +460,7 @@
 				8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */,
 				8C43AED12AE86BB700A37151 /* ShoppingList.swift in Sources */,
 				8C34688F2ADCD6D900E0C7B3 /* GroupListViewModel.swift in Sources */,
+				8CE18FAA2AFAE771004C1A58 /* AnalyticsViewModel.swift in Sources */,
 				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
 				8C34688A2ADCC45200E0C7B3 /* SignUpPageView.swift in Sources */,
 				8C3468692AD9BC4900E0C7B3 /* User.swift in Sources */,

@@ -118,7 +118,7 @@ enum Tab: Int, CaseIterable {
             return TabConfiguation(
                 title: "Analytics",
                 image: "chart.bar",
-                content: AnyView(ContentView())
+                content: AnyView(AnalyticsPageView())
             )
         }
     }

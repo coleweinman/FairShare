@@ -11,6 +11,7 @@ import AVFoundation
 
 struct ImagePopoverData: Identifiable {
     var id: String { selectedImagePath ?? selectedImageData?.description ?? "" }
+    var index: Int
     var selectedImagePath: String?
     var selectedImageData: Data?
 }
@@ -27,7 +28,7 @@ struct AttachmentsListView: View {
     @State var errorAlert: Bool = false
     @State var errorAlertMessage: String = ""
     
-    init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void, onRemoveExisting: @escaping (String) -> Void) {
+    init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void, onRemoveExisting: @escaping (Int) -> Void) {
         self.existingImages = existingImages
         self.pendingImages = pendingImages
         self.onSelect = onSelect
@@ -36,7 +37,7 @@ struct AttachmentsListView: View {
     }
     
     var onSelect: (([Data]) -> Void)
-    var onRemoveExisting: ((String) -> Void)
+    var onRemoveExisting: ((Int) -> Void)
     
     func loadImages(photos: [PhotosPickerItem]) async throws -> [Data] {
         var images: [Data] = []
@@ -61,17 +62,18 @@ struct AttachmentsListView: View {
             ForEach(existingImages, id: \.self) { path in
                 StorageImageView(path: path, maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
-                        imagePopoverData = ImagePopoverData(selectedImagePath: path)
+                        imagePopoverData = ImagePopoverData(index: existingImages.firstIndex(of: path)!, selectedImagePath: path)
                     }
             }
-            ForEach(pendingImages, id: \.self) { image in
+            ForEach(pendingImages.indices, id: \.self) { index in
+                let image = pendingImages[index]
                 Image(uiImage: UIImage(data: image)!)
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .frame(maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
-                        imagePopoverData = ImagePopoverData(selectedImageData: image)
+                        imagePopoverData = ImagePopoverData(index: index, selectedImageData: image)
                     }
             }
             PhotosPicker(selection: $selectedItems,
@@ -88,38 +90,36 @@ struct AttachmentsListView: View {
                      }
                      
                  }
-             })
+             }).padding()
             Button(action: {
                 self.openCamera()
             }, label: {
                 Label("Add from Camera", systemImage: "camera")
-            })
+            }).padding()
         }
         .sheet(item: $imagePopoverData) { data in
-                    
-                    Button(role:.destructive) {
-                                if data.selectedImageData != nil {
-                                    self.pendingImages.removeAll(where: {pi in pi == data.selectedImageData})
-                                    self.onSelect(self.pendingImages)
-                                } else {
-                                    self.onRemoveExisting(data.selectedImagePath!)
-                                }
-                                imagePopoverData = nil
-                    } label: {
-                        Label("Remove", systemImage: "trash")
-                    }.padding()
-                            GeometryReader { geo in
-                                if let path = data.selectedImagePath {
-                                    StorageImageView(path: path, maxWidth: geo.size.width, maxHeight: geo.size.height)
-                                } else {
-                                    Image(uiImage: UIImage(data: data.selectedImageData!)!)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                }
-                            }
-                            
+            Button("Remove", systemImage: "trash", action: {
+                if data.selectedImageData != nil {
+                    self.pendingImages.remove(at: data.index)
+                    self.selectedItems.remove(at: data.index)
+                    self.onSelect(self.pendingImages)
+                } else {
+                    print(data.index)
+                    self.onRemoveExisting(data.index)
+                }
+                imagePopoverData = nil
+            }).padding()
+            GeometryReader { geo in
+                if let path = data.selectedImagePath {
+                    StorageImageView(path: path, maxWidth: geo.size.width, maxHeight: geo.size.height)
+                } else {
+                    Image(uiImage: UIImage(data: data.selectedImageData!)!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: geo.size.width, maxHeight: geo.size.height)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+            }
         }
         .fullScreenCover(isPresented: $cameraOpen) {
             CameraView(

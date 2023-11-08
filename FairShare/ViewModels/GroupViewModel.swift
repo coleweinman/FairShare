@@ -48,23 +48,22 @@ class GroupViewModel: ObservableObject {
         do {
             let result = try await functions.httpsCallable("onFindUserRequest").call(functionData)
             if let data = result.data as? [String: Any],
-               let user = data["user"] as? [String: Any],
-               let userId = user["id"] as? String,
-               let userName = user["name"] as? String,
-               let userProfilePictureUrl = user["profilePictureUrl"] as? String?
+               let user = data["user"] as? [String: Any]
             {
-                let invitedUser = BasicUser(
-                    id: userId, 
-                    name: userName,
-                    profilePictureUrl: userProfilePictureUrl != nil ? URL(string: userProfilePictureUrl!) : nil
-                )
+                let decoder = JSONDecoder()
+                let data = try JSONSerialization.data(withJSONObject: user)
+                let invitedUser = try decoder.decode(BasicUser.self, from: data) as BasicUser
                 await MainActor.run {
                     self.group!.invitedMembers.append(invitedUser)
                     self.group!.involvedUserIds.append(invitedUser.id)
                 }
                 return "User invited"
             } else if let data = result.data as? [String: Any], let message = data["message"] as? String {
+                print(message)
                 return message
+            } else if let data = result.data as? [String: Any] {
+                print(data)
+                return "Error inviting user"
             } else {
                 print("Couldn't parse function response!")
                 return "Error inviting user"

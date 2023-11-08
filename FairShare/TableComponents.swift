@@ -154,7 +154,7 @@ struct NetBalanceView: View {
                 Text(user.amount.moneyString)
                     .font(.system(size: balanceFontSize, weight: .regular))
                     .foregroundColor(user.amount >= 0 ? positiveBalanceColor : negativeBalanceColor)
-                if user.amount < 0 {
+                if user.amount > 0 {
                     Button(action: {
                         remindConfirmationAlert = true
                     }) {
