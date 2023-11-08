@@ -19,7 +19,7 @@ struct ListsPageView: View {
             NavigationStack {
                 List {
                     ForEach(lists) { list in
-                        NavigationLink(destination: ItemListPage(listName: list.name, items:list.items, listId: list.id!)){
+                        NavigationLink(destination: ItemListPage(listName: list.name, listId: list.id!)){
                             Text(list.name)
                         }
                     }

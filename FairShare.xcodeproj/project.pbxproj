@@ -219,6 +219,7 @@
 		8C34685C2AD5A60C00E0C7B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D8D4C5352AFB0592007340CA /* New Group */,
 				8C0C5BD82AF45638006DB621 /* AttachmentsListView.swift */,
 				8C0C5BDA2AF58DA6006DB621 /* StorageImageView.swift */,
 				8CE18F992AF96300004C1A58 /* Extentions.swift */,
@@ -316,6 +317,11 @@
 				8CE18FA72AFAE5E9004C1A58 /* AnalyticsPageView.swift */,
 			);
 			path = Analytics;
+		D8D4C5352AFB0592007340CA /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		ECA904532ADE4F840055A608 /* ExpensesPages */ = {

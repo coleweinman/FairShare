@@ -9,6 +9,7 @@
 
 import SwiftUI
 
+
 struct ItemListPage: View {
     @State private var isEditing = false
     @State private var newItemName = ""
@@ -16,31 +17,39 @@ struct ItemListPage: View {
     @StateObject var listViewModel: ShoppingListViewModel = ShoppingListViewModel()
 
     var listName: String
-    @State var items: [ListItem]
+    //@State var items: [ListItem]
     var listId: String
     
 
     var body: some View {
         VStack {
-            if let list = listViewModel.shoppingList {
-                List{
-                    ForEach(items.indices, id: \.self) { i in
-                        HStack {
-                            if isEditing {
-                                Button(action: {
-                                    self.items.remove(at: i)
-                                }) {
-                                    Image(systemName: "minus.circle")
+            if let list = listViewModel.shoppingList,
+               let items = listViewModel.items
+            {
+                List {
+                    //ForEach(Binding($listViewModel.shoppingList)!.items.indices, id: \.self) { i in
+                    ForEach(listViewModel.items!) { item in
+                            HStack {
+                                if isEditing {
+                                    Button(action: {
+                                        var newItems = listViewModel.shoppingList!.items
+                                        newItems.remove(at: item.index)
+                                        listViewModel.shoppingList?.items = newItems
+                                        listViewModel.save()
+                                    }) {
+                                        Image(systemName: "minus.circle")
+                                    }
+                                } else {
+                                    Image(systemName: item.checked ? "checkmark.square" : "square").onTapGesture {
+                                        listViewModel.shoppingList!.items[item.index].checked.toggle()
+                                        listViewModel.save()
+                                    }
                                 }
-                            } else {
-                                Image(systemName: items[i].checked ? "checkmark.square" : "square").onTapGesture {
-                                    self.items[i].checked.toggle()
-                                }
+                                Text(item.name)
                             }
-                            Text(items[i].name)
-                        }
-                    }.onDelete(perform: deleteItem)
-                }
+                        }.onDelete(perform: deleteItem)
+                    }
+
                 
                 if isEditing {
                     HStack {
@@ -77,15 +86,17 @@ struct ItemListPage: View {
     
     
     private func deleteItem(at offsets: IndexSet) {
-        items.remove(atOffsets: offsets)
-        listViewModel.shoppingList?.items = items
-        listViewModel.save()
+       // items.remove(atOffsets: offsets)
+//        var newItems = listViewModel.shoppingList!.items
+//        newItems.remove(at: offsets)
+//        listViewModel.shoppingList?.items = newItems
+//        listViewModel.save()
     }
     
     private func addItem() {
-            items.append(ListItem(name: newItemName, checked: false))
+            listViewModel.shoppingList?.items.append(ListItem(name: newItemName, checked: false))
             newItemName = ""
-            listViewModel.shoppingList?.items = items
+            //listViewModel.shoppingList?.items = items
             listViewModel.save()
     }
 

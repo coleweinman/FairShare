@@ -23,3 +23,10 @@ struct ListItem: Codable, Equatable {
     var name: String
     var checked: Bool
 }
+
+struct IndexedListItem: Identifiable, Hashable, Equatable {
+    var id: Int { index }
+    var index: Int
+    var name: String
+    var checked: Bool
+}

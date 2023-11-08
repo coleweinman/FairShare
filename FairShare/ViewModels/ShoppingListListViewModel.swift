@@ -11,6 +11,7 @@ import FirebaseFirestore
 class ShoppingListListViewModel: ObservableObject {
     @Published var shoppingLists: [ShoppingList]?
     
+    
     private var db = Firestore.firestore()
     
     func add(shoppingList: ShoppingList) -> String? {

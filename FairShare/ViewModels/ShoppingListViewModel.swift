@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 class ShoppingListViewModel: ObservableObject {
     @Published var shoppingList: ShoppingList?
+    @Published var items: [IndexedListItem]?
     
     private var db = Firestore.firestore()
     
@@ -44,6 +45,14 @@ class ShoppingListViewModel: ObservableObject {
                 }
                 do {
                     self.shoppingList = try document.data(as: ShoppingList.self)
+                    var indexedItems: [IndexedListItem] = []
+                    for i in 0 ..< self.shoppingList!.items.count {
+                        let item = self.shoppingList!.items[i]
+                        indexedItems.append(
+                            IndexedListItem(index: i, name: item.name, checked: item.checked)
+                        )
+                    }
+                    self.items = indexedItems
                 } catch {
                     print("Error fetching document: \(error)")
                 }

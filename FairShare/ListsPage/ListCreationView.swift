@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ListCreationView: View {
+    @Environment(\.presentationMode) var presentationMode
     @State private var listName = ""
     @State private var selectedGroup = 0
     @State var showAlert = false
@@ -42,7 +43,8 @@ struct ListCreationView: View {
                     }
                     .background(Color(UIColor.systemGray6))
                     
-                    ButtonStyle1(buttonText: "Submit", actionFunction: {self.createListOnSubmit()})
+                    ButtonStyle1(buttonText: "Submit", actionFunction: {self.createListOnSubmit()
+                        self.presentationMode.wrappedValue.dismiss() })
                         .alert(isPresented: $showAlert) {
                             Alert(title: Text(listName), message: Text("Create new list"), dismissButton: .default(Text("OK")))
                         }

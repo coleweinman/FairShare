@@ -112,7 +112,9 @@ enum Tab: Int, CaseIterable {
             return TabConfiguation(
                 title: "Lists",
                 image: "checklist",
-                content: AnyView(ListsPageView())
+                content: AnyView(ListsPageView()),
+                createView: AnyView(ListCreationView()),
+                createViewTitle: "Create List"
             )
         case .analytics:
             return TabConfiguation(
