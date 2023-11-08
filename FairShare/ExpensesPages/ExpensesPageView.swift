@@ -62,6 +62,9 @@ struct ExpensesPageView: View {
                         .sheet(isPresented: $isPresented, onDismiss: onDismiss) {
                             // this is the sheet
                             VStack {
+                                Text("Filter and Sort")
+                                    .bold()
+                                    .scenePadding()
                                 // TOGGLES
                                 VStack {
                                     Toggle("Filter by Date", isOn: $showDateFilter)
