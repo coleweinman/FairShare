@@ -63,7 +63,7 @@ struct PaymentCreationView: View {
                     SingleDropdown(labelName: "Payment To", groupMembers: allMembers, selectedItem: $paymentTo)
                     // Comments
                     CommentBox(comment: Binding($paymentViewModel.payment)!.description)
-                    ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
+                    //ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
                     ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
                         Button("OK", role: .cancel) { }
                     }
