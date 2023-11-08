@@ -146,12 +146,7 @@ struct ExpenseCreationView: View {
             }.onChange(of: expenseMembers) { newVal in
                 
                 // Iterate through userAmounts and delete if not in expenseMembers??
-                for index in userAmounts.userAmountList.indices {
-                    let user = userAmounts.userAmountList[index]
-                    if (!expenseMembers.contains(where: {$0.id == user.id})) {
-                        userAmounts.userAmountList.remove(at: index)
-                    }
-                }
+                userAmounts.userAmountList.removeAll(where: { ua in !expenseMembers.contains(where: { em in em.id == ua.id })})
                 
                 // Create new UserAmount for curr member
                 // Set the amount by default to 0
