@@ -16,7 +16,7 @@ struct PaymentCreationView: View {
     @Environment(\.dismiss) private var dismiss
     
     // View model to upload pament
-    @ObservedObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
+    @StateObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
     // View Model to access current user logged in
     @EnvironmentObject var userViewModel: UserViewModel
@@ -79,6 +79,7 @@ struct PaymentCreationView: View {
                         paymentViewModel.payment = DEFAULT_PAYMENT
                     }
                 } else {
+                    print("fetching")
                     paymentViewModel.fetchData(paymentId: paymentId!)
                 }
             }
