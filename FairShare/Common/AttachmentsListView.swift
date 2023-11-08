@@ -32,7 +32,7 @@ struct AttachmentsListView: View {
         self.pendingImages = pendingImages
         self.onSelect = onSelect
         self.onRemoveExisting = onRemoveExisting
-        print(existingImages)
+        // print(existingImages)
     }
     
     var onSelect: (([Data]) -> Void)
