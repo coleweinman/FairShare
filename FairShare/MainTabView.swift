@@ -54,6 +54,13 @@ struct MainTabView: View {
                         }
                     }
                 }
+                .navigationBarItems(leading:
+                       Button(action: {
+                           print("Navigation bar item action")
+                       }) {
+                           Image(systemName: "questionmark.circle")
+                       }
+                   )
             } else {
                 VStack {
                     ProgressView() // Displays a loading spinner

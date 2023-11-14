@@ -14,7 +14,6 @@ struct ProfileCircleImage: View {
     @EnvironmentObject var userViewModel: UserViewModel
     
     @Binding var userId: String
-    //@State var user: BasicUser?
     
     let groupMembers: [BasicUser]
     
@@ -42,7 +41,8 @@ struct ProfileCircleImage: View {
             // Spacer()
             Text(currUser.name).padding(.leading, 60)
             
-        }.padding([.top, .bottom], -10)
+        }
+        .padding([.top, .bottom], -10)
             .onTapGesture() {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
@@ -59,7 +59,7 @@ struct ProfileCircleImage: View {
                 }
             }
             // TODO: Find correct default, this should not happen
-            return BasicUser(id: userViewModel.user!.id!, name: userViewModel.user!.name, profilePictureUrl: userViewModel.user!.profilePictureUrl)
+            return BasicUser(id: "", name: "error", profilePictureUrl: userViewModel.user!.profilePictureUrl)
         }
     }
 }

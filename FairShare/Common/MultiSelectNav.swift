@@ -15,7 +15,7 @@ struct MultiSelectNav: View {
     
     var options: [Group]
     // @Binding var selections: [BasicUser]
-    @Binding var involvedUsers: [BasicUser]
+    @Binding var involvedUsers: UserAmountList
     
     var body: some View {
         VStack{
@@ -48,14 +48,14 @@ struct MemberSelectView: View {
     @State var multiSelection = Set<UUID>()
     @State private var selection = 0
     //var currUser: User?
-    @Binding var involvedUsers: [BasicUser]
+    @Binding var involvedUsers: UserAmountList
     
     @State var editMode = EditMode.active
     @Environment(\.dismiss) private var dismiss
     
     var currUserId: String
     
-    init(groups: [Group], involvedUsers: Binding<[BasicUser]>, currUserId: String) {
+    init(groups: [Group], involvedUsers: Binding<UserAmountList>, currUserId: String) {
         self._involvedUsers = involvedUsers
         self.groups = []
         self.userOptions = []
@@ -109,7 +109,7 @@ struct MemberSelectView: View {
                 Text("Selection: \(multiSelection.count)")
                 Spacer()
             }.onChange(of: editMode) { newVal in
-                var members: [BasicUser] = []
+                var members: UserAmountList = UserAmountList(userAmountList: [])
                 if (selection == 0) {
                     // By group
                     for item in multiSelection {
@@ -118,7 +118,8 @@ struct MemberSelectView: View {
                         // Groups
                         let result = groups.filter { $0.id == item}
                         if result.count >= 1 {
-                            members.append(contentsOf: result[0].group.members)
+                            var newMembers = members.basicUsersToUserAmounts(users: result[0].group.members)
+                            members.userAmountList.append(contentsOf: newMembers)
                         }
                     }
                 } else {
@@ -129,17 +130,19 @@ struct MemberSelectView: View {
                         // Groups
                         let result = userOptions.filter{$0.id == item}
                         if result.count >= 1 {
-                            members.append(result[0].user)
+                            var newMembers = members.basicUsersToUserAmounts(users: [result[0].user])
+                            members.userAmountList.append(contentsOf: newMembers)
                         }
                     }
                     // Add back in current logged in user
                     // TODO: At least 1 group MUST exist --> Put in safeguards for this (check that user is in at least 1 group when starting up creation screen)
                     // Assumption, currUser is a member in all groups in "groups"
                     let someGroup = groups[0].group.members
-                    let currUser = someGroup.filter{$0.id == currUserId}
-                    members.insert(currUser[0], at: 0)
+                    var currUser = someGroup.filter{$0.id == currUserId}
+                    let currUserAmount = members.basicUsersToUserAmounts(users: [currUser[0]])
+                    members.userAmountList.insert(currUserAmount[0], at: 0)
                 }
-                involvedUsers = members
+                involvedUsers.userAmountList = members.userAmountList
                 dismiss()
             }
         }

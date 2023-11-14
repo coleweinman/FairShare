@@ -25,6 +25,21 @@ class UserAmountList: ObservableObject {
         self.userAmountList = userAmountList
     }
     
+    func basicUsersToUserAmounts(users: [BasicUser]) -> [UserAmount] {
+        var result: [UserAmount] = []
+        for user in users {
+            result.append(UserAmount(id: user.id, name: user.name, profilePictureUrl: user.profilePictureUrl, amount: 0.0))
+        }
+        return result
+    }
+    
+    func userAmountsToBasicUser() -> [BasicUser] {
+        var result: [BasicUser] = []
+        for amount in self.userAmountList {
+            result.append(BasicUser(id: amount.id, name: amount.name, profilePictureUrl: amount.profilePictureUrl))
+        }
+        return result
+    }
 }
 
 // View for expense creation page with all view elements
@@ -48,7 +63,7 @@ struct ExpenseCreationView: View {
     @State var alertMessage: String = ""
     
     @State var expensePayerId: String = ""
-    @State var expenseMembers: [BasicUser] = []
+    // @State var expenseMembers: [BasicUser] = []
     @State var userAmounts: UserAmountList = UserAmountList(userAmountList: [])
     
     // Set on appear
@@ -78,11 +93,12 @@ struct ExpenseCreationView: View {
                             if (userAmounts.userAmountList.isEmpty) {
                                 userAmounts.userAmountList = currExpense.liabilityDetails
                             }
-                            if (expenseMembers.isEmpty) {
+                            
+                            /*if (expenseMembers.isEmpty) {
                                 for user in userAmounts.userAmountList {
                                     expenseMembers.append(BasicUser(id: user.id, name: user.name, profilePictureUrl: user.profilePictureUrl))
                                 }
-                            }
+                            }*/
                         }
                         
                     }
@@ -91,14 +107,14 @@ struct ExpenseCreationView: View {
                     }
                     // Pull choice of groups for logged in user
                     if let groups = groupListViewModel.groups {
-                        MultiSelectNav(options: groups, involvedUsers: $expenseMembers).padding(.top, 15)
+                        MultiSelectNav(options: groups, involvedUsers: $userAmounts).padding(.top, 15)
                     } else {
                         // Debug print
                         let _ = print(" NO GROUP OPTIONS")
                     }
-                    if (!expenseMembers.isEmpty) {
+                    if (!userAmounts.userAmountList.isEmpty) {
                         // Payer
-                        SingleDropdown(labelName: "Paid By", groupMembers: expenseMembers, selectedItem: $expensePayerId)
+                        SingleDropdown(labelName: "Paid By", groupMembers: userAmounts.userAmountsToBasicUser(), selectedItem: $expensePayerId)
                         Divider().padding(.top, 20)
                     }
                     // Involved members
@@ -106,7 +122,7 @@ struct ExpenseCreationView: View {
                         ForEach($userAmounts.userAmountList) {$member in
                             Spacer()
                             // User input for liability amount
-                            UserSplitAmount(currUserAmount: $member, groupMembers: expenseMembers).padding([.top, .bottom], 20)
+                            UserSplitAmount(currUserAmount: $member, groupMembers: userAmounts).padding([.top, .bottom], 20)
                         }
                     }.onTapGesture() {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -145,10 +161,12 @@ struct ExpenseCreationView: View {
                     if (expenseViewModel.expense == nil) {
                         expenseViewModel.expense = DEFAULT_EXPENSE
                     }
+                    // CAUSES CRASH
+                    // userAmounts.userAmountList = []
                 } else {
                     expenseViewModel.fetchData(expenseId: expenseId!)
                 }
-            }.onChange(of: expenseMembers) { newVal in
+            }/*.onChange(of: expenseMembers) { newVal in
                 
                 // Iterate through userAmounts and delete if not in expenseMembers??
                 //userAmounts.userAmountList.removeAll(where: { ua in !expenseMembers.contains(where: { em in em.id == ua.id })})
@@ -161,7 +179,7 @@ struct ExpenseCreationView: View {
                         userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
                     }
                 }
-            }
+            }*/
             .onTapGesture() {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
@@ -212,11 +230,11 @@ struct ExpenseCreationView: View {
                      showAlert = true
                      return
                      }
-                    let paidByUser = expenseMembers.filter{$0.id == expensePayerId}[0]
-                    let paidByAmount = UserAmount(id: paidByUser.id, name: paidByUser.name, amount: expenseViewModel.expense!.totalAmount)
+                    let paidByAmount = userAmounts.userAmountList.filter{$0.id == expensePayerId}[0]
+                    let paidByUser = BasicUser(id: paidByAmount.id, name: paidByAmount.name, profilePictureUrl: paidByAmount.profilePictureUrl)
                     expenseViewModel.expense?.paidByDetails = [paidByAmount]
                     expenseViewModel.expense?.liabilityDetails = userAmounts.userAmountList
-                    expenseViewModel.expense?.involvedUserIds = expenseMembers.map{$0.id}
+                    expenseViewModel.expense?.involvedUserIds = userAmounts.userAmountList.map{$0.id}
                     
                     // TODO: Comment back in
                     await MainActor.run {
@@ -291,4 +309,3 @@ struct ExpenseCreationView_Previews: PreviewProvider {
         ExpenseCreationView()
     }
 }
-

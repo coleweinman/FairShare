@@ -13,11 +13,11 @@ struct UserSplitAmount: View {
     @Binding var currUserAmount: UserAmount
     @State var amount: String = ""
     
-    var groupMembers:[BasicUser]
+    var groupMembers: UserAmountList
     
     var body: some View {
         HStack (alignment: .center){
-            ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers)
+            ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers.userAmountsToBasicUser())
             Spacer()
             TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
             
