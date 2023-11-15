@@ -17,11 +17,8 @@ struct SignUpPageView: View {
         NavigationStack {
             VStack {
                 ScrollView {
-                    Text("FairShare")
-                        .font(.system(size: 44))
-                        .padding(.top, 72)
+                    Image("FairShareLogo").resizable().scaledToFit().padding(.top, 72)
                         .padding(.bottom, 24)
-                    
                     Text("Name")
                         .frame(maxWidth: .infinity, alignment: .leading)
                     TextField(
