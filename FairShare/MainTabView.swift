@@ -13,6 +13,7 @@ struct MainTabView: View {
     @StateObject var balanceDataViewModel = BalanceDataViewModel()
     @StateObject var groupListViewModel: GroupListViewModel = GroupListViewModel()
     @EnvironmentObject var authViewModel: AuthenticationViewModel
+    @State var showHelp = false
     
     var body: some View {
         NavigationStack {
@@ -53,14 +54,16 @@ struct MainTabView: View {
                             Image(systemName: "gear")
                         }
                     }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            showHelp.toggle()
+                        }) {
+                            Image(systemName: "questionmark.circle")
+                        }.sheet(isPresented: $showHelp) {
+                            HelpPopup()
+                        }
+                    }
                 }
-                .navigationBarItems(leading:
-                       Button(action: {
-                           print("Navigation bar item action")
-                       }) {
-                           Image(systemName: "questionmark.circle")
-                       }
-                   )
             } else {
                 VStack {
                     ProgressView() // Displays a loading spinner
