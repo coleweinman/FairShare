@@ -18,8 +18,8 @@ struct AmountEntry: View {
         VStack (alignment: .center) {
             HStack{
                 Text("$")
-                TextField("_______", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5).foregroundColor(textColor)
-            }.textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
+                TextField("", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5).foregroundColor(textColor)
+            }.limitInputLength(inputValue: $userInput, length: 8).textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
                 .onTapGesture() {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
@@ -40,5 +40,33 @@ struct AmountEntry: View {
         .onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
+    }
+    
+    func isValidMoney() -> Bool {
+        let validRegex1 = "^[0-9]*.{1}[0-9]{2}"
+        let validRegex2 = "^[0-9]*.*"
+        if ((userInput.range(of: validRegex1) != nil) || userInput.range(of: validRegex2) != nil) {
+            return true
+        }
+        return false
+    }
+}
+
+
+// https://sanzaru84.medium.com/swiftui-an-updated-approach-to-limit-the-amount-of-characters-in-a-textfield-view-984c942a156
+struct TextFieldLimit: ViewModifier {
+    @Binding var value: String
+    var length: Int
+    func body(content: Content) -> some View {
+            content
+                .onReceive(value.publisher.collect()) {
+                    value = String($0.prefix(length))
+            }
+    }
+}
+
+extension View {
+    func limitInputLength(inputValue: Binding<String>, length: Int) -> some View {
+        self.modifier(TextFieldLimit(value: inputValue, length: length))
     }
 }
