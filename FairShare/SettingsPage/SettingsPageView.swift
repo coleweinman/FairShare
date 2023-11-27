@@ -26,6 +26,9 @@ struct SettingsPageView: View {
                 if let profileUrl = viewModel.user?.profilePictureUrl {
                     AsyncImage(url: profileUrl) { image in
                         image.resizable()
+                            .aspectRatio(contentMode: .fill) 
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
                     } placeholder: {
                         ProgressView()
                     }

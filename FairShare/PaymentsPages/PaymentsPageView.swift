@@ -202,6 +202,7 @@ struct PaymentsPageView: View {
                                         cornerRadius: 8
                                     )
                                 }.buttonStyle(PlainButtonStyle())
+                                PaymentCell(payment: payment, userId: userViewModel.user!.id!)
                             }
                          }.onTapGesture() {
                              UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -273,3 +274,29 @@ struct PaymentsPageView_Previews: PreviewProvider {
         PaymentsPageView()
     }
 }
+
+struct PaymentCell: View {
+    let payment: Payment
+    let userId: String
+    var redbackgroundColor: Color = Color(red: 1.0, green: 0.68, blue: 0.68, opacity: 0.75)
+    var greenbackgroundColor: Color = Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75)
+
+       var body: some View {
+
+           return NavigationLink {
+               PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
+           } label: {
+               TableCellItemView(
+                   title: "Payment from \(payment.from.name)",
+                   date: payment.date,
+                   amount: payment.amount.moneyString,
+                   pfps: [payment.from.profilePictureUrl],
+                   backgroundColor: (payment.from.id == userId ? redbackgroundColor : greenbackgroundColor),
+                   cornerRadius: 8
+               )
+           }
+           .buttonStyle(PlainButtonStyle())
+       }
+   }
+
+

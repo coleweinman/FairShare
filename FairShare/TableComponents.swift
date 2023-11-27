@@ -18,6 +18,9 @@ struct PFP: View {
             LazyImage(url: profileUrl) { state in
                 if let image = state.image {
                     image.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
                 } else {
                     ProgressView()
                 }

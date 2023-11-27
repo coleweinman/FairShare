@@ -91,6 +91,7 @@ struct LoginPageView: View {
                     
                     if let error = viewModel.error {
                         Text(error)
+                        //Text("An error occurred: \(error.localizedDescription)")
                     }
                 }
             }
