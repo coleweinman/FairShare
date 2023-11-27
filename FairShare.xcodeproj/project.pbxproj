@@ -72,6 +72,8 @@
 		ECAEBB9E2AFB031C00EC7B11 /* PersonSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAEBB9D2AFB031C00EC7B11 /* PersonSelection.swift */; };
 		ECEEF2E52AE5F2AD0022D2D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */; };
 		ECFF62212B1098AA00A8F2B3 /* HelpPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFF62202B1098AA00A8F2B3 /* HelpPopup.swift */; };
+		ECFF62232B11DEE400A8F2B3 /* ViewExpensePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFF62222B11DEE400A8F2B3 /* ViewExpensePage.swift */; };
+		ECFF62252B148EC300A8F2B3 /* ViewPaymentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFF62242B148EC300A8F2B3 /* ViewPaymentPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +134,8 @@
 		ECAEBB9D2AFB031C00EC7B11 /* PersonSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonSelection.swift; sourceTree = "<group>"; };
 		ECEEF2E42AE5F2AD0022D2D1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ECFF62202B1098AA00A8F2B3 /* HelpPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpPopup.swift; sourceTree = "<group>"; };
+		ECFF62222B11DEE400A8F2B3 /* ViewExpensePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExpensePage.swift; sourceTree = "<group>"; };
+		ECFF62242B148EC300A8F2B3 /* ViewPaymentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPaymentPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -326,6 +330,7 @@
 			children = (
 				ECA9045A2ADE517C0055A608 /* ExpenseCreationView.swift */,
 				848DBDA42ADE8E2A008DC4F3 /* ExpensesPageView.swift */,
+				ECFF62222B11DEE400A8F2B3 /* ViewExpensePage.swift */,
 			);
 			path = ExpensesPages;
 			sourceTree = "<group>";
@@ -335,6 +340,7 @@
 			children = (
 				ECA904582ADE51640055A608 /* PaymentCreationView.swift */,
 				848DBDA22ADE8DFE008DC4F3 /* PaymentsPageView.swift */,
+				ECFF62242B148EC300A8F2B3 /* ViewPaymentPage.swift */,
 			);
 			path = PaymentsPages;
 			sourceTree = "<group>";
@@ -460,6 +466,7 @@
 				8C0C5BDB2AF58DA6006DB621 /* StorageImageView.swift in Sources */,
 				84908E202AE875D60008FC40 /* PaymentListViewModel.swift in Sources */,
 				848DBDA52ADE8E2A008DC4F3 /* ExpensesPageView.swift in Sources */,
+				ECFF62232B11DEE400A8F2B3 /* ViewExpensePage.swift in Sources */,
 				8C43AED72AE8735C00A37151 /* ShoppingListViewModel.swift in Sources */,
 				8C3468912ADD9E8A00E0C7B3 /* GroupViewModel.swift in Sources */,
 				8C43AED12AE86BB700A37151 /* ShoppingList.swift in Sources */,
@@ -468,6 +475,7 @@
 				8C34686D2AD9F10300E0C7B3 /* Payment.swift in Sources */,
 				8C34688A2ADCC45200E0C7B3 /* SignUpPageView.swift in Sources */,
 				8C3468692AD9BC4900E0C7B3 /* User.swift in Sources */,
+				ECFF62252B148EC300A8F2B3 /* ViewPaymentPage.swift in Sources */,
 				ECAEBB9E2AFB031C00EC7B11 /* PersonSelection.swift in Sources */,
 				D83FA3CC2AFAF35D0064663C /* ItemListPage.swift in Sources */,
 				ECA904592ADE51640055A608 /* PaymentCreationView.swift in Sources */,

@@ -156,7 +156,12 @@ struct CommentBox: View {
     var body: some View {
         VStack {
             Divider().padding(.top, 20)
-            TextField("Comments...", text: $comment, axis: .vertical).textFieldStyle(.roundedBorder).padding().lineLimit(5, reservesSpace: true).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+            TextField("Comments...", text: $comment, axis: .vertical)
+                .scenePadding(.all)
+                .textFieldStyle(.roundedBorder).padding()
+                .font(Font.system(size: 18, design: .default))
+                .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+                .lineLimit(5, reservesSpace: true)
         }.onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }

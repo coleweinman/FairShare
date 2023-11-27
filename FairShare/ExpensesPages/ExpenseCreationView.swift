@@ -14,6 +14,8 @@ import UIKit
 // Hard coded values for view element colors
 let shadowColor: Color = .gray
 let clickableTextColor: Color = .blue
+// let expenseBackgroundColor: Color = Color(red: 0.671, green: 0.827, blue: 0.996)
+let expenseBackgroundColor: Color = .white
 
 let DEFAULT_EXPENSE = Expense(title: "", description: "", date: Date(), totalAmount: 0.0, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: [])
 
@@ -39,6 +41,16 @@ class UserAmountList: ObservableObject {
             result.append(BasicUser(id: amount.id, name: amount.name, profilePictureUrl: amount.profilePictureUrl))
         }
         return result
+    }
+    
+    func applyEvenSplit(total: Decimal) {
+        var splitAmount = total / Decimal(self.userAmountList.count)
+        // Round to 2 decimal places
+        // Calculate leftover cents and add 1 cent for leftover amount of people
+        for index in self.userAmountList.indices {
+            self.userAmountList[index].amount = splitAmount
+            print("NEW AMOUNT: ", self.userAmountList[index].amount)
+        }
     }
 }
 
@@ -73,115 +85,114 @@ struct ExpenseCreationView: View {
     @State var pendingImages: [Data] = []
     @State var savingAlert = false
     
+    
     var body: some View {
         ScrollView {
-            VStack {
-                if (expenseViewModel.expense != nil) {
-                    VStack {
-                        // Amount
-                        AmountEntry(amount: Binding($expenseViewModel.expense)!.totalAmount)
-                        // Title
-                        ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
-                        // Date
-                        DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
-                    }.onAppear() {
-                        // Do rest of initialization for editing here
-                        if let currExpense = expenseViewModel.expense {
-                            if (expensePayerId == "") {
-                                expensePayerId = currExpense.paidByDetails[0].id
-                            }
-                            if (userAmounts.userAmountList.isEmpty) {
-                                userAmounts.userAmountList = currExpense.liabilityDetails
+            ZStack {
+                //Rectangle()
+                //    .fill(expenseBackgroundColor)
+                //    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                VStack {
+                    if (expenseViewModel.expense != nil) {
+                        VStack {
+                            // Amount
+                            AmountEntry(amount: Binding($expenseViewModel.expense)!.totalAmount)
+                            // Title
+                            ExpenseTitle(title: Binding($expenseViewModel.expense)!.title)
+                            // Date
+                            DateSelector(selectedDate: Binding($expenseViewModel.expense)!.date)
+                        }.onAppear() {
+                            // Do rest of initialization for editing here
+                            if let currExpense = expenseViewModel.expense {
+                                if (expensePayerId == "") {
+                                    expensePayerId = currExpense.paidByDetails[0].id
+                                }
+                                if (userAmounts.userAmountList.isEmpty) {
+                                    userAmounts.userAmountList = currExpense.liabilityDetails
+                                }
                             }
                             
-                            /*if (expenseMembers.isEmpty) {
-                                for user in userAmounts.userAmountList {
-                                    expenseMembers.append(BasicUser(id: user.id, name: user.name, profilePictureUrl: user.profilePictureUrl))
+                        }
+                        .onTapGesture() {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        }
+                        // Pull choice of groups for logged in user
+                        if let groups = groupListViewModel.groups {
+                            MultiSelectNav(options: groups, involvedUsers: $userAmounts).padding(.top, 15)
+                        } else {
+                            // Debug print
+                            let _ = print(" NO GROUP OPTIONS")
+                        }
+                        if (!userAmounts.userAmountList.isEmpty) {
+                            // Payer
+                            SingleDropdown(labelName: "Paid By", groupMembers: userAmounts.userAmountsToBasicUser(), selectedItem: $expensePayerId)
+                            Divider().padding(.top, 20)
+                        }
+                        // Involved members
+                        VStack (alignment: .leading) {
+                            ForEach($userAmounts.userAmountList) {$member in
+                                Spacer()
+                                // User input for liability amount
+                                UserSplitAmount(currUserAmount: $member, groupMembers: userAmounts).padding([.top, .bottom], 20)
+                            }
+                            if (!userAmounts.userAmountList.isEmpty) {
+                                HStack {
+                                    Spacer()
+                                    ButtonStyle1(buttonText: "Apply Even Split", actionFunction: {
+                                        self.applyEvenSplit()
+                                        // Change state variable to cause refresh
+                                        expenseViewModel.expense?.totalAmount += 0
+                                    })
+                                    Spacer()
                                 }
-                            }*/
+                            }
+                        }.onTapGesture() {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
+                        // Comments/ expense description
+                        CommentBox(comment: Binding($expenseViewModel.expense)!.description)
                         
-                    }
-                    .onTapGesture() {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
-                    // Pull choice of groups for logged in user
-                    if let groups = groupListViewModel.groups {
-                        MultiSelectNav(options: groups, involvedUsers: $userAmounts).padding(.top, 15)
+                        Divider()
+                        Text("Attachments")
+                        AttachmentsListView(
+                            existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [],
+                            pendingImages: pendingImages, onSelect: { images in pendingImages = images },
+                            onRemoveExisting: { index in
+                                print(expenseViewModel.expense?.attachmentObjectIds)
+                                expenseViewModel.expense?.attachmentObjectIds.remove(at: index)
+                                print(expenseViewModel.expense?.attachmentObjectIds)
+                            }
+                        )
+                        // Divider()
+                        ButtonStyle1(buttonText: "Submit", actionFunction: {
+                            Task {
+                                await self.createExpenseOnSubmit()
+                            }
+                        })
+                        .padding(.top, 20)
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text(expenseViewModel.expense!.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                        }
                     } else {
-                        // Debug print
-                        let _ = print(" NO GROUP OPTIONS")
+                        ProgressView()
                     }
-                    if (!userAmounts.userAmountList.isEmpty) {
-                        // Payer
-                        SingleDropdown(labelName: "Paid By", groupMembers: userAmounts.userAmountsToBasicUser(), selectedItem: $expensePayerId)
-                        Divider().padding(.top, 20)
-                    }
-                    // Involved members
-                    VStack (alignment: .leading) {
-                        ForEach($userAmounts.userAmountList) {$member in
-                            Spacer()
-                            // User input for liability amount
-                            UserSplitAmount(currUserAmount: $member, groupMembers: userAmounts).padding([.top, .bottom], 20)
+                }.onAppear() {
+                    currUserId = userViewModel.user!.id
+                    expensePayerId = currUserId!
+                    if (expenseId == nil) {
+                        // No expenseId given
+                        if (expenseViewModel.expense == nil) {
+                            expenseViewModel.expense = DEFAULT_EXPENSE
                         }
-                    }.onTapGesture() {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
-                    // Comments/ expense description
-                    CommentBox(comment: Binding($expenseViewModel.expense)!.description)
-                    
-                    Divider()
-                    Text("Attachments")
-                    AttachmentsListView(
-                        existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [],
-                        pendingImages: pendingImages, onSelect: { images in pendingImages = images },
-                        onRemoveExisting: { index in
-                            print(expenseViewModel.expense?.attachmentObjectIds)
-                            expenseViewModel.expense?.attachmentObjectIds.remove(at: index)
-                            print(expenseViewModel.expense?.attachmentObjectIds)
-                        }
-                    )
-                    Divider()
-                    ButtonStyle1(buttonText: "Submit", actionFunction: {
-                        Task {
-                            await self.createExpenseOnSubmit()
-                        }
-                    })
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text(expenseViewModel.expense!.title), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                    }
-                } else {
-                    ProgressView()
-                }
-            }.onAppear() {
-                currUserId = userViewModel.user!.id
-                expensePayerId = currUserId!
-                if (expenseId == nil) {
-                    // No expenseId given
-                    if (expenseViewModel.expense == nil) {
-                        expenseViewModel.expense = DEFAULT_EXPENSE
-                    }
-                    // CAUSES CRASH
-                    // userAmounts.userAmountList = []
-                } else {
-                    expenseViewModel.fetchData(expenseId: expenseId!)
-                }
-            }/*.onChange(of: expenseMembers) { newVal in
-                
-                // Iterate through userAmounts and delete if not in expenseMembers??
-                //userAmounts.userAmountList.removeAll(where: { ua in !expenseMembers.contains(where: { em in em.id == ua.id })})
-                
-                // Create new UserAmount for curr member
-                // Set the amount by default to 0
-                for member in expenseMembers {
-                    if (!userAmounts.userAmountList.contains(where: {$0.id == member.id})) {
-                        // Do not have entry for user yet, create
-                        userAmounts.userAmountList.append(UserAmount(id: member.id, name: member.name, profilePictureUrl: member.profilePictureUrl, amount: 0.0))
+                        // CAUSES CRASH
+                        // userAmounts.userAmountList = []
+                    } else {
+                        expenseViewModel.fetchData(expenseId: expenseId!)
                     }
                 }
-            }*/
-            .onTapGesture() {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                .onTapGesture() {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
             }
         }.overlay() {
             GeometryReader { geometry in
@@ -208,6 +219,10 @@ struct ExpenseCreationView: View {
         }
         func applyEvenSplit() {
             // ToDO
+            if let expense = expenseViewModel.expense {
+                let total = expense.totalAmount
+                userAmounts.applyEvenSplit(total: total)
+            }
         }
         
         func findSplitSum() -> Decimal {
@@ -274,7 +289,11 @@ struct ExpenseTitle: View {
     var body: some View {
         VStack (alignment: .leading){
             Text("Expense Description").scenePadding(.all).padding(.bottom, -30)
-            TextField("Enter title", text: $title).scenePadding(.all).textFieldStyle(.roundedBorder).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+            TextField("Enter title", text: $title)
+                .scenePadding(.all)
+                .textFieldStyle(.roundedBorder)
+                .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+                .font(Font.system(size: 24, design: .default))
         }.scenePadding()
         .onTapGesture() {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -295,7 +314,7 @@ struct DateSelector: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 40) {
-            DatePicker("Date", selection: $selectedDate, displayedComponents: .date).padding(.leading, 20)
+            DatePicker("Date", selection: $selectedDate, displayedComponents: .date).padding([.leading, .trailing], 20)
             Button("Today") {
                 selectedDate = Date()
             }.padding(.top, -45).font(.footnote).padding(.leading, 20)

@@ -19,9 +19,10 @@ struct UserSplitAmount: View {
         HStack (alignment: .center){
             ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers.userAmountsToBasicUser())
             Spacer()
-            TextField("_____", text: $amount).frame(width: 50, height: 50, alignment: .trailing)
+            Text("$").font(Font.system(size: 18, design: .default))
+            TextField("", text: $amount).frame(width: 80, height: 60, alignment: .trailing).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
             
-        }.scenePadding()
+        }.textFieldStyle(.roundedBorder).font(Font.system(size: 18, design: .default)).scenePadding()
         .onChange(of: amount) { newVal in
             if let currAmount = Decimal(string: amount) {
                 currUserAmount.amount = currAmount
@@ -32,6 +33,9 @@ struct UserSplitAmount: View {
             }
         }.onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }.onChange(of: currUserAmount.amount) { newVal in
+            // Allow even split button to override existing values
+            amount = "\(currUserAmount.amount)"
         }
     }
 }

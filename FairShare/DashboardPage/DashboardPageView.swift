@@ -54,7 +54,8 @@ struct DashboardPageView: View {
                         VStack {
                             ForEach(expenses) { expense in
                                 NavigationLink {
-                                    ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
+                                    // ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
+                                    ViewExpensePage(expenseId: expense.id!, canEdit: false)
                                 } label : {
                                     TableCellItemView(
                                         title: expense.title,
@@ -78,7 +79,8 @@ struct DashboardPageView: View {
                         VStack {
                             ForEach(payments) { payment in
                                 NavigationLink {
-                                    PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
+                                    ViewPaymentPage(paymentId: payment.id!, canEdit: false)
+                                    //PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
                                 } label: {
                                     TableCellItemView(
                                         title: "Payment from \(payment.from.name)",

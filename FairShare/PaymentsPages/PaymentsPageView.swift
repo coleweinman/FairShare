@@ -11,6 +11,7 @@ struct PaymentsPageView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     @StateObject private var paymentListViewModel = PaymentListViewModel()
     @StateObject private var balanceDataViewModel = BalanceDataViewModel()
+    @StateObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     @State private var isPresented = false
     @State private var ascending = true
     @State private var showDateFilter: Bool = false
@@ -29,6 +30,8 @@ struct PaymentsPageView: View {
     var cardOuterCornerRadius: CGFloat = 24
     var cardPadding: CGFloat = 16
     var headerFontSize: CGFloat = 18
+    
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView {
@@ -188,7 +191,7 @@ struct PaymentsPageView: View {
                          VStack {
                             ForEach(payments) { payment in
                                 NavigationLink {
-                                    PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
+                                    ViewPaymentPage(paymentId: payment.id!, canEdit: true)
                                 } label: {
                                     TableCellItemView(
                                         title: "Payment from \(payment.from.name)",
