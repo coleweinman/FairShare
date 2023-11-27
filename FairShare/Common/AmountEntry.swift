@@ -23,6 +23,7 @@ struct AmountEntry: View {
                 .onTapGesture() {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+                .padding([.leading, .trailing, .top], 20)
             Text("Amount")
         }.onChange(of: userInput) { newVal in
             if let currAmount = Decimal(string: userInput) {
@@ -36,9 +37,11 @@ struct AmountEntry: View {
             if (amount != 0) {
                 userInput = "\(amount)"
             }
-        }
-        .onTapGesture() {
+        } .onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        } .onChange(of: amount) { newVal in
+            userInput = "\(amount)"
+            
         }
     }
     
