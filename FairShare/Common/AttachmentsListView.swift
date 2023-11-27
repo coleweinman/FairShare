@@ -18,7 +18,7 @@ struct ImagePopoverData: Identifiable {
 
 struct AttachmentsListView: View {
     var existingImages: [String]
-    @State var pendingImages: [Data]
+    @Binding var pendingImages: [Data]
     @State var selectedItems: [PhotosPickerItem] = []
     @State var viewImage: Bool = false
     @State var selectedImagePath: String?
@@ -28,16 +28,10 @@ struct AttachmentsListView: View {
     @State var errorAlert: Bool = false
     @State var errorAlertMessage: String = ""
     
-    init(existingImages: [String], pendingImages: [Data], onSelect: @escaping ([Data]) -> Void, onRemoveExisting: @escaping (Int) -> Void) {
-        self.existingImages = existingImages
-        self.pendingImages = pendingImages
-        self.onSelect = onSelect
-        self.onRemoveExisting = onRemoveExisting
-        // print(existingImages)
-    }
-    
-    var onSelect: (([Data]) -> Void)
     var onRemoveExisting: ((Int) -> Void)
+    
+    var onTapPending: ((Data) -> Void)?
+    var onTapExisting: ((String) -> Void)?
     
     func loadImages(photos: [PhotosPickerItem]) async throws -> [Data] {
         var images: [Data] = []
@@ -62,7 +56,11 @@ struct AttachmentsListView: View {
             ForEach(existingImages, id: \.self) { path in
                 StorageImageView(path: path, maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
-                        imagePopoverData = ImagePopoverData(index: existingImages.firstIndex(of: path)!, selectedImagePath: path)
+                        if let onTap = onTapExisting {
+                            onTap(path)
+                        } else {
+                            imagePopoverData = ImagePopoverData(index: existingImages.firstIndex(of: path)!, selectedImagePath: path)
+                        }
                     }
             }
             ForEach(pendingImages.indices, id: \.self) { index in
@@ -73,7 +71,11 @@ struct AttachmentsListView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .frame(maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 400)
                     .onTapGesture {
-                        imagePopoverData = ImagePopoverData(index: index, selectedImageData: image)
+                        if let onTap = onTapPending {
+                            onTap(image)
+                        } else {
+                            imagePopoverData = ImagePopoverData(index: index, selectedImageData: image)
+                        }
                     }
             }
             PhotosPicker(selection: $selectedItems,
@@ -82,13 +84,14 @@ struct AttachmentsListView: View {
                 Label("Add from Photos", systemImage: "photo")
             }
              .onChange(of: selectedItems, perform: { photos in
-                 Task {
-                     do {
-                         let images = try await loadImages(photos: photos)
-                         self.pendingImages = images
-                         onSelect(images)
+                 if photos.count > 0 {
+                     Task {
+                         do {
+                             let images = try await loadImages(photos: photos)
+                             self.pendingImages.append(contentsOf: images)
+                             selectedItems.removeAll()
+                         }
                      }
-                     
                  }
              }).padding()
             Button(action: {
@@ -104,7 +107,6 @@ struct AttachmentsListView: View {
                 if data.selectedImageData != nil {
                     self.pendingImages.remove(at: data.index)
                     self.selectedItems.remove(at: data.index)
-                    self.onSelect(self.pendingImages)
                 } else {
                     print(data.index)
                     self.onRemoveExisting(data.index)
@@ -127,7 +129,6 @@ struct AttachmentsListView: View {
             CameraView(
                 onImageSelected: { image in
                     pendingImages.append(image)
-                    self.onSelect(pendingImages)
                 }, 
                 onDismiss: {
                     self.cameraOpen = false

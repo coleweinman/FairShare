@@ -18,6 +18,7 @@ struct Expense: Codable, Identifiable {
     var paidByDetails: [UserAmount]
     var liabilityDetails: [UserAmount]
     var involvedUserIds: [String]
+    var expenseItems: [ExpenseItem]?
     
     func profilePictures() -> [URL?] {
         var pictures: [URL?] = []
@@ -41,4 +42,10 @@ struct Expense: Codable, Identifiable {
             result.append("expenseAttachments/\(id)/\(objId)")
         }
     }
+}
+
+struct ExpenseItem: Codable, Hashable {
+    var name: String
+    var amount: Decimal
+    var split: [String : Decimal]
 }

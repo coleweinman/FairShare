@@ -42,18 +42,19 @@ struct PersonSelection: View {
             Spacer()
         }.onChange(of: editMode) { newVal in
             var members: [BasicUser] = []
-                // By user
-                for item in multiSelection {
-                    // Need to search through groups and userOptions using UUID and return list of users
-                    // item is a UUID
-                    // Groups
-                    let result = userOptions.filter{$0.id == item}
-                    if result.count >= 1 {
-                        members.append(result[0].user)
-                    }
+            // By user
+            for item in multiSelection {
+                // Need to search through groups and userOptions using UUID and return list of users
+                // item is a UUID
+                // Groups
+                let result = userOptions.filter{$0.id == item}
+                if result.count >= 1 {
+                    members.append(result[0].user)
                 }
-                selectedUsers = members
-                dismiss()
+            }
+            print(members)
+            selectedUsers = members
+            dismiss()
         }
     }
 }

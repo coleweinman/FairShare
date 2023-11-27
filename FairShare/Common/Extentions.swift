@@ -17,3 +17,16 @@ extension Decimal {
         return formatter.string(from: NSDecimalNumber(decimal: self)) ?? "N/A"
     }
 }
+
+extension String: LocalizedError {
+    public var errorDescription: String? { return self }
+}
+
+extension Decimal {
+    func rounded(_ scale: Int, _ roundingMode: NSDecimalNumber.RoundingMode) -> Decimal {
+        var result = Decimal()
+        var localCopy = self
+        NSDecimalRound(&result, &localCopy, scale, roundingMode)
+        return result
+    }
+}

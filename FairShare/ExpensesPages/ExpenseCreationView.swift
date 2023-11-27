@@ -85,6 +85,8 @@ struct ExpenseCreationView: View {
     @State var pendingImages: [Data] = []
     @State var savingAlert = false
     
+    @State var showItemSplit: Bool = false
+    @State var expenseItems: [ExpenseItem] = []
     
     var body: some View {
         ScrollView {
@@ -152,15 +154,19 @@ struct ExpenseCreationView: View {
                         // Comments/ expense description
                         CommentBox(comment: Binding($expenseViewModel.expense)!.description)
                         
+                        Button(action: {
+                            showItemSplit.toggle()
+                        }) {
+                            Text("Item Split")
+                        }
+                        
                         Divider()
                         Text("Attachments")
                         AttachmentsListView(
                             existingImages: expenseViewModel.expense?.getAttachmentPaths() ?? [],
-                            pendingImages: pendingImages, onSelect: { images in pendingImages = images },
+                            pendingImages: $pendingImages,
                             onRemoveExisting: { index in
-                                print(expenseViewModel.expense?.attachmentObjectIds)
                                 expenseViewModel.expense?.attachmentObjectIds.remove(at: index)
-                                print(expenseViewModel.expense?.attachmentObjectIds)
                             }
                         )
                         // Divider()
@@ -209,9 +215,23 @@ struct ExpenseCreationView: View {
                     }
                 }
             }
-        }.onTapGesture() {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
+        .sheet(isPresented: $showItemSplit, content: {
+            ItemSplitView(
+                members: $userAmounts.userAmountList,
+                expenseViewModel: expenseViewModel,
+                pendingImages: $pendingImages,
+                onSave: { total, users, items in
+                    print(total)
+                    print(users)
+                    print(items)
+                    userAmounts.userAmountList = users
+                    expenseViewModel.expense!.totalAmount = total
+                    expenseViewModel.expense!.expenseItems = items
+                    showItemSplit.toggle()
+                }
+            )
+        })
     }
     
         func attachReceipt() {
@@ -246,10 +266,10 @@ struct ExpenseCreationView: View {
                      return
                      }
                     let paidByAmount = userAmounts.userAmountList.filter{$0.id == expensePayerId}[0]
-                    let paidByUser = BasicUser(id: paidByAmount.id, name: paidByAmount.name, profilePictureUrl: paidByAmount.profilePictureUrl)
-                    expenseViewModel.expense?.paidByDetails = [paidByAmount]
-                    expenseViewModel.expense?.liabilityDetails = userAmounts.userAmountList
-                    expenseViewModel.expense?.involvedUserIds = userAmounts.userAmountList.map{$0.id}
+                    let paidByUserAmount = UserAmount(id: paidByAmount.id, name: paidByAmount.name, profilePictureUrl: paidByAmount.profilePictureUrl, amount: expenseViewModel.expense!.totalAmount)
+                    expenseViewModel.expense!.paidByDetails = [paidByUserAmount]
+                    expenseViewModel.expense!.liabilityDetails = userAmounts.userAmountList
+                    expenseViewModel.expense!.involvedUserIds = userAmounts.userAmountList.map{$0.id}
                     
                     // TODO: Comment back in
                     await MainActor.run {
@@ -295,9 +315,6 @@ struct ExpenseTitle: View {
                 .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
                 .font(Font.system(size: 24, design: .default))
         }.scenePadding()
-        .onTapGesture() {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
     }
 }
 

@@ -8,18 +8,24 @@
 import SwiftUI
 
 struct TestUserView: View {
-    @ObservedObject private var viewModel = UserViewModel()
+    @ObservedObject private var viewModel = ReceiptViewModel()
+    @State var pics: [Data] = []
     
     var body: some View {
         VStack {
-            if let user = viewModel.user {
-                Text(user.name)
-            } else {
-                Text("User nil")
-            }
+//            AttachmentsListView(existingImages: [], pendingImages: $pics, onSelect: { images in
+//                Task {
+//                    await viewModel.processReceipt(data: images[0])
+//                }
+//            }, onRemoveExisting: {_ in})
+            Button(action: {
+                
+            }, label: {
+                Text("Test")
+            })
         }
         .onAppear() {
-            viewModel.fetchData(uid: "5xuwvjBzryoJsQ3VGLIX")
+
         }
     }
 }
