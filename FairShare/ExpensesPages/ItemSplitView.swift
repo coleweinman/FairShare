@@ -145,7 +145,9 @@ struct ItemSplitView: View {
                 LoadingOverlayView(enabled: $viewModel.loadingReceipt)
             }
         }
-        
+        .onAppear {
+            viewModel.expenseItems = (expenseViewModel.expense?.expenseItems ?? []).map { ei in ExpenseItemViewModel(item: ei) }
+        }
     }
 }
 

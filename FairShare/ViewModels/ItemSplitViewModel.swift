@@ -87,14 +87,25 @@ class ItemSplitViewModel: ObservableObject {
     func getNewUsers(users: [UserAmount]) -> (Decimal, [UserAmount]) {
         var amountDict: [String : Decimal] = [:]
         var total = Decimal(0)
-        var applied = Decimal(0)
+        
         for item in expenseItems {
             total += item.item.amount
-            let splitAmount = (item.item.amount * 100 / Decimal(item.item.split.count)).rounded(2, .down)
+            let splitAmount = item.item.amount / Decimal(item.item.split.count)
             for uid in item.item.split.keys {
                 amountDict.updateValue((amountDict[uid] ?? 0) + splitAmount, forKey: uid)
-                applied += splitAmount
             }
+        }
+        
+        var applied = Decimal(0)
+        for uid in amountDict.keys {
+            amountDict[uid] = amountDict[uid]!.rounded(2, .plain)
+            applied += amountDict[uid]!
+        }
+        
+        print(total - applied)
+        if total - applied != 0,
+           let first = amountDict.keys.first {
+            amountDict[first]! += total - applied
         }
         
         var newUsers: [UserAmount] = []
@@ -107,7 +118,6 @@ class ItemSplitViewModel: ObservableObject {
             )
             newUsers.append(newUser)
         }
-        print(total - applied)
         return (total, newUsers)
     }
     
