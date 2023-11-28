@@ -20,10 +20,13 @@ struct MultiSelectNav: View {
     var body: some View {
         VStack{
             NavigationView{
-                NavigationLink {
-                    MemberSelectView(groups: options, involvedUsers: $involvedUsers, currUserId: userViewModel.user!.id!)
-                } label: {
-                    Label("Edit Members On Expense", systemImage: "pencil")
+                ZStack {
+                    expenseBackgroundColor
+                    NavigationLink {
+                        MemberSelectView(groups: options, involvedUsers: $involvedUsers, currUserId: userViewModel.user!.id!)
+                    } label: {
+                        Label("Edit Members On Expense", systemImage: "pencil")
+                    }
                 }
             }.frame(maxHeight: 40)
             Spacer()
@@ -49,6 +52,7 @@ struct MemberSelectView: View {
     @State private var selection = 0
     //var currUser: User?
     @Binding var involvedUsers: UserAmountList
+    // @Binding var involvedUsers: [UserAmount]
     
     @State var editMode = EditMode.active
     @Environment(\.dismiss) private var dismiss

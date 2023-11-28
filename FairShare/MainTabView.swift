@@ -107,7 +107,7 @@ enum Tab: Int, CaseIterable {
                 title: "Expenses",
                 image: "scroll",
                 content: AnyView(ExpensesPageView()),
-                createView: AnyView(ExpenseCreationView()),
+                createView: AnyView(ExpenseCreationView(existingExpense: false)),
                 createViewTitle: "Create Expense"
             )
         case .payments:
@@ -115,7 +115,7 @@ enum Tab: Int, CaseIterable {
                 title: "Payments",
                 image: "creditcard",
                 content: AnyView(PaymentsPageView()),
-                createView: AnyView(PaymentCreationView()),
+                createView: AnyView(PaymentCreationView(existingPayment: false)),
                 createViewTitle: "Create Payment"
             )
         case .lists:

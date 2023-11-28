@@ -88,6 +88,13 @@ struct ExpenseCreationView: View {
     @State var showItemSplit: Bool = false
     @State var expenseItems: [ExpenseItem] = []
     
+    // If false, reset userAmounts list
+    @State var hasResetAmounts = false
+    
+    // Enable deletions
+    @State var showConfirmationDialogue = false
+    var existingExpense: Bool
+    
     var body: some View {
         ScrollView {
             ZStack {
@@ -95,6 +102,7 @@ struct ExpenseCreationView: View {
                 //    .fill(expenseBackgroundColor)
                 //    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 VStack {
+                    let _ = print("TEST")
                     if (expenseViewModel.expense != nil) {
                         VStack {
                             // Amount
@@ -190,8 +198,10 @@ struct ExpenseCreationView: View {
                         if (expenseViewModel.expense == nil) {
                             expenseViewModel.expense = DEFAULT_EXPENSE
                         }
-                        // CAUSES CRASH
-                        // userAmounts.userAmountList = []
+                        if (!hasResetAmounts) {
+                            userAmounts.userAmountList = []
+                            self.hasResetAmounts = true
+                        }
                     } else {
                         expenseViewModel.fetchData(expenseId: expenseId!)
                     }
@@ -215,6 +225,28 @@ struct ExpenseCreationView: View {
                     }
                 }
             }
+        }.toolbar {
+            if (existingExpense) {
+                // Add delete button to toolbar
+                ToolbarItem(placement: .primaryAction) {
+                   Button {
+                        print("PERFORM DELETE")
+                       // Open confirmation of delete with ok and cancel
+                       showConfirmationDialogue.toggle()
+                    } label: {
+                        Image(systemName: "trash").foregroundColor(.red)
+                    }
+                }
+            }
+        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
+            Button("Confirm") { // Call delete
+                print("DELETE")
+                expenseViewModel.deleteData(expenseId: expenseId!)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete expense?")
         }
         .sheet(isPresented: $showItemSplit, content: {
             ItemSplitView(
@@ -339,9 +371,10 @@ struct DateSelector: View {
     }
 }
 
-struct ExpenseCreationView_Previews: PreviewProvider {
+/*struct ExpenseCreationView_Previews: PreviewProvider {
     
     static var previews: some View {
         ExpenseCreationView()
     }
 }
+*/

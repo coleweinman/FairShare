@@ -17,4 +17,13 @@ struct Payment: Codable, Identifiable {
     var to: BasicUser
     var from: BasicUser
     var involvedUserIds: [String]
+    
+    func setPaymentTitle(currUser: BasicUser) -> String {
+        if (currUser.id == self.to.id) {
+            // Payment to current user
+            return "Incoming Payment"
+        } else {
+            return "Outgoing Payment"
+        }
+    }
 }

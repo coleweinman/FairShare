@@ -36,6 +36,10 @@ struct PaymentCreationView: View {
     @State var allMembers: [BasicUser] = []
     var paymentId: String?
     @State var currUserId: String?
+    
+    // Enable deletions
+    @State var showConfirmationDialogue = false
+    var existingPayment: Bool
 
     var body: some View {
         ScrollView {
@@ -90,6 +94,28 @@ struct PaymentCreationView: View {
             }
         }.onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }.toolbar {
+            if (existingPayment) {
+                // Add delete button to toolbar
+                ToolbarItem(placement: .primaryAction) {
+                   Button {
+                        print("PERFORM DELETE")
+                       // Open confirmation of delete with ok and cancel
+                       showConfirmationDialogue.toggle()
+                    } label: {
+                        Image(systemName: "trash").foregroundColor(.red)
+                    }
+                }
+            }
+        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
+            Button("Confirm") { // Call delete
+                print("DELETE")
+                paymentViewModel.deleteData(paymentId: paymentId!)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete payment?")
         }
     }
     
@@ -193,10 +219,10 @@ struct SearchBar: View {
     }
 }
 
-struct PaymentCreationView_Previews: PreviewProvider {
+/*struct PaymentCreationView_Previews: PreviewProvider {
     static var previews: some View {
         PaymentCreationView()
     }
-}
+}*/
 
 

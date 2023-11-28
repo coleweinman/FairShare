@@ -51,4 +51,14 @@ class PaymentViewModel: ObservableObject {
                     }
                 }
         }
+    
+    func deleteData(paymentId: String) {
+        db.collection("payments").document(paymentId).delete() { err in
+            if let error = err {
+                print("Error removing payment: \(error)")
+            } else {
+                print("Payment successfully removed.")
+            }
+        }
+    }
 }

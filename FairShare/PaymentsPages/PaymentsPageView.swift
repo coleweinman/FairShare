@@ -284,7 +284,7 @@ struct PaymentCell: View {
        var body: some View {
 
            return NavigationLink {
-               PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
+               ViewPaymentPage(paymentId: payment.id!, canEdit: true)
            } label: {
                TableCellItemView(
                    title: "Payment from \(payment.from.name)",

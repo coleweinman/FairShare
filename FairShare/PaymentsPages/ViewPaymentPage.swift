@@ -12,6 +12,8 @@ struct ViewPaymentPage: View {
     
     @StateObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
+    @EnvironmentObject var viewModel: UserViewModel
+    
     var paymentId: String
     
     var canEdit: Bool
@@ -23,7 +25,11 @@ struct ViewPaymentPage: View {
                     Divider()
                     let stringAmount = "$\(currPayment.amount)"
                     // TODO: FIGURE OUT TITLE
-                    Text(stringAmount).navigationTitle("").font(.system(size: 64, design: .rounded))
+                    if let currUser = viewModel.user {
+                        Text(stringAmount).navigationTitle("\(currPayment.setPaymentTitle(currUser: BasicUser(id: currUser.id!, name: currUser.name)))").font(.system(size: 64, design: .rounded))
+                    } else {
+                        Text(stringAmount).font(.system(size: 64, design: .rounded))
+                    }
                     if (currPayment.description != "") {
                         Text("\"\(currPayment.description)\"").font(.system(size: 18, design: .rounded))
                     }
@@ -67,7 +73,7 @@ struct ViewPaymentPage: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         // Action
-                        PaymentCreationView(paymentId: paymentId)
+                        PaymentCreationView(paymentId: paymentId, existingPayment: true)
                     } label: {
                         Image(systemName: "pencil.circle")
                     }

@@ -8,7 +8,6 @@
 import SwiftUI
 import NukeUI
 
-// Profile picture + name
 struct ProfileCircleImage: View {
     
     @EnvironmentObject var userViewModel: UserViewModel

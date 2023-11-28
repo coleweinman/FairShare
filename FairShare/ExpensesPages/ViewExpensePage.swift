@@ -68,7 +68,7 @@ struct ViewExpensePage: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         // Action
-                        ExpenseCreationView(expenseId: expenseId)
+                        ExpenseCreationView(expenseId: expenseId, existingExpense: true)
                     } label: {
                         Image(systemName: "pencil.circle")
                     }

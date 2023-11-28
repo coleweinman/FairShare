@@ -11,10 +11,10 @@ import FirebaseStorage
 
 class ExpenseViewModel: ObservableObject {
     @Published var expense: Expense?
-        
+    
     private var db = Firestore.firestore()
     private var storage = Storage.storage()
-        
+    
     func save() -> String? {
         guard let expense = self.expense else {
             return nil
@@ -75,7 +75,6 @@ class ExpenseViewModel: ObservableObject {
         }
         
     }
-        
     func fetchData(expenseId: String) {
         db.collection("expenses").document(expenseId)
             .addSnapshotListener { documentSnapshot, error in
@@ -85,10 +84,22 @@ class ExpenseViewModel: ObservableObject {
                 }
                 do {
                     self.expense = try document.data(as: Expense.self)
+                    print("TRYING")
                 } catch {
                     print("Error fetching document: \(error)")
+                    //self.expense = nil
                 }
             }
+    }
+    
+    func deleteData(expenseId: String) {
+        db.collection("expenses").document(expenseId).delete() { err in
+            if let error = err {
+                print("Error removing expense: \(error)")
+            } else {
+                print("Expense successfully removed.")
+            }
+        }
     }
 }
 
