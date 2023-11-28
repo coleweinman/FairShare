@@ -190,11 +190,7 @@ struct PaymentsPageView: View {
                     if let payments = paymentListViewModel.payments {
                          VStack {
                             ForEach(payments) { payment in
-                                NavigationLink {
-                                    ViewPaymentPage(paymentId: payment.id!, canEdit: true)
-                                } label: {
-                                    PaymentCell(payment: payment, userId: userViewModel.user!.id!)
-                                }.buttonStyle(PlainButtonStyle())
+                                PaymentCell(payment: payment, userId: userViewModel.user!.id!)
                             }
                          }.onTapGesture() {
                              UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
