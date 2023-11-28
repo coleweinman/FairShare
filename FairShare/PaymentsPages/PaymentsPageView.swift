@@ -193,16 +193,8 @@ struct PaymentsPageView: View {
                                 NavigationLink {
                                     ViewPaymentPage(paymentId: payment.id!, canEdit: true)
                                 } label: {
-                                    TableCellItemView(
-                                        title: "Payment from \(payment.from.name)",
-                                        date: payment.date,
-                                        amount: payment.amount.moneyString,
-                                        pfps: [payment.from.profilePictureUrl],
-                                        backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
-                                        cornerRadius: 8
-                                    )
+                                    PaymentCell(payment: payment, userId: userViewModel.user!.id!)
                                 }.buttonStyle(PlainButtonStyle())
-                                PaymentCell(payment: payment, userId: userViewModel.user!.id!)
                             }
                          }.onTapGesture() {
                              UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
