@@ -44,11 +44,10 @@ struct PaymentsPageView: View {
                     Text("Net Balance")
                         .font(.system(size: headerFontSize, weight: .semibold))
                     if let netBalances = balanceDataViewModel.balanceData?.netBalances {
+                        // send netBalances into a func
                         VStack {
-                            ForEach(Array(netBalances.keys), id: \.self) { key in
-                                NetBalanceView(
-                                    user: netBalances[key]!
-                                )
+                            ForEach(balanceDataViewModel.sortIds(netBalances: netBalances), id: \.self) { id in
+                                NetBalanceView(user: netBalances[id]!)
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -223,6 +222,7 @@ struct PaymentsPageView: View {
                     if let user = userViewModel.user {
                         paymentListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
                         balanceDataViewModel.fetchData(uid: user.id!)
+                        
                     }
                 }
             }

@@ -13,9 +13,28 @@ class BalanceDataViewModel: ObservableObject {
     
     private var db = Firestore.firestore()
     
+    func sortIds(netBalances: [String: UserAmount]) -> [String] {
+        var namesToId: [String: String] = [:]
+        var names: [String] = []
+        var sortedNames: [String] = []
+        var sortedIds: [String] = []
+        for id in netBalances.keys {
+            let name = netBalances[id]!.name
+            namesToId[name] = id
+            names.append(name)
+        }
+        sortedNames = names.sorted()
+        for name in sortedNames {
+            let id = namesToId[name]
+            sortedIds.append(id!)
+        }
+        return sortedIds
+    }
+    
     func fetchData(uid: String) {
-        db.collection("users").document(uid).collection("secure").document("balances")
-            .addSnapshotListener { documentSnapshot, error in
+        var query = db.collection("users").document(uid).collection("secure").document("balances")
+        
+        var _ = query.addSnapshotListener { documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     print("Error fetching document: \(error!)")
                     return
