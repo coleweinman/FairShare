@@ -102,7 +102,6 @@ struct ExpenseCreationView: View {
                 //    .fill(expenseBackgroundColor)
                 //    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 VStack {
-                    let _ = print("TEST")
                     if (expenseViewModel.expense != nil) {
                         VStack {
                             // Amount
@@ -122,9 +121,6 @@ struct ExpenseCreationView: View {
                                 }
                             }
                             
-                        }
-                        .onTapGesture() {
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
                         // Pull choice of groups for logged in user
                         if let groups = groupListViewModel.groups {
@@ -162,18 +158,23 @@ struct ExpenseCreationView: View {
                                     })
                                     Spacer()
                                 }
+                                HStack {
+                                    Spacer()
+                                    ButtonStyle1(buttonText: "Item Split", actionFunction: {
+                                        showItemSplit.toggle()
+                                    })
+                                    Spacer()
+                                }.padding(.top, 10)
                             }
-                        }.onTapGesture() {
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
                         // Comments/ expense description
                         CommentBox(comment: Binding($expenseViewModel.expense)!.description)
                         
-                        Button(action: {
+                        /*Button(action: {
                             showItemSplit.toggle()
                         }) {
                             Text("Item Split")
-                        }
+                        }*/
                         
                         Divider()
                         Text("Attachments")
@@ -212,9 +213,6 @@ struct ExpenseCreationView: View {
                     } else {
                         expenseViewModel.fetchData(expenseId: expenseId!)
                     }
-                }
-                .onTapGesture() {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
             }
         }.overlay() {

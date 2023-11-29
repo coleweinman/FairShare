@@ -52,7 +52,6 @@ struct MemberSelectView: View {
     @State private var selection = 0
     //var currUser: User?
     @Binding var involvedUsers: UserAmountList
-    // @Binding var involvedUsers: [UserAmount]
     
     @State var editMode = EditMode.active
     @Environment(\.dismiss) private var dismiss
@@ -70,7 +69,7 @@ struct MemberSelectView: View {
             for user in group.members {
                 let currUserItem = UserListItem(user: user)
                 // TODO: Check that can unwrap userViewModel, exclude current user
-                if (!userOptions.contains(currUserItem) && currUserId != user.id) {
+                if (!userOptions.contains(where: {$0.user.id == user.id}) && currUserId != user.id) {
                     self.userOptions.append(currUserItem)
                 }
             }
