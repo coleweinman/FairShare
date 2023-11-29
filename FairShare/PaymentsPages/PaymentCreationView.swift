@@ -180,17 +180,22 @@ struct CommentBox: View {
     @Binding var comment: String
     
     var body: some View {
-        VStack {
+        VStack (alignment: .leading){
             Divider().padding(.top, 20)
-            TextField("Comments...", text: $comment, axis: .vertical)
-                .scenePadding(.all)
-                .textFieldStyle(.roundedBorder).padding()
+            //Text("Expense Comments").scenePadding(.all).padding(.bottom, -15)
+            TextField(" Comments...", text: $comment, axis: .vertical)
                 .font(Font.system(size: 18, design: .default))
-                .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+                /*.textFieldStyle(.roundedBorder)
+                .shadow(color: shadowColor, radius: 2, x: 0, y: 2)*/
+                .background(
+                    RoundedRectangle(cornerRadius: 8).foregroundColor(.white)
+                        .shadow(color: shadowColor, radius: 2, x: 0, y: 2).padding(-10)
+                )
                 .lineLimit(5, reservesSpace: true)
+                .padding()
         }.onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
+        }.scenePadding(.all)
     }
 }
 
@@ -204,7 +209,7 @@ struct ButtonStyle1: View {
             // What to do on button press
             actionFunction()
         }.buttonStyle(.bordered).foregroundColor(.white).background(.mint).cornerRadius(10).font(Font.system(size: 16, design: .default))
-            .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+            .shadow(color: shadowColor, radius: 2, x: 0, y: 2)
     }
 }
 

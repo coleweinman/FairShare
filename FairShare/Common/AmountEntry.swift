@@ -18,13 +18,13 @@ struct AmountEntry: View {
         VStack (alignment: .center) {
             HStack{
                 Text("$")
-                TextField("", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5).foregroundColor(textColor)
-            }.limitInputLength(inputValue: $userInput, length: 8).textFieldStyle(.roundedBorder).font(Font.system(size: 80, design: .default)).padding(.all, 1)
+                TextField("", text: $userInput).scenePadding(.all).shadow(color: shadowColor, radius: 2, x: 0, y: 2).foregroundColor(textColor)
+            }.limitInputLength(inputValue: $userInput, length: 8).textFieldStyle(.roundedBorder).font(Font.system(size: 64, design: .default)).padding(.all, 1)
                 .onTapGesture() {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .padding([.leading, .trailing, .top], 20)
-            Text("Amount")
+            Text("Amount").font(.system(size: 18, design: .default)).padding(.top, -5)
         }.onChange(of: userInput) { newVal in
             if let currAmount = Decimal(string: userInput) {
                 amount = currAmount

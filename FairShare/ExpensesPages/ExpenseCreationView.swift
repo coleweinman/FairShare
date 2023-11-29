@@ -140,6 +140,13 @@ struct ExpenseCreationView: View {
                         }
                         // Involved members
                         VStack (alignment: .leading) {
+                            if (!userAmounts.userAmountList.isEmpty) {
+                                HStack {
+                                    Spacer()
+                                    Text("Split Assignments").font(.title)
+                                    Spacer()
+                                }.padding(.top, 10)
+                            }
                             ForEach($userAmounts.userAmountList) {$member in
                                 Spacer()
                                 // User input for liability amount
@@ -340,11 +347,11 @@ struct ExpenseTitle: View {
     
     var body: some View {
         VStack (alignment: .leading){
-            Text("Expense Description").scenePadding(.all).padding(.bottom, -30)
+            Text("Expense Description").scenePadding(.all).padding(.bottom, -30).font(.system(size: 18, design: .default))
             TextField("Enter title", text: $title)
                 .scenePadding(.all)
                 .textFieldStyle(.roundedBorder)
-                .shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+                .shadow(color: shadowColor, radius: 2, x: 0, y: 2)
                 .font(Font.system(size: 24, design: .default))
         }.scenePadding()
     }

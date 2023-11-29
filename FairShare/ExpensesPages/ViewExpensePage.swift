@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ViewExpensePage: View {
     
+    //@Environment(\.dismiss) private var dismissView
+    
     // View model to access db and upload new expenses
     @StateObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     // Passed expenseID
@@ -24,26 +26,39 @@ struct ViewExpensePage: View {
                 VStack (alignment: .center) {
                     Divider()
                     let stringAmount = "$\(currExpense.totalAmount)"
-                    Text(stringAmount).navigationTitle(currExpense.title).font(.system(size: 64, design: .rounded))
+                    Text(stringAmount).navigationTitle(currExpense.title).font(.system(size: 72, design: .rounded))
                     if (currExpense.description != "") {
                         Text("\"\(currExpense.description)\"").font(.system(size: 18, design: .rounded))
                     }
                     Divider()
-                }
+                }/*.onAppear() {
+                    if let isDeleted = currExpense.isDeleted, isDeleted {
+                        expenseViewModel.deleteData(expenseId: expenseId)
+                        dismiss()
+                    }
+                }*/
                 HStack {
                     VStack (alignment: .leading) {
                         Text("Paid By").font(.system(size: 18,  weight: .semibold, design: .rounded))
                         HStack (alignment: .top) {
-                            PFP(image: currExpense.paidByDetails[0].profilePictureUrl, size: 64)
+                            PFP(image: currExpense.paidByDetails[0].profilePictureUrl, size: 72)
                             Spacer()
                             Text(currExpense.paidByDetails[0].name).font(.system(size: 18, weight: .semibold, design: .rounded))
                         }
                         
                         Divider()
                         Text("Members").font(.system(size: 18, weight: .semibold, design: .rounded))
-                        HStack {
+                        VStack (alignment: .leading) {
                             ForEach (currExpense.liabilityDetails) { member in
-                                PFP(image: member.profilePictureUrl, size: 64)
+                                HStack (alignment: .top) {
+                                    PFP(image: member.profilePictureUrl, size: 64)
+                                    let amount = "\(member.amount)"
+                                    Spacer()
+                                    VStack (alignment: .trailing){
+                                        Text("\(member.name)").padding(.bottom, 5)
+                                        Text("$\(amount)")
+                                    }
+                                }
                             }
                         }
                         Divider()

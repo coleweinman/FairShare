@@ -20,7 +20,7 @@ struct UserSplitAmount: View {
             ProfileCircleImage(userId: $currUserAmount.id, groupMembers: groupMembers.userAmountsToBasicUser())
             Spacer()
             Text("$").font(Font.system(size: 18, design: .default))
-            TextField("", text: $amount).frame(width: 80, height: 60, alignment: .trailing).scenePadding(.all).shadow(color: shadowColor, radius: 5, x: 0, y: 5)
+            TextField("", text: $amount).frame(width: 80, height: 60, alignment: .trailing).scenePadding(.all).shadow(color: shadowColor, radius: 2, x: 0, y: 2)
             
         }.textFieldStyle(.roundedBorder).font(Font.system(size: 18, design: .default)).scenePadding()
         .onChange(of: amount) { newVal in
