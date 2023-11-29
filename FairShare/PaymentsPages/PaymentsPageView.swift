@@ -24,6 +24,7 @@ struct PaymentsPageView: View {
     @State private var selectedSort: Sort = .date
     @State private var showAlert = false
     @State private var alertMessage: String = ""
+    @State private var search: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -61,9 +62,7 @@ struct PaymentsPageView: View {
                         Button(action: {
                             isPresented.toggle()
                         }) {
-                            Spacer()
-                            Text("Filter and Sort")
-                            Spacer()
+                            Image(systemName: "line.3.horizontal.decrease.circle")
                         }
                         .frame(maxHeight: .infinity)
                         .padding(8)
@@ -176,13 +175,30 @@ struct PaymentsPageView: View {
                                     }
                                     .scenePadding()
                                 }
-                            }.onTapGesture() {
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             }
                             Spacer()
                         }
-                    }.onTapGesture() {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        TextField("Search", text: $search)
+                            .frame(maxHeight: .infinity)
+                            .padding(8)
+                            .background(cardBackgroundColor)
+                            .cornerRadius(cardOuterCornerRadius)
+                        HStack {
+                            Button(action: {
+                                //
+                            }) {
+                                Image(systemName: "chevron.left")
+                            }
+                            Button(action: {
+                                //
+                            }) {
+                                Image(systemName: "chevron.right")
+                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .padding(8)
+                        .background(cardBackgroundColor)
+                        .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     Text("Past Payments")
@@ -192,8 +208,6 @@ struct PaymentsPageView: View {
                             ForEach(payments) { payment in
                                 PaymentCell(payment: payment, userId: userViewModel.user!.id!)
                             }
-                         }.onTapGesture() {
-                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                          }
                          .frame(maxWidth: .infinity)
                          .padding(cardPadding)
@@ -202,8 +216,6 @@ struct PaymentsPageView: View {
                     } else {
                         ProgressView()
                     }
-                }.onTapGesture() {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .frame(maxWidth: .infinity)
                 .scenePadding()
