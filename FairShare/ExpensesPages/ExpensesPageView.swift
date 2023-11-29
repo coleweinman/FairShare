@@ -17,7 +17,7 @@ struct ExpensesPageView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @StateObject private var expenseListViewModel = ExpenseListViewModel()
     @State private var isPresented = false
-    @State private var ascending = true
+    @State private var ascending = false
     @State private var showDateFilter: Bool = false
     @State private var showAmountFilter: Bool = false
     @State private var showSort: Bool = false
@@ -245,7 +245,7 @@ struct ExpensesPageView: View {
                 .scenePadding()
                 .onAppear() {
                     if let user = userViewModel.user {
-                        expenseListViewModel.fetchData(uid: user.id!)
+                        expenseListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
                     }
                 }
             }
@@ -269,7 +269,7 @@ struct ExpensesPageView: View {
         let date2 = showDateFilter ? endDate : nil
         let amount1 = showAmountFilter ? Double(minAmount) : nil
         let amount2 = showAmountFilter ? Double(maxAmount) : nil
-        let sortBy = selectedSort
+        let sortBy = selectedSort == .amount ? Sort.amount : Sort.date
         let sortOrder = ascending
         if let user = userViewModel.user {
             expenseListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)

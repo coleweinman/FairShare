@@ -72,9 +72,13 @@ class ExpenseListViewModel: ObservableObject {
         if let sortBy = sortBy, let sortOrder = sortOrder {
             switch sortBy {
                 case .date:
-                    query = query.order(by: "date", descending: !sortOrder)
+                    query = query
+                        .order(by: "date", descending: !sortOrder)
+                        .order(by: "totalAmount", descending: true)
                 case .amount:
-                    query = query.order(by: "totalAmount", descending: !sortOrder)
+                    query = query
+                        .order(by: "totalAmount", descending: !sortOrder)
+                        .order(by: "date", descending: true)
             }
         }
         var _ = query.addSnapshotListener { querySnapshot, error in
