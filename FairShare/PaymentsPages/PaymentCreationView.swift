@@ -60,8 +60,6 @@ struct PaymentCreationView: View {
                                 paymentTo = currPayment.to.id
                             }
                         }
-                    }.onTapGesture() {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                     // Sender
                     SingleDropdown(labelName: "Payment From", groupMembers: allMembers, selectedItem: $paymentFrom)
@@ -89,11 +87,6 @@ struct PaymentCreationView: View {
                     paymentViewModel.fetchData(paymentId: paymentId!)
                 }
             }
-            .onTapGesture() {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
-        }.onTapGesture() {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }.toolbar {
             if (existingPayment) {
                 // Add delete button to toolbar

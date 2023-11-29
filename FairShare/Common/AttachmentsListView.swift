@@ -106,7 +106,6 @@ struct AttachmentsListView: View {
             Button("Remove", systemImage: "trash", action: {
                 if data.selectedImageData != nil {
                     self.pendingImages.remove(at: data.index)
-                    self.selectedItems.remove(at: data.index)
                 } else {
                     print(data.index)
                     self.onRemoveExisting(data.index)

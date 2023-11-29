@@ -68,21 +68,10 @@ struct ExpensesPageView: View {
                                 VStack {
                                     Toggle("Filter by Date", isOn: $showDateFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                        .onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        }
                                     Toggle("Filter by Amount", isOn: $showAmountFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                        .onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        }
                                     Toggle("Sort", isOn: $showSort)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                        .onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        }
-                                }.onTapGesture() {
-                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 }
                                 .scenePadding()
                                 // FILTERS
@@ -100,8 +89,6 @@ struct ExpensesPageView: View {
                                             )
                                             .scenePadding(.horizontal)
                                             .scenePadding([.leading, .trailing, .bottom])
-                                        }.onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         }
                                         VStack {
                                             // end date
@@ -114,11 +101,7 @@ struct ExpensesPageView: View {
                                             )
                                             .scenePadding(.horizontal)
                                             .scenePadding([.leading, .trailing, .bottom])
-                                        }.onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         }
-                                    }.onTapGesture() {
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                     }
                                 }
                                 // amount filter
@@ -141,12 +124,7 @@ struct ExpensesPageView: View {
                                                 .background(Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1))
                                                 .clipShape(RoundedRectangle(cornerRadius: 5.0))
                                                 .scenePadding([.leading, .trailing, .bottom])
-                                        }.onTapGesture() {
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                         }
-                                    }
-                                    .onTapGesture() {
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                     }
                                 }
                                 if showSort {
@@ -168,8 +146,6 @@ struct ExpensesPageView: View {
                                                 .imageScale(.large)
                                                 .foregroundColor(.black)
                                         }
-                                    }.onTapGesture() {
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                     }
                                 }
                                 // SUBMIT
