@@ -19,9 +19,12 @@ class BalanceDataViewModel: ObservableObject {
         var sortedNames: [String] = []
         var sortedIds: [String] = []
         for id in netBalances.keys {
-            let name = netBalances[id]!.name
-            namesToId[name] = id
-            names.append(name)
+            let balance = netBalances[id]!
+            if balance.amount != 0 {
+                let name = balance.name
+                namesToId[name] = id
+                names.append(name)
+            }
         }
         sortedNames = names.sorted()
         for name in sortedNames {
