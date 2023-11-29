@@ -40,7 +40,11 @@ struct AmountEntry: View {
         } .onTapGesture() {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         } .onChange(of: amount) { newVal in
-            userInput = "\(amount)"
+            if (newVal == -1) {
+                userInput = ""
+            } else {
+                userInput = "\(amount)"
+            }
             
         }
     }
