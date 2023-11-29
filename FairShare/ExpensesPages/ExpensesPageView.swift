@@ -28,6 +28,7 @@ struct ExpensesPageView: View {
     @State private var selectedSort: Sort = .date
     @State private var showAlert = false
     @State private var alertMessage: String = ""
+    @State private var search: String = ""
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -46,9 +47,7 @@ struct ExpensesPageView: View {
                         Button(action: {
                             isPresented.toggle()
                         }) {
-                            Spacer()
-                            Text("Filter and Sort")
-                            Spacer()
+                            Image(systemName: "line.3.horizontal.decrease.circle")
                         }
                         .frame(maxHeight: .infinity)
                         .padding(8)
@@ -186,16 +185,31 @@ struct ExpensesPageView: View {
                                         Text("Reset")
                                     }
                                     .scenePadding()
-                                }.onTapGesture() {
-                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                                 }
-                            }.onTapGesture() {
-                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                             }
                             Spacer()
                         }
-                    }.onTapGesture() {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        TextField("Search", text: $search)
+                            .frame(maxHeight: .infinity)
+                            .padding(8)
+                            .background(cardBackgroundColor)
+                            .cornerRadius(cardOuterCornerRadius)
+                        HStack {
+                            Button(action: {
+                                //
+                            }) {
+                                Image(systemName: "chevron.left")
+                            }
+                            Button(action: {
+                                //
+                            }) {
+                                Image(systemName: "chevron.right")
+                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .padding(8)
+                        .background(cardBackgroundColor)
+                        .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     if let expenses = expenseListViewModel.expenses {
@@ -255,8 +269,8 @@ struct ExpensesPageView: View {
         let date2 = showDateFilter ? endDate : nil
         let amount1 = showAmountFilter ? Double(minAmount) : nil
         let amount2 = showAmountFilter ? Double(maxAmount) : nil
-        let sortBy = showSort ? selectedSort : nil
-        let sortOrder = showSort ? ascending : nil
+        let sortBy = selectedSort
+        let sortOrder = ascending
         if let user = userViewModel.user {
             expenseListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)
             print("success")
