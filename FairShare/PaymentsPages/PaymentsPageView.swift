@@ -246,8 +246,8 @@ struct PaymentsPageView: View {
         let date2 = showDateFilter ? endDate : nil
         let amount1 = showAmountFilter ? Double(minAmount) : nil
         let amount2 = showAmountFilter ? Double(maxAmount) : nil
-        let sortBy = showSort ? selectedSort : nil
-        let sortOrder = showSort ? ascending : nil
+        let sortBy = selectedSort
+        let sortOrder = ascending
         if let user = userViewModel.user {
             paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)
         }
