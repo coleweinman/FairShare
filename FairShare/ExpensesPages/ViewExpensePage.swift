@@ -23,7 +23,6 @@ struct ViewExpensePage: View {
     var body: some View {
         VStack {
             if let currExpense = expenseViewModel.expense {
-                let _ = print("TEST")
                 VStack (alignment: .center) {
                     Divider()
                     let stringAmount = "$\(currExpense.totalAmount)"
