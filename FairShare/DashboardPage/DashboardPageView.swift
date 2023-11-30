@@ -52,20 +52,25 @@ struct DashboardPageView: View {
                         .font(.system(size: 16, weight: .semibold))
                     if let expenses = expenseListViewModel.expenses {
                         VStack {
-                            ForEach(expenses) { expense in
-                                NavigationLink {
-                                    // ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
-                                    ViewExpensePage(expenseId: expense.id!, canEdit: false)
-                                } label : {
-                                    TableCellItemView(
-                                        title: expense.title,
-                                        date: expense.date,
-                                        amount: "$\(String(describing: expense.totalAmount))",
-                                        pfps: expense.profilePictures(),
-                                        backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                                        cornerRadius: 8
-                                    )
-                                }.buttonStyle(PlainButtonStyle())
+                            if expenses.count > 0 {
+                                ForEach(expenses) { expense in
+                                    NavigationLink {
+                                        // ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
+                                        ViewExpensePage(expenseId: expense.id!, canEdit: false)
+                                    } label : {
+                                        TableCellItemView(
+                                            title: expense.title,
+                                            date: expense.date,
+                                            amount: "$\(String(describing: expense.totalAmount))",
+                                            pfps: expense.profilePictures(),
+                                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
+                                            cornerRadius: 8
+                                        )
+                                    }.buttonStyle(PlainButtonStyle())
+                                }
+                            } else {
+                                Image("duck3")
+                                Text("You don't have any expenses yet!")
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -77,20 +82,25 @@ struct DashboardPageView: View {
                         .font(.system(size: 16, weight: .semibold))
                     if let payments = paymentListViewModel.payments {
                         VStack {
-                            ForEach(payments) { payment in
-                                NavigationLink {
-                                    ViewPaymentPage(paymentId: payment.id!, canEdit: false)
-                                    //PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
-                                } label: {
-                                    TableCellItemView(
-                                        title: "Payment from \(payment.from.name)",
-                                        date: payment.date,
-                                        amount: "+ $\(String(describing: payment.amount))",
-                                        pfps: [payment.from.profilePictureUrl],
-                                        backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
-                                        cornerRadius: 8
-                                    )
-                                }.buttonStyle(PlainButtonStyle())
+                            if payments.count > 0 {
+                                ForEach(payments) { payment in
+                                    NavigationLink {
+                                        ViewPaymentPage(paymentId: payment.id!, canEdit: false)
+                                        //PaymentCreationView(paymentId: payment.id).navigationTitle("Edit Payment")
+                                    } label: {
+                                        TableCellItemView(
+                                            title: "Payment from \(payment.from.name)",
+                                            date: payment.date,
+                                            amount: "+ $\(String(describing: payment.amount))",
+                                            pfps: [payment.from.profilePictureUrl],
+                                            backgroundColor: Color(red: 0.788, green: 0.894, blue: 0.871, opacity: 0.75),
+                                            cornerRadius: 8
+                                        )
+                                    }.buttonStyle(PlainButtonStyle())
+                                }
+                            } else {
+                                Image("duck3")
+                                Text("You don't have any payments yet!")
                             }
                         }
                         .frame(maxWidth: .infinity)

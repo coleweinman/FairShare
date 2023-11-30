@@ -46,8 +46,13 @@ struct PaymentsPageView: View {
                     if let netBalances = balanceDataViewModel.balanceData?.netBalances {
                         // send netBalances into a func
                         VStack {
-                            ForEach(balanceDataViewModel.sortIds(netBalances: netBalances), id: \.self) { id in
-                                NetBalanceView(user: netBalances[id]!)
+                            if netBalances.count > 0 {
+                                ForEach(balanceDataViewModel.sortIds(netBalances: netBalances), id: \.self) { id in
+                                    NetBalanceView(user: netBalances[id]!)
+                                }
+                            } else {
+                                Image("duck4")
+                                Text("You're all settled up!")
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -203,15 +208,21 @@ struct PaymentsPageView: View {
                     Text("Past Payments")
                         .font(.system(size: headerFontSize, weight: .semibold))
                     if let payments = paymentListViewModel.payments {
-                         VStack {
-                            ForEach(payments) { payment in
-                                PaymentCell(payment: payment, userId: userViewModel.user!.id!)
+                        VStack {
+                            if payments.count > 0 {
+                                ForEach(payments) { payment in
+                                    PaymentCell(payment: payment, userId: userViewModel.user!.id!)
+                                }
+                            } else {
+                                Image("duck3")
+                                Text("You don't have any payments yet!")
                             }
-                         }
-                         .frame(maxWidth: .infinity)
-                         .padding(cardPadding)
-                         .background(cardBackgroundColor)
-                         .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(cardPadding)
+                        .background(cardBackgroundColor)
+                        .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
+                        Spacer()
                     } else {
                         ProgressView()
                     }

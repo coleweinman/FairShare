@@ -17,7 +17,10 @@ struct AnalyticsPageView: View {
             VStack {
                 if let totalOwed = viewModel.totalOwed {
                     if totalOwed.isEmpty {
-                        Text("No analytics data for users with no expenses")
+                        Spacer()
+                        Image("duck3")
+                        Text("No analytics data for users with no expenses.")
+                        Spacer()
                     } else {
                         Text("Balance from expenses over the last year")
                         Chart {

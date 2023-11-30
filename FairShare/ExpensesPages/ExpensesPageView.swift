@@ -190,22 +190,25 @@ struct ExpensesPageView: View {
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     if let expenses = expenseListViewModel.expenses {
                         VStack {
-                            ForEach(expenses) { expense in
-                                NavigationLink {
-                                    ViewExpensePage(expenseId: expense.id!, canEdit: true)
-                                } label: {
-                                    TableCellItemView(
-                                        title: expense.title,
-                                        date: expense.date,
-                                        amount: expense.totalAmount.moneyString,
-                                        pfps: expense.profilePictures(),
-                                        backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
-                                        cornerRadius: 8
-                                    )
-                                }.buttonStyle(PlainButtonStyle())
+                            if expenses.count > 0 {
+                                ForEach(expenses) { expense in
+                                    NavigationLink {
+                                        ViewExpensePage(expenseId: expense.id!, canEdit: true)
+                                    } label: {
+                                        TableCellItemView(
+                                            title: expense.title,
+                                            date: expense.date,
+                                            amount: expense.totalAmount.moneyString,
+                                            pfps: expense.profilePictures(),
+                                            backgroundColor: Color(red: 0.671, green: 0.827, blue: 0.996),
+                                            cornerRadius: 8
+                                        )
+                                    }.buttonStyle(PlainButtonStyle())
+                                }
+                            } else {
+                                Image("duck3")
+                                Text("You don't have any expenses yet!")
                             }
-                        }.onTapGesture() {
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(cardPadding)
@@ -214,8 +217,6 @@ struct ExpensesPageView: View {
                     } else {
                         ProgressView()
                     }
-                }.onTapGesture() {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
                 .frame(maxWidth: .infinity)
                 .scenePadding()

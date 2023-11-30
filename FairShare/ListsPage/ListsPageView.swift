@@ -18,17 +18,24 @@ struct ListsPageView: View {
     var body: some View {
         VStack {
             if let lists = listsViewModel.shoppingLists {
-                        VStack {
-                           ForEach(lists) { list in
-                               ListCell(list: list, userId: userViewModel.user!.id!)
-                           }
-                           .onDelete(perform: deleteList)
+                VStack {
+                    if lists.count > 0 {
+                        ForEach(lists) { list in
+                           ListCell(list: list, userId: userViewModel.user!.id!)
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(cardPadding)
-                        .background(cardBackgroundColor)
-                        .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
-                        }  else {
+                        .onDelete(perform: deleteList)
+                    } else {
+                        Spacer()
+                        Image("duck3")
+                        Text("You don't have any lists yet!")
+                        Spacer()
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(cardPadding)
+                .background(cardBackgroundColor)
+                .clipShape(RoundedRectangle(cornerRadius: cardOuterCornerRadius))
+            } else {
                 ProgressView()
             }
             Spacer()
