@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ViewExpensePage: View {
     
+    @Environment(\.dismiss) private var dismissView
+    
     //@Environment(\.dismiss) private var dismissView
     
     // View model to access db and upload new expenses
@@ -19,10 +21,13 @@ struct ViewExpensePage: View {
     // var currExpense: Expense
     var expenseId: String
     
+    @State var showConfirmationDialogue = false
+    
     var canEdit: Bool
     var body: some View {
         VStack {
             if let currExpense = expenseViewModel.expense {
+                let _ = print("TEST")
                 VStack (alignment: .center) {
                     Divider()
                     let stringAmount = "$\(currExpense.totalAmount)"
@@ -31,12 +36,7 @@ struct ViewExpensePage: View {
                         Text("\"\(currExpense.description)\"").font(.system(size: 18, design: .rounded))
                     }
                     Divider()
-                }/*.onAppear() {
-                    if let isDeleted = currExpense.isDeleted, isDeleted {
-                        expenseViewModel.deleteData(expenseId: expenseId)
-                        dismiss()
-                    }
-                }*/
+                }
                 HStack {
                     VStack (alignment: .leading) {
                         Text("Paid By").font(.system(size: 18,  weight: .semibold, design: .rounded))
@@ -52,11 +52,13 @@ struct ViewExpensePage: View {
                             ForEach (currExpense.liabilityDetails) { member in
                                 HStack (alignment: .top) {
                                     PFP(image: member.profilePictureUrl, size: 64)
-                                    let amount = "\(member.amount)"
+                                    //let amount = "\(member.amount)"
+                                    let amount = (member.amount as NSDecimalNumber).doubleValue
                                     Spacer()
                                     VStack (alignment: .trailing){
+                                        let formattedAmount = String(format: "%.2f", amount)
                                         Text("\(member.name)").padding(.bottom, 5)
-                                        Text("$\(amount)")
+                                        Text("$\(formattedAmount)")
                                     }
                                 }
                             }
@@ -92,6 +94,16 @@ struct ViewExpensePage: View {
         }.onAppear() {
             expenseViewModel.fetchData(expenseId: expenseId)
         }.padding()
+    }
+    
+    
+    func formattedCurrency(amount: String) -> String {
+        print("AMOUNT: ", amount)
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.numberStyle = .currency
+        return formatter.string(for: amount) ?? "0"
     }
     
 }
