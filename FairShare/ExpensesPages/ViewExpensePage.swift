@@ -9,10 +9,6 @@ import SwiftUI
 
 struct ViewExpensePage: View {
     
-    @Environment(\.dismiss) private var dismissView
-    
-    //@Environment(\.dismiss) private var dismissView
-    
     // View model to access db and upload new expenses
     @StateObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     // Passed expenseID
