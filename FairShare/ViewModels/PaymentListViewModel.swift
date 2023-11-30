@@ -13,6 +13,8 @@ class PaymentListViewModel: ObservableObject {
     
     private var db = Firestore.firestore()
     
+    private var listener: ListenerRegistration?
+    
     func add(payment: Payment) -> String? {
         do {
             let docRef = try db.collection("payments").addDocument(from: payment)
@@ -57,9 +59,12 @@ class PaymentListViewModel: ObservableObject {
     }
     
     func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?) {
+        listener?.remove()
         let paymentsRef = db.collection("payments")
         var query = paymentsRef.whereField("involvedUserIds", arrayContains: uid)
-        if let startDate = startDate, let endDate = endDate {
+        if var startDate = startDate, var endDate = endDate {
+            startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: startDate)!
+            endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: endDate)!
             query = query
                 .whereField("date", isGreaterThanOrEqualTo: startDate)
                 .whereField("date", isLessThanOrEqualTo: endDate)
@@ -81,7 +86,7 @@ class PaymentListViewModel: ObservableObject {
                         .order(by: "date", descending: true)
             }
         }
-        var _ = query.addSnapshotListener { querySnapshot, error in
+        listener = query.addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error!)")
                 return

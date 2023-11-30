@@ -155,7 +155,7 @@ struct ExpensesPageView: View {
                                         showDateFilter = false
                                         showAmountFilter = false
                                         showSort = false
-                                        ascending = true
+                                        ascending = false
                                         selectedSort = .date
                                     }) {
                                         Text("Reset")
@@ -221,7 +221,7 @@ struct ExpensesPageView: View {
                 .frame(maxWidth: .infinity)
                 .scenePadding()
                 .onAppear() {
-                    if let user = userViewModel.user {
+                    if let user = userViewModel.user, expenseListViewModel.expenses == nil  {
                         expenseListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
                     }
                 }

@@ -11,6 +11,8 @@ import FirebaseFirestore
 class ExpenseListViewModel: ObservableObject {
     @Published var expenses: [Expense]?
     
+    private var listener: ListenerRegistration?
+    
     private var db = Firestore.firestore()
     
     func add(expense: Expense) -> String? {
@@ -57,9 +59,12 @@ class ExpenseListViewModel: ObservableObject {
     }
     
     func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?) {
+        listener?.remove()
         let expensesRef = db.collection("expenses")
         var query = expensesRef.whereField("involvedUserIds", arrayContains: uid)
-        if let startDate = startDate, let endDate = endDate {
+        if var startDate = startDate, var endDate = endDate {
+            startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: startDate)!
+            endDate = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: endDate)!
             query = query
                 .whereField("date", isGreaterThanOrEqualTo: startDate)
                 .whereField("date", isLessThanOrEqualTo: endDate)
@@ -81,12 +86,13 @@ class ExpenseListViewModel: ObservableObject {
                         .order(by: "date", descending: true)
             }
         }
-        var _ = query.addSnapshotListener { querySnapshot, error in
+        listener = query.addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error!)")
                 return
             }
             do {
+                print("update")
                 let expenses = try documents.map { doc in
                     return try doc.data(as: Expense.self)
                 }

@@ -172,7 +172,7 @@ struct PaymentsPageView: View {
                                         showDateFilter = false
                                         showAmountFilter = false
                                         showSort = false
-                                        ascending = true
+                                        ascending = false
                                         selectedSort = .date
                                     }) {
                                         Text("Reset")
@@ -230,7 +230,7 @@ struct PaymentsPageView: View {
                 .frame(maxWidth: .infinity)
                 .scenePadding()
                 .onAppear() {
-                    if let user = userViewModel.user {
+                    if let user = userViewModel.user, paymentListViewModel.payments == nil {
                         paymentListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
                         balanceDataViewModel.fetchData(uid: user.id!)
                         
