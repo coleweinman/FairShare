@@ -113,8 +113,8 @@ struct DashboardPageView: View {
                 .scenePadding()
                 .onAppear() {
                     if let user = userViewModel.user {
-                        expenseListViewModel.fetchData(uid: user.id!)
-                        paymentListViewModel.fetchData(uid: user.id!)
+                        expenseListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false, limit: 5)
+                        paymentListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false, limit: 5)
                     }
                 }
             }

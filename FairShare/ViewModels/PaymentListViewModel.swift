@@ -58,7 +58,7 @@ class PaymentListViewModel: ObservableObject {
             }
     }
     
-    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?) {
+    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?, limit: Int?) {
         listener?.remove()
         let paymentsRef = db.collection("payments")
         var query = paymentsRef.whereField("involvedUserIds", arrayContains: uid)
@@ -85,6 +85,9 @@ class PaymentListViewModel: ObservableObject {
                         .order(by: "amount", descending: !sortOrder)
                         .order(by: "date", descending: true)
             }
+        }
+        if let limit = limit {
+            query = query.limit(to: limit)
         }
         listener = query.addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {

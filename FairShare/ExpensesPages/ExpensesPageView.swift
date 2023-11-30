@@ -29,6 +29,7 @@ struct ExpensesPageView: View {
     @State private var showAlert = false
     @State private var alertMessage: String = ""
     @State private var search: String = ""
+    @State private var limit: Int = 5
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -170,22 +171,22 @@ struct ExpensesPageView: View {
                             .padding(8)
                             .background(cardBackgroundColor)
                             .cornerRadius(cardOuterCornerRadius)
-                        HStack {
-                            Button(action: {
-                                //
-                            }) {
-                                Image(systemName: "chevron.left")
-                            }
-                            Button(action: {
-                                //
-                            }) {
-                                Image(systemName: "chevron.right")
-                            }
-                        }
-                        .frame(maxHeight: .infinity)
-                        .padding(8)
-                        .background(cardBackgroundColor)
-                        .cornerRadius(cardOuterCornerRadius)
+//                        HStack {
+//                            Button(action: {
+//                                //
+//                            }) {
+//                                Image(systemName: "chevron.left")
+//                            }
+//                            Button(action: {
+//                                //
+//                            }) {
+//                                Image(systemName: "chevron.right")
+//                            }
+//                        }
+//                        .frame(maxHeight: .infinity)
+//                        .padding(8)
+//                        .background(cardBackgroundColor)
+//                        .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     if let expenses = expenseListViewModel.expenses {
@@ -205,6 +206,17 @@ struct ExpensesPageView: View {
                                         )
                                     }.buttonStyle(PlainButtonStyle())
                                 }
+                                // load more
+                                if expenses.count >= limit {
+                                    Button(action: {
+                                        limit += 5
+                                        onDismiss()
+                                    }) {
+                                        Text("Load More")
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .scenePadding()
+                                }
                             } else {
                                 Image("duck3")
                                 Text("You don't have any expenses yet!")
@@ -222,7 +234,7 @@ struct ExpensesPageView: View {
                 .scenePadding()
                 .onAppear() {
                     if let user = userViewModel.user, expenseListViewModel.expenses == nil  {
-                        expenseListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
+                        expenseListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false, limit: limit)
                     }
                 }
             }
@@ -249,10 +261,7 @@ struct ExpensesPageView: View {
         let sortBy = selectedSort == .amount ? Sort.amount : Sort.date
         let sortOrder = ascending
         if let user = userViewModel.user {
-            expenseListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)
-            print("success")
-        } else {
-            print("TANKED")
+            expenseListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder, limit: limit)
         }
     }
     

@@ -25,6 +25,7 @@ struct PaymentsPageView: View {
     @State private var showAlert = false
     @State private var alertMessage: String = ""
     @State private var search: String = ""
+    @State private var limit: Int = 5
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -187,22 +188,22 @@ struct PaymentsPageView: View {
                             .padding(8)
                             .background(cardBackgroundColor)
                             .cornerRadius(cardOuterCornerRadius)
-                        HStack {
-                            Button(action: {
-                                //
-                            }) {
-                                Image(systemName: "chevron.left")
-                            }
-                            Button(action: {
-                                //
-                            }) {
-                                Image(systemName: "chevron.right")
-                            }
-                        }
-                        .frame(maxHeight: .infinity)
-                        .padding(8)
-                        .background(cardBackgroundColor)
-                        .cornerRadius(cardOuterCornerRadius)
+//                        HStack {
+//                            Button(action: {
+//                                //
+//                            }) {
+//                                Image(systemName: "chevron.left")
+//                            }
+//                            Button(action: {
+//                                //
+//                            }) {
+//                                Image(systemName: "chevron.right")
+//                            }
+//                        }
+//                        .frame(maxHeight: .infinity)
+//                        .padding(8)
+//                        .background(cardBackgroundColor)
+//                        .cornerRadius(cardOuterCornerRadius)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     Text("Past Payments")
@@ -212,6 +213,17 @@ struct PaymentsPageView: View {
                             if payments.count > 0 {
                                 ForEach(payments) { payment in
                                     PaymentCell(payment: payment, userId: userViewModel.user!.id!)
+                                }
+                                // load more
+                                if payments.count >= limit {
+                                    Button(action: {
+                                        limit += 5
+                                        onDismiss()
+                                    }) {
+                                        Text("Load More")
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .scenePadding()
                                 }
                             } else {
                                 Image("duck3")
@@ -231,7 +243,7 @@ struct PaymentsPageView: View {
                 .scenePadding()
                 .onAppear() {
                     if let user = userViewModel.user, paymentListViewModel.payments == nil {
-                        paymentListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false)
+                        paymentListViewModel.fetchData(uid: user.id!, startDate: nil, endDate: nil, minAmount: nil, maxAmount: nil, sortBy: .date, sortOrder: false, limit: limit)
                         balanceDataViewModel.fetchData(uid: user.id!)
                         
                     }
@@ -260,7 +272,7 @@ struct PaymentsPageView: View {
         let sortBy = selectedSort == .amount ? Sort.amount : Sort.date
         let sortOrder = ascending
         if let user = userViewModel.user {
-            paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder)
+            paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder, limit: limit)
         }
     }
     

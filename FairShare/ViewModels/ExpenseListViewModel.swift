@@ -58,7 +58,7 @@ class ExpenseListViewModel: ObservableObject {
             }
     }
     
-    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?) {
+    func fetchData(uid: String, startDate: Date?, endDate: Date?, minAmount: Double?, maxAmount: Double?, sortBy: Sort?, sortOrder: Bool?, limit: Int?) {
         listener?.remove()
         let expensesRef = db.collection("expenses")
         var query = expensesRef.whereField("involvedUserIds", arrayContains: uid)
@@ -86,13 +86,15 @@ class ExpenseListViewModel: ObservableObject {
                         .order(by: "date", descending: true)
             }
         }
+        if let limit = limit {
+            query = query.limit(to: limit)
+        }
         listener = query.addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error!)")
                 return
             }
             do {
-                print("update")
                 let expenses = try documents.map { doc in
                     return try doc.data(as: Expense.self)
                 }
