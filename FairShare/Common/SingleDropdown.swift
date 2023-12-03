@@ -41,6 +41,7 @@ struct SingleDropdown: View {
                     }
                 }*/
                 Picker("Select", selection: $selectedItem) {
+                    Text("Select user")
                     ForEach(groupMembers) { member in
                         Text("\(member.name)")
                     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ViewExpensePage: View {
     
+    @Environment(\.presentationMode) private var presentationMode
     // View model to access db and upload new expenses
     @StateObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
     // Passed expenseID
@@ -78,15 +79,35 @@ struct ViewExpensePage: View {
         }.toolbar {
             if (canEdit) {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        // Action
-                        ExpenseCreationView(expenseId: expenseId, existingExpense: true)
+                        NavigationLink {
+                            // Action
+                            ExpenseCreationView(expenseId: expenseId)
+                        } label: {
+                            Image(systemName: "pencil.circle")
+                        }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                   Button {
+                        print("PERFORM DELETE")
+                       // Open confirmation of delete with ok and cancel
+                       showConfirmationDialogue.toggle()
                     } label: {
-                        Image(systemName: "pencil.circle")
+                        Image(systemName: "trash").foregroundColor(.red)
                     }
                 }
             }
-        }.onAppear() {
+        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
+            Button("Confirm") { // Call delete
+                print("DELETE")
+                expenseViewModel.deleteData(expenseId: expenseId)
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete expense?")
+        }
+        .onAppear() {
+            let _ = print("ON APPEAR")
             expenseViewModel.fetchData(expenseId: expenseId)
         }.padding()
     }

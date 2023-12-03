@@ -36,10 +36,6 @@ struct PaymentCreationView: View {
     @State var allMembers: [BasicUser] = []
     var paymentId: String?
     @State var currUserId: String?
-    
-    // Enable deletions
-    @State var showConfirmationDialogue = false
-    var existingPayment: Bool
 
     var body: some View {
         ScrollView {
@@ -69,7 +65,11 @@ struct PaymentCreationView: View {
                     CommentBox(comment: Binding($paymentViewModel.payment)!.description)
                     //ButtonStyle1(buttonText:"Attach Transaction\n Confirmation", actionFunction: {self.attachImage()})
                     ButtonStyle1(buttonText: "Submit", actionFunction: {self.createPaymentOnSubmit()}).alert(alertMessage, isPresented: $sendAlert) {
-                        Button("OK", role: .cancel) { }
+                        Button("OK", role: .cancel) {
+                            if (alertMessage == "Payment successful") {
+                                dismiss()
+                            }
+                        }
                     }
                 } else {
                     ProgressView()
@@ -87,28 +87,6 @@ struct PaymentCreationView: View {
                     paymentViewModel.fetchData(paymentId: paymentId!)
                 }
             }
-        }.toolbar {
-            if (existingPayment) {
-                // Add delete button to toolbar
-                ToolbarItem(placement: .primaryAction) {
-                   Button {
-                        print("PERFORM DELETE")
-                       // Open confirmation of delete with ok and cancel
-                       showConfirmationDialogue.toggle()
-                    } label: {
-                        Image(systemName: "trash").foregroundColor(.red)
-                    }
-                }
-            }
-        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
-            Button("Confirm") { // Call delete
-                print("DELETE")
-                paymentViewModel.deleteData(paymentId: paymentId!)
-                dismiss()
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Delete payment?")
         }
     }
     
@@ -142,17 +120,15 @@ struct PaymentCreationView: View {
                     }
                 }
                 let involvedUsers = [sender?.id, receiver?.id]
-                //let newPayment = Payment(description: paymentComment, date: newPayment.date, amount: newPayment.amount, attachmentObjectIds: [], to: receiver!, from: sender!, involvedUserIds: involvedUsers as! [String])
-                //paymentViewModel.payment = newPayment
                 paymentViewModel.payment?.to = receiver!
                 paymentViewModel.payment?.from = sender!
                 paymentViewModel.payment?.involvedUserIds = involvedUsers as! [String]
-                
+                let _ = print("BEFORE")
                 let success = paymentViewModel.save()
+                let _ = print("AFTER")
                 if (success) {
-                    alertMessage = "Payment successfully created"
+                    alertMessage = "Payment successful"
                     sendAlert = true
-                    dismiss()
                 } else {
                     alertMessage = "Failed to create payment"
                     sendAlert = true

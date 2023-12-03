@@ -9,10 +9,13 @@ import SwiftUI
 
 struct ViewPaymentPage: View {
     
+    @Environment(\.presentationMode) private var presentationMode
     
     @StateObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
     @EnvironmentObject var viewModel: UserViewModel
+    
+    @State var showConfirmationDialogue = false
     
     var paymentId: String
     
@@ -73,12 +76,30 @@ struct ViewPaymentPage: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         // Action
-                        PaymentCreationView(paymentId: paymentId, existingPayment: true)
+                        PaymentCreationView(paymentId: paymentId)
                     } label: {
                         Image(systemName: "pencil.circle")
                     }
                 }
+                ToolbarItem(placement: .primaryAction) {
+                   Button {
+                        print("PERFORM DELETE")
+                       // Open confirmation of delete with ok and cancel
+                       showConfirmationDialogue.toggle()
+                    } label: {
+                        Image(systemName: "trash").foregroundColor(.red)
+                    }
+                }
             }
+        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
+            Button("Confirm") { // Call delete
+                print("DELETE")
+                paymentViewModel.deleteData(paymentId: paymentId)
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete payment?")
         }.onAppear() {
             paymentViewModel.fetchData(paymentId: paymentId)
         }.padding()

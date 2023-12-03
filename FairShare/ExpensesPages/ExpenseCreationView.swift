@@ -44,11 +44,19 @@ class UserAmountList: ObservableObject {
     }
     
     func applyEvenSplit(total: Decimal) {
-        var splitAmount = total / Decimal(self.userAmountList.count)
+        let numUsers = Decimal(self.userAmountList.count)
+        var splitAmount = total / numUsers
+        splitAmount = splitAmount.rounded(2, .plain)
+        var leftOver = NSDecimalNumber(decimal: (total - (splitAmount * numUsers)) * 100)
+        var leftOverCents = Int(leftOver)
         // Round to 2 decimal places
         // Calculate leftover cents and add 1 cent for leftover amount of people
         for index in self.userAmountList.indices {
-            self.userAmountList[index].amount = splitAmount
+            if (index < leftOverCents) {
+                self.userAmountList[index].amount = splitAmount + 0.01
+            } else {
+                self.userAmountList[index].amount = splitAmount
+            }
             print("NEW AMOUNT: ", self.userAmountList[index].amount)
         }
     }
@@ -90,10 +98,6 @@ struct ExpenseCreationView: View {
     
     // If false, reset userAmounts list
     @State var hasResetAmounts = false
-    
-    // Enable deletions
-    @State var showConfirmationDialogue = false
-    var existingExpense: Bool
     
     var body: some View {
         ScrollView {
@@ -230,28 +234,6 @@ struct ExpenseCreationView: View {
                     }
                 }
             }
-        }.toolbar {
-            if (existingExpense) {
-                // Add delete button to toolbar
-                ToolbarItem(placement: .primaryAction) {
-                   Button {
-                        print("PERFORM DELETE")
-                       // Open confirmation of delete with ok and cancel
-                       showConfirmationDialogue.toggle()
-                    } label: {
-                        Image(systemName: "trash").foregroundColor(.red)
-                    }
-                }
-            }
-        }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
-            Button("Confirm") { // Call delete
-                print("DELETE")
-                expenseViewModel.deleteData(expenseId: expenseId!)
-                dismiss()
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Delete expense?")
         }
         .sheet(isPresented: $showItemSplit, content: {
             ItemSplitView(
