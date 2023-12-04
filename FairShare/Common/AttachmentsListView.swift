@@ -147,14 +147,23 @@ struct AttachmentsListView: View {
         if status != .authorized {
             AVCaptureDevice.requestAccess(for: .video) { authorized in
                 if authorized {
-                    self.cameraOpen = true
+                    // TODO: Check that rear camera is available
+                    if AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back) != nil {
+                        self.cameraOpen = true
+                    } else {
+                        print("NO CAMERA AVAILABLE")
+                    }
                 } else {
                     errorAlert = true
                     errorAlertMessage = "Please grant camera permission"
                 }
             }
         } else {
-            self.cameraOpen = true
+            if AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back) != nil {
+                self.cameraOpen = true
+            } else {
+                print("NO CAMERA AVAILABLE")
+            }
         }
     }
 }
