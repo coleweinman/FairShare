@@ -17,6 +17,8 @@ struct GroupEditPageView: View {
     @State var openInviteResponse = false
     @State var inviteUserEmail: String = ""
     @State var inviteUserResponse: String = ""
+    @State var showConfirmationDialogue: Bool = false
+    @Environment(\.presentationMode) private var presentationMode
     
     var groupId: String?
     
@@ -106,6 +108,17 @@ struct GroupEditPageView: View {
         }
         .navigationTitle("Group Editor")
         .toolbar {
+            if viewModel.group?.id != nil {
+                ToolbarItem(placement: .primaryAction) {
+                   Button {
+                        print("PERFORM DELETE")
+                       // Open confirmation of delete with ok and cancel
+                       showConfirmationDialogue.toggle()
+                    } label: {
+                        Image(systemName: "trash").foregroundColor(.red)
+                    }
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     let saveResult = viewModel.save()
@@ -148,6 +161,15 @@ struct GroupEditPageView: View {
                 Text(inviteUserResponse)
             }
         )
+        .confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
+            Button("Confirm") { // Call delete
+                viewModel.deleteData(groupId: viewModel.group!.id!)
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Delete group?")
+        }
         .onAppear() {
             if let id = groupId {
                 viewModel.fetchData(groupId: id)

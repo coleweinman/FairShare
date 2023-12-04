@@ -58,7 +58,7 @@ class AuthenticationViewModel: ObservableObject {
                 if let displayName = fbResult.user.displayName,
                    let email = fbResult.user.email
                 {
-                    let user = User(name: displayName, email: email, profilePictureUrl: fbResult.user.photoURL, paymentRemindersEnabled: true, paymentRemindersFrequency: "daily", newExpenseNotificationEnabled: true)
+                    let user = User(name: displayName, email: email, profilePictureUrl: fbResult.user.photoURL, paymentRemindersEnabled: true, paymentRemindersFrequency: "Daily", newExpenseNotificationEnabled: true)
                     do {
                         let userDoc = try await Firestore.firestore().collection("users").document(fbResult.user.uid).getDocument()
                         if !userDoc.exists {
@@ -90,7 +90,7 @@ class AuthenticationViewModel: ObservableObject {
         Auth.auth().createUser(withEmail: email.lowercased(), password: password) { authResult, error in
             self.error = error?.localizedDescription
             if let result = authResult {
-                let user = User(name: name, email: email.lowercased(), profilePictureUrl: nil, paymentRemindersEnabled: true, paymentRemindersFrequency: "daily", newExpenseNotificationEnabled: true)
+                let user = User(name: name, email: email.lowercased(), profilePictureUrl: nil, paymentRemindersEnabled: true, paymentRemindersFrequency: "Daily", newExpenseNotificationEnabled: true)
                 do {
                     try Firestore.firestore().collection("users").document(result.user.uid).setData(from: user)
                     try Firestore.firestore().collection("users").document(result.user.uid).collection("secure").document("balances").setData(from: BalanceData(netBalances: [:]))

@@ -37,6 +37,16 @@ class GroupViewModel: ObservableObject {
         return false
     }
     
+    func deleteData(groupId: String) {
+        db.collection("groups").document(groupId).delete() { err in
+            if let error = err {
+                print("Error removing group: \(error)")
+            } else {
+                print("Group successfully removed.")
+            }
+        }
+    }
+    
     func inviteUserByEmail(email: String) async -> String {
         guard self.group != nil else {
             return "Group not loaded"

@@ -79,34 +79,18 @@ struct SettingsPageView: View {
                         .onChange(of: viewModel.user!.paymentRemindersEnabled) { newValue in
                             viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersEnabled", value: newValue)
                         }
-                    Button(action: {
-                                    showActionSheet.toggle()
-                                    }) {
-                                        Text("Payment Reminder Frequency:    \(viewModel.user!.paymentRemindersFrequency)")
-                                        }
-                                        .actionSheet(isPresented: $showActionSheet) {
-                                            ActionSheet(
-                                                title: Text("Select Payment Reminder Frequency"),
-                                                buttons: [
-                                                    .default(Text(frequencies[0])) {
-                                                        selectedFrequency = 0
-                                                        viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersFrequency", value: frequencies[0])
-                                                    },
-                                                    .default(Text(frequencies[1])) {
-                                                        selectedFrequency = 1
-                                                        viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersFrequency", value: frequencies[1])
-                                                    },
-                                                    .default(Text(frequencies[2])) {
-                                                        viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersFrequency", value: frequencies[2])
-                                                    },
-                                                    .cancel()
-                                                ]
-                                            )
-                                        }.buttonStyle(PlainButtonStyle())
-                                    Toggle("New Expense Notifcations", isOn: Binding($viewModel.user)!.newExpenseNotificationEnabled)
-                        .onChange(of: viewModel.user!.newExpenseNotificationEnabled) { newValue in
-                            viewModel.updateField(userId: viewModel.user!.id!, field: "newExpenseNotificationEnabled", value: newValue)
+                    if viewModel.user?.paymentRemindersEnabled ?? false {
+                        Picker("Payment Reminder Frequency", selection: Binding($viewModel.user)!.paymentRemindersFrequency) {
+                            Text("Daily").tag("Daily")
+                            Text("Every Other Day").tag("Every Other Day")
+                            Text("Weekly").tag("Weekly")
                         }
+                        .pickerStyle(.navigationLink)
+                    }
+                    Toggle("New Expense Notifcations", isOn: Binding($viewModel.user)!.newExpenseNotificationEnabled)
+                    .onChange(of: viewModel.user!.newExpenseNotificationEnabled) { newValue in
+                        viewModel.updateField(userId: viewModel.user!.id!, field: "newExpenseNotificationEnabled", value: newValue)
+                    }
                 }
                 Section(header: Text("Account Info")) {
                     Text("Name: \(viewModel.user!.name)")

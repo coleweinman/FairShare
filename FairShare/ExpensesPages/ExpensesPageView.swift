@@ -61,116 +61,125 @@ struct ExpensesPageView: View {
                         }
                         .sheet(isPresented: $isPresented, onDismiss: onDismiss) {
                             // this is the sheet
-                            VStack {
-                                Text("Filters")
-                                    .font(.system(size: 24))
-                                    .bold()
-                                    .scenePadding()
-                                // TOGGLES
+                            NavigationStack {
                                 VStack {
-                                    Toggle("Filter by Date", isOn: $showDateFilter)
-                                        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                        .onChange(of: showDateFilter) { newValue in
-                                            filtersApplied = showDateFilter || showAmountFilter
-                                            showAmountFilter = showDateFilter && showAmountFilter ? false : showAmountFilter
-                                            if showDateFilter {
-                                                selectedSort = .date
+                                    // TOGGLES
+                                    VStack {
+                                        Toggle("Filter by Date", isOn: $showDateFilter)
+                                            .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                                            .onChange(of: showDateFilter) { newValue in
+                                                filtersApplied = showDateFilter || showAmountFilter
+                                                showAmountFilter = showDateFilter && showAmountFilter ? false : showAmountFilter
+                                                if showDateFilter {
+                                                    selectedSort = .date
+                                                }
                                             }
-                                        }
-                                    Toggle("Filter by Amount", isOn: $showAmountFilter)
-                                        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                        .onChange(of: showAmountFilter) { newValue in
-                                            filtersApplied = showDateFilter || showAmountFilter
-                                            showDateFilter = showDateFilter && showAmountFilter ? false : showDateFilter
-                                            if showAmountFilter {
-                                                selectedSort = .amount
+                                        Toggle("Filter by Amount", isOn: $showAmountFilter)
+                                            .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                                            .onChange(of: showAmountFilter) { newValue in
+                                                filtersApplied = showDateFilter || showAmountFilter
+                                                showDateFilter = showDateFilter && showAmountFilter ? false : showDateFilter
+                                                if showAmountFilter {
+                                                    selectedSort = .amount
+                                                }
                                             }
-                                        }
-                                }
-                                .scenePadding()
-                                // FILTERS
-                                // date filter
-                                if showDateFilter {
-                                    HStack {
-                                        VStack {
-                                            // start date
-                                            Text("Start Date")
-                                            DatePicker(
-                                                selection: $startDate,
-                                                in: ...Date(),
-                                                displayedComponents: .date,
-                                                label: {}
-                                            )
-                                            .scenePadding(.horizontal)
-                                            .scenePadding([.leading, .trailing, .bottom])
-                                        }
-                                        VStack {
-                                            // end date
-                                            Text("End Date")
-                                            DatePicker(
-                                                selection: $endDate,
-                                                in: ...Date(),
-                                                displayedComponents: .date,
-                                                label: {}
-                                            )
-                                            .scenePadding(.horizontal)
-                                            .scenePadding([.leading, .trailing, .bottom])
-                                        }
-                                    }
-                                }
-                                // amount filter
-                                if showAmountFilter {
-                                    HStack {
-                                        VStack {
-                                            // min amount
-                                            Text("Min Amount")
-                                            TextField("0.00", text: $minAmount)
-                                                .scenePadding()
-                                                .background(Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1))
-                                                .clipShape(RoundedRectangle(cornerRadius: 5.0))
-                                                .scenePadding([.leading, .trailing, .bottom])
-                                        }
-                                        VStack {
-                                            // max amount
-                                            Text("Max Amount")
-                                            TextField("0.00", text: $maxAmount)
-                                                .scenePadding()
-                                                .background(Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1))
-                                                .clipShape(RoundedRectangle(cornerRadius: 5.0))
-                                                .scenePadding([.leading, .trailing, .bottom])
-                                        }
-                                    }
-                                }
-                                // SORTS
-                                HStack {
-                                    Text("Sort By")
-                                    Picker("Sort By", selection: $selectedSort) {
-                                        ForEach(Sort.allCases, id: \.self) {sortCase in
-                                            Text(sortCase == .date ? "Date" : "Amount")
-                                                .tag(sortCase)
-                                        }
-                                    }
-                                    Button(action: {
-                                        ascending.toggle()
-                                    }) {
-                                        Image(systemName: ascending ? "chevron.up" : "chevron.down")
-                                            .imageScale(.large)
-                                            .foregroundColor(.black)
-                                    }
-                                }
-                                // SUBMIT
-                                HStack {
-                                    // RESET
-                                    Button(action: {
-                                        resetFilters()
-                                    }) {
-                                        Text("Clear Filters")
-                                            .font(.system(size: 20))
                                     }
                                     .scenePadding()
+                                    // FILTERS
+                                    // date filter
+                                    if showDateFilter {
+                                        HStack {
+                                            VStack {
+                                                // start date
+                                                Text("Start Date")
+                                                DatePicker(
+                                                    selection: $startDate,
+                                                    in: ...Date(),
+                                                    displayedComponents: .date,
+                                                    label: {}
+                                                )
+                                                .scenePadding(.horizontal)
+                                                .scenePadding([.leading, .trailing, .bottom])
+                                            }
+                                            VStack {
+                                                // end date
+                                                Text("End Date")
+                                                DatePicker(
+                                                    selection: $endDate,
+                                                    in: ...Date(),
+                                                    displayedComponents: .date,
+                                                    label: {}
+                                                )
+                                                .scenePadding(.horizontal)
+                                                .scenePadding([.leading, .trailing, .bottom])
+                                            }
+                                        }
+                                    }
+                                    // amount filter
+                                    if showAmountFilter {
+                                        HStack {
+                                            VStack {
+                                                // min amount
+                                                Text("Min Amount")
+                                                TextField("0.00", text: $minAmount)
+                                                    .scenePadding()
+                                                    .background(Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1))
+                                                    .clipShape(RoundedRectangle(cornerRadius: 5.0))
+                                                    .scenePadding([.leading, .trailing, .bottom])
+                                            }
+                                            VStack {
+                                                // max amount
+                                                Text("Max Amount")
+                                                TextField("0.00", text: $maxAmount)
+                                                    .scenePadding()
+                                                    .background(Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1))
+                                                    .clipShape(RoundedRectangle(cornerRadius: 5.0))
+                                                    .scenePadding([.leading, .trailing, .bottom])
+                                            }
+                                        }
+                                    }
+                                    // SORTS
+                                    HStack {
+                                        Text("Sort By")
+                                        Picker("Sort By", selection: $selectedSort) {
+                                            ForEach(Sort.allCases, id: \.self) {sortCase in
+                                                Text(sortCase == .date ? "Date" : "Amount")
+                                                    .tag(sortCase)
+                                            }
+                                        }
+                                        Button(action: {
+                                            ascending.toggle()
+                                        }) {
+                                            Image(systemName: ascending ? "chevron.up" : "chevron.down")
+                                                .imageScale(.large)
+                                                .foregroundColor(.black)
+                                        }
+                                    }
+                                    // SUBMIT
+                                    HStack {
+                                        // RESET
+                                        Button(action: {
+                                            resetFilters()
+                                        }) {
+                                            Text("Clear Filters")
+                                                .font(.system(size: 20))
+                                        }
+                                        .scenePadding()
+                                    }
+                                    Spacer()
                                 }
+                                .toolbar {
+                                    ToolbarItem(placement: .primaryAction, content: {
+                                        Button("Done") {
+                                            isPresented.toggle()
+                                        }
+                                    })
+                                }
+                                .navigationTitle("Filters")
+                                .navigationBarTitleDisplayMode(.inline)
+                                .presentationDragIndicator(.visible)
                             }
-                            Spacer()
+                            
                         }
                         if filtersApplied {
                             Button(action: {
