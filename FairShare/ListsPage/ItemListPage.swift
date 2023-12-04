@@ -19,11 +19,9 @@ struct ItemListPage: View {
     @StateObject var listViewModel: ShoppingListViewModel = ShoppingListViewModel()
     @StateObject var shoppinglistViewModel: ShoppingListListViewModel = ShoppingListListViewModel()
 
-
     var listName: String
     @State var showConfirmationDialogue = false
     var listId: String
-    
 
     var body: some View {
         VStack {
@@ -104,7 +102,6 @@ struct ItemListPage: View {
                         }
                 }
     
-    
     private func deleteList() {
         let idString = listViewModel.shoppingList?.id ?? ""
         shoppinglistViewModel.remove(shoppingListId: idString)
@@ -116,5 +113,4 @@ struct ItemListPage: View {
             newItemName = ""
             listViewModel.save()
     }
-
 }

@@ -19,14 +19,12 @@ struct SingleDropdown: View {
     @Binding var selectedItem: String
     
     var body: some View {
-        //let memberNames = groupMembers.map { $0.name }
         
         VStack (alignment: .center){
             HStack (alignment: .center) {
                 VStack (alignment: .leading){
                     Text(labelName)
                     Button("Set as Self") {
-                        // ToDo: Change to use actual name of current user
                         selectedItem = userViewModel.user!.id!
                     }.foregroundColor(clickableTextColor).font(.footnote)
                     // Add HStack with profile picture and name
@@ -35,18 +33,12 @@ struct SingleDropdown: View {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                 Spacer()
-                /*Picker("Select", selection: $selectedItem) {
-                    ForEach(memberNames, id: \.self) {
-                        Text($0)
-                    }
-                }*/
                 Picker("Select", selection: $selectedItem) {
                     Text("Select user")
                     ForEach(groupMembers) { member in
                         Text("\(member.name)")
                     }
                 }
-                //Text("Selected item: \(selectedItem)")
             }.scenePadding(.all)
             .onTapGesture() {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

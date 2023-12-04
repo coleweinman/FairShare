@@ -102,7 +102,6 @@ struct SettingsPageView: View {
         }
 }
 
-
 struct LogoutButton: View {
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     

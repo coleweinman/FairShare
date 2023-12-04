@@ -14,8 +14,6 @@ struct StorageImageView: View {
     var maxHeight: CGFloat = 100
     @State private var url: URL?
     
-
-    
     func loadImage() {
         let storage = Storage.storage()
         let imageRef = storage.reference(withPath: path)
@@ -44,8 +42,6 @@ struct StorageImageView: View {
         }.onAppear {
             loadImage()
         }
-        
-        
     }
 }
 

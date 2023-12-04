@@ -90,7 +90,3 @@ private extension HelpPopup {
         Text("Body")
     }
 }
-
-#Preview {
-    HelpPopup()
-}

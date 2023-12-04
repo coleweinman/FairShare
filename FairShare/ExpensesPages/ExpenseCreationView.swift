@@ -14,7 +14,6 @@ import UIKit
 // Hard coded values for view element colors
 let shadowColor: Color = .gray
 let clickableTextColor: Color = .blue
-// let expenseBackgroundColor: Color = Color(red: 0.671, green: 0.827, blue: 0.996)
 let expenseBackgroundColor: Color = .white
 
 let DEFAULT_EXPENSE = Expense(title: "", description: "", date: Date(), totalAmount: 0.0, attachmentObjectIds: [], paidByDetails: [], liabilityDetails: [], involvedUserIds: [])
@@ -104,9 +103,6 @@ struct ExpenseCreationView: View {
     var body: some View {
         ScrollView {
             ZStack {
-                //Rectangle()
-                //    .fill(expenseBackgroundColor)
-                //    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 VStack {
                     if (expenseViewModel.expense != nil) {
                         VStack {
@@ -175,12 +171,6 @@ struct ExpenseCreationView: View {
                         }
                         // Comments/ expense description
                         CommentBox(comment: Binding($expenseViewModel.expense)!.description)
-                        
-                        /*Button(action: {
-                            showItemSplit.toggle()
-                        }) {
-                            Text("Item Split")
-                        }*/
                         
                         Divider()
                         Text("Attachments")
@@ -334,7 +324,6 @@ struct ExpenseTitle: View {
     }
 }
 
-
 // Picker for date selection
 struct DateSelector: View {
     @Binding var selectedDate: Date
@@ -354,11 +343,3 @@ struct DateSelector: View {
         }.scenePadding().padding(.bottom, -30)
     }
 }
-
-/*struct ExpenseCreationView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        ExpenseCreationView()
-    }
-}
-*/

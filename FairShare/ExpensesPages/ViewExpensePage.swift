@@ -12,10 +12,7 @@ struct ViewExpensePage: View {
     @Environment(\.presentationMode) private var presentationMode
     // View model to access db and upload new expenses
     @StateObject var expenseViewModel: ExpenseViewModel = ExpenseViewModel()
-    // Passed expenseID
-    // Need to lookup expense with expenseViewModel
     
-    // var currExpense: Expense
     var expenseId: String
     
     @State var showConfirmationDialogue = false
@@ -49,7 +46,6 @@ struct ViewExpensePage: View {
                                 ForEach (currExpense.liabilityDetails) { member in
                                     HStack (alignment: .top) {
                                         PFP(image: member.profilePictureUrl, size: 64)
-                                        //let amount = "\(member.amount)"
                                         let amount = (member.amount as NSDecimalNumber).doubleValue
                                         Spacer()
                                         VStack (alignment: .trailing){
@@ -115,7 +111,6 @@ struct ViewExpensePage: View {
         }
     }
     
-    
     func formattedCurrency(amount: String) -> String {
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 2
@@ -125,7 +120,3 @@ struct ViewExpensePage: View {
     }
     
 }
-
-//#Preview {
-    // ViewExpensePage()
-//}

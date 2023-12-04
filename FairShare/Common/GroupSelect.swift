@@ -9,8 +9,8 @@ import SwiftUI
 
 // Picker to select group for expense
 struct GroupSelect: View {
+    
     @ObservedObject var groupViewModel: GroupViewModel = GroupViewModel()
-    //@EnvironmentObject var groupViewModel: GroupViewModel
     
     var groups: [Group]
     @Binding var selectedItem: String
@@ -34,7 +34,6 @@ struct GroupSelect: View {
                         members = group.members
                     }
                 }
-                
             }
         }.scenePadding(.all)
     }

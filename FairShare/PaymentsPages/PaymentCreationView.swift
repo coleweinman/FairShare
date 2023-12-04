@@ -15,7 +15,7 @@ struct PaymentCreationView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    // View model to upload pament
+    // View model to upload payment
     @StateObject var paymentViewModel: PaymentViewModel = PaymentViewModel()
     
     // View Model to access current user logged in
@@ -102,10 +102,6 @@ struct PaymentCreationView: View {
         }
     }
     
-    func attachImage() {
-        // ToDo: Camera and camera roll launch
-    }
-    
     // Respond to submit button press, use state vars to create and store payment
     func createPaymentOnSubmit() {
         if (paymentFrom != "" && paymentTo != "") {
@@ -179,22 +175,4 @@ struct ButtonStyle1: View {
             .shadow(color: shadowColor, radius: 2, x: 0, y: 2)
     }
 }
-
-// TODO
-struct SearchBar: View {
-    @State private var searchTerm = ""
-    
-    var body: some View {
-        NavigationStack {
-            Text("Test")
-        }.searchable(text: $searchTerm, prompt: "Search")
-    }
-}
-
-/*struct PaymentCreationView_Previews: PreviewProvider {
-    static var previews: some View {
-        PaymentCreationView()
-    }
-}*/
-
 

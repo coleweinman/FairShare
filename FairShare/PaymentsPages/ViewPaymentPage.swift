@@ -68,7 +68,6 @@ struct ViewPaymentPage: View {
                     }
                     Spacer()
                 }
-                // TODO: Add button to view attachments
                 Spacer()
             }
             
@@ -104,9 +103,3 @@ struct ViewPaymentPage: View {
         }.padding()
     }
 }
-
-
-/*#Preview {
-    ViewPaymentPage()
-}
-*/

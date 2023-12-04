@@ -39,10 +39,7 @@ struct DashboardPageView: View {
                                     .foregroundColor(Color.red)
                             }
                             
-                        } else {
-                            
                         }
-                        
                     }
                     .frame(maxWidth: .infinity)
                     .padding(cardPadding)
@@ -55,7 +52,6 @@ struct DashboardPageView: View {
                             if expenses.count > 0 {
                                 ForEach(expenses) { expense in
                                     NavigationLink {
-                                        // ExpenseCreationView(expenseId: expense.id).navigationTitle("Edit Expense")
                                         ViewExpensePage(expenseId: expense.id!, canEdit: false)
                                     } label : {
                                         TableCellItemView(

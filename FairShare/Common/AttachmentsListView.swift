@@ -158,7 +158,3 @@ struct AttachmentsListView: View {
         }
     }
 }
-
-/*#Preview {
-    AttachmentsListView(existingImages: [], pendingImages: [], onSelect: {_ in }, onRemoveExisting: {_ in })
-}*/
