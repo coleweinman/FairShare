@@ -14,10 +14,14 @@ struct ItemListPage: View {
     @State private var isEditing = false
     @State private var newItemName = ""
     @State private var isAlertPresented = false
+    @Environment(\.presentationMode) private var presentationMode
+
     @StateObject var listViewModel: ShoppingListViewModel = ShoppingListViewModel()
+    @StateObject var shoppinglistViewModel: ShoppingListListViewModel = ShoppingListListViewModel()
+
 
     var listName: String
-    //@State var items: [ListItem]
+    @State var showConfirmationDialogue = false
     var listId: String
     
 
@@ -27,7 +31,6 @@ struct ItemListPage: View {
                let items = listViewModel.items
             {
                 List {
-                    //ForEach(Binding($listViewModel.shoppingList)!.items.indices, id: \.self) { i in
                     ForEach(listViewModel.items!) { item in
                             HStack {
                                 if isEditing {
@@ -47,7 +50,7 @@ struct ItemListPage: View {
                                 }
                                 Text(item.name)
                             }
-                        }.onDelete(perform: deleteItem)
+                        }
                     }
 
                 
@@ -66,11 +69,20 @@ struct ItemListPage: View {
             listViewModel.fetchData(shoppingListId: listId)
             
         }
-                .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(trailing: 
+                                    HStack {
+                Button(action: {
                     self.isEditing.toggle()
                 }) {
                     Text(isEditing ? "Done" : "Edit")
-                })
+                }
+                Button(action: {
+                    showConfirmationDialogue.toggle()
+                }) {
+                    Image(systemName: "trash").foregroundColor(.red)
+                }
+            })
+                                    
                 .navigationTitle(listName)
                 .alert("Enter item name", isPresented: $isAlertPresented) {
                     TextField("", text: $newItemName)
@@ -81,22 +93,27 @@ struct ItemListPage: View {
                         Spacer()
                         Button("Add", action: addItem)
                     }
+                }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue){
+                    Button("Confirm") {
+                                        deleteList()
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    }
+                                    Button("Cancel", role: .cancel) { }
+                                } message: {
+                                    Text("Delete List?")
+                        }
                 }
-    }
     
     
-    private func deleteItem(at offsets: IndexSet) {
-       // items.remove(atOffsets: offsets)
-//        var newItems = listViewModel.shoppingList!.items
-//        newItems.remove(at: offsets)
-//        listViewModel.shoppingList?.items = newItems
-//        listViewModel.save()
+    private func deleteList() {
+        let idString = listViewModel.shoppingList?.id ?? ""
+        shoppinglistViewModel.remove(shoppingListId: idString)
+        
     }
     
     private func addItem() {
             listViewModel.shoppingList?.items.append(ListItem(name: newItemName, checked: false))
             newItemName = ""
-            //listViewModel.shoppingList?.items = items
             listViewModel.save()
     }
 
