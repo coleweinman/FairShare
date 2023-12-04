@@ -29,8 +29,35 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func signInWithEmail(email: String, password: String) {
+        if email == "" {
+            self.error = "Email not provided"
+            return
+        }
+        if password == "" {
+            self.error = "Password not provided"
+            return
+        }
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            self.error = error?.localizedDescription
+            if let error = error as NSError? {
+                guard let errorCode = AuthErrorCode.Code(rawValue: error.code) else {
+                    self.error = "Unknown error. Please try again later."
+                    return
+                }
+                switch errorCode {
+                case .invalidEmail:
+                    self.error = "Invalid email"
+                case .weakPassword:
+                    self.error = "Password is too weak"
+                case .wrongPassword:
+                    self.error = "Invalid password"
+                case .userDisabled:
+                    self.error = "Account is disabled"
+                default:
+                    self.error = "Invalid credentials"
+                }
+            } else {
+                self.error = nil
+            }
         }
     }
     
@@ -87,8 +114,42 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func signUp(name:String, email: String, password: String) {
+        if name == "" {
+            self.error = "Name not provided"
+            return
+        }
+        if email == "" {
+            self.error = "Email not provided"
+            return
+        }
+        if password == "" {
+            self.error = "Password not provided"
+            return
+        }
         Auth.auth().createUser(withEmail: email.lowercased(), password: password) { authResult, error in
-            self.error = error?.localizedDescription
+            if let error = error as NSError? {
+                guard let errorCode = AuthErrorCode.Code(rawValue: error.code) else {
+                    self.error = "Unknown error. Please try again later."
+                    print(error.code)
+                    return
+                }
+                switch errorCode {
+                case .invalidEmail:
+                    self.error = "Invalid email"
+                case .emailAlreadyInUse:
+                    self.error = "Email already in use"
+                case .weakPassword:
+                    self.error = "Password is too weak"
+                case .userDisabled:
+                    self.error = "Account is disabled"
+                default:
+                    print(errorCode.rawValue)
+                    self.error = "Unknown error. Please try again later."
+                }
+            } else {
+                self.error = nil
+            }
+            
             if let result = authResult {
                 let user = User(name: name, email: email.lowercased(), profilePictureUrl: nil, paymentRemindersEnabled: true, paymentRemindersFrequency: "Daily", newExpenseNotificationEnabled: true)
                 do {

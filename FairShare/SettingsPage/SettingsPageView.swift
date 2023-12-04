@@ -16,7 +16,6 @@ struct SettingsPageView: View {
 
     @State private var showActionSheet = false
     @State private var selectedFrequency = 0
-    let frequencies = ["Daily", "Every Other Day", "Weekly"]
     @State private var selectedImage: UIImage? = nil
     @State private var isImagePickerPresented = false
     
@@ -84,6 +83,9 @@ struct SettingsPageView: View {
                             Text("Daily").tag("Daily")
                             Text("Every Other Day").tag("Every Other Day")
                             Text("Weekly").tag("Weekly")
+                        }
+                        .onChange(of: viewModel.user!.paymentRemindersFrequency) { newValue in
+                            viewModel.updateField(userId: viewModel.user!.id!, field: "paymentRemindersFrequency", value: newValue)
                         }
                         .pickerStyle(.navigationLink)
                     }

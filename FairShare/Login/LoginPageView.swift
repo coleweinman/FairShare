@@ -31,6 +31,7 @@ struct LoginPageView: View {
     @State private var forgotPasswordEmail: String = ""
     @State private var forgotPasswordResponse: String = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @State private var errorAlert: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -88,11 +89,6 @@ struct LoginPageView: View {
                             
                         }
                     })
-                    
-                    if let error = viewModel.error {
-                        Text(error)
-                        //Text("An error occurred: \(error.localizedDescription)")
-                    }
                 }
             }
             .textFieldStyle(CustomTextFieldStyle())
@@ -128,6 +124,26 @@ struct LoginPageView: View {
                     Text(forgotPasswordResponse)
                 }
             )
+            .alert(
+                Text("Sign In Error"),
+                isPresented: $errorAlert,
+                actions: {
+                    Button("Ok") {}
+                },
+                message: {
+                    Text(viewModel.error ?? "")
+                }
+            )
+            .onChange(of: errorAlert) { value in
+                if !value {
+                    viewModel.error = nil
+                }
+            }
+            .onChange(of: viewModel.error) { value in
+                if value != nil {
+                    errorAlert = true
+                }
+            }
         }
     }
     

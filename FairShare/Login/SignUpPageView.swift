@@ -12,6 +12,7 @@ struct SignUpPageView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @State private var errorAlert: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -55,6 +56,26 @@ struct SignUpPageView: View {
                     if let error = viewModel.error {
                         Text(error)
                     }
+                }
+            }
+            .alert(
+                Text("Sign Up Error"),
+                isPresented: $errorAlert,
+                actions: {
+                    Button("Ok") {}
+                },
+                message: {
+                    Text(viewModel.error ?? "")
+                }
+            )
+            .onChange(of: errorAlert) { value in
+                if !value {
+                    viewModel.error = nil
+                }
+            }
+            .onChange(of: viewModel.error) { value in
+                if value != nil {
+                    errorAlert = true
                 }
             }
             .textFieldStyle(CustomTextFieldStyle())
