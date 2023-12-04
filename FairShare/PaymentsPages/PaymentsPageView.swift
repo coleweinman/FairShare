@@ -24,8 +24,8 @@ struct PaymentsPageView: View {
     @State private var selectedSort: Sort = .date
     @State private var showAlert = false
     @State private var alertMessage: String = ""
-    @State private var search: String = ""
     @State private var limit: Int = 5
+    @State private var filtersApplied: Bool = false
     
     var pageBackgroundColor: Color = Color(red: 0.933, green: 0.933, blue: 0.933, opacity: 1)
     var cardBackgroundColor: Color = Color(red: 1, green: 1, blue: 1, opacity: 1)
@@ -67,7 +67,8 @@ struct PaymentsPageView: View {
                         Button(action: {
                             isPresented.toggle()
                         }) {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
+                            Image(systemName: "slider.horizontal.3")
+                            Text("Show Filters")
                         }
                         .frame(maxHeight: .infinity)
                         .padding(8)
@@ -81,17 +82,30 @@ struct PaymentsPageView: View {
                         .sheet(isPresented: $isPresented, onDismiss: onDismiss) {
                             // this is the sheet
                             VStack {
-                                Text("Filter and Sort")
+                                Text("Filters")
+                                    .font(.system(size: 24))
                                     .bold()
                                     .scenePadding()
                                 // TOGGLES
                                 VStack {
                                     Toggle("Filter by Date", isOn: $showDateFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                                        .onChange(of: showDateFilter) { newValue in
+                                            filtersApplied = showDateFilter || showAmountFilter
+                                            showAmountFilter = showDateFilter && showAmountFilter ? false : showAmountFilter
+                                            if showDateFilter {
+                                                selectedSort = .date
+                                            }
+                                        }
                                     Toggle("Filter by Amount", isOn: $showAmountFilter)
                                         .toggleStyle(SwitchToggleStyle(tint: .accentColor))
-                                    Toggle("Sort", isOn: $showSort)
-                                        .toggleStyle(SwitchToggleStyle(tint: .accentColor))
+                                        .onChange(of: showAmountFilter) { newValue in
+                                            filtersApplied = showDateFilter || showAmountFilter
+                                            showDateFilter = showDateFilter && showAmountFilter ? false : showDateFilter
+                                            if showAmountFilter {
+                                                selectedSort = .amount
+                                            }
+                                        }
                                 }
                                 .scenePadding()
                                 // FILTERS
@@ -147,63 +161,50 @@ struct PaymentsPageView: View {
                                         }
                                     }
                                 }
-                                if showSort {
-                                    // SORTS
-                                    HStack {
-                                        Text("Sort By")
-                                        Picker("Sort By", selection: $selectedSort) {
-                                            ForEach(Sort.allCases, id: \.self) {sortCase in
-                                                Text(sortCase == .date ? "Date" : "Amount")
-                                                    .tag(sortCase)
-                                            }
+                                // SORTS
+                                HStack {
+                                    Text("Sort By")
+                                    Picker("Sort By", selection: $selectedSort) {
+                                        ForEach(Sort.allCases, id: \.self) {sortCase in
+                                            Text(sortCase == .date ? "Date" : "Amount")
+                                                .tag(sortCase)
                                         }
-                                        Button(action: {
-                                            ascending.toggle()
-                                        }) {
-                                            Image(systemName: ascending ? "chevron.up" : "chevron.down")
-                                                .imageScale(.large)
-                                                .foregroundColor(.black)
-                                        }
+                                    }
+                                    Button(action: {
+                                        ascending.toggle()
+                                    }) {
+                                        Image(systemName: ascending ? "chevron.up" : "chevron.down")
+                                            .imageScale(.large)
+                                            .foregroundColor(.black)
                                     }
                                 }
                                 // SUBMIT
                                 HStack {
                                     // RESET
                                     Button(action: {
-                                        showDateFilter = false
-                                        showAmountFilter = false
-                                        showSort = false
-                                        ascending = false
-                                        selectedSort = .date
+                                        resetFilters()
                                     }) {
-                                        Text("Reset")
+                                        Text("Clear Filters")
+                                            .font(.system(size: 20))
                                     }
                                     .scenePadding()
                                 }
                             }
                             Spacer()
                         }
-                        TextField("Search", text: $search)
+                        if filtersApplied {
+                            Button(action: {
+                                resetFilters()
+                                onDismiss()
+                            }) {
+                                Image(systemName: "xmark.circle")
+                                Text("Clear Filters")
+                            }
                             .frame(maxHeight: .infinity)
                             .padding(8)
                             .background(cardBackgroundColor)
                             .cornerRadius(cardOuterCornerRadius)
-//                        HStack {
-//                            Button(action: {
-//                                //
-//                            }) {
-//                                Image(systemName: "chevron.left")
-//                            }
-//                            Button(action: {
-//                                //
-//                            }) {
-//                                Image(systemName: "chevron.right")
-//                            }
-//                        }
-//                        .frame(maxHeight: .infinity)
-//                        .padding(8)
-//                        .background(cardBackgroundColor)
-//                        .cornerRadius(cardOuterCornerRadius)
+                        }
                     }
                     .frame(maxWidth: .infinity, maxHeight: 32)
                     Text("Past Payments")
@@ -227,7 +228,7 @@ struct PaymentsPageView: View {
                                 }
                             } else {
                                 Image("duck3")
-                                Text("You don't have any payments yet!")
+                                Text("No payments to show!")
                             }
                         }
                         .frame(maxWidth: .infinity)
@@ -264,6 +265,9 @@ struct PaymentsPageView: View {
         } else if showDateFilter && (!equalDates(firstDate: startDate, secondDate: endDate) && startDate > endDate) {
             alertMessage = "Enter a valid date range"
             showAlert = true
+        } else if (showDateFilter && selectedSort != .date) || (showAmountFilter && selectedSort != .amount) {
+            alertMessage = "You cannot filter and sort by different attributes"
+            showAlert = true
         }
         let date1 = showDateFilter ? startDate : nil
         let date2 = showDateFilter ? endDate : nil
@@ -274,6 +278,14 @@ struct PaymentsPageView: View {
         if let user = userViewModel.user {
             paymentListViewModel.fetchData(uid: user.id!, startDate: date1, endDate: date2, minAmount: amount1, maxAmount: amount2, sortBy: sortBy, sortOrder: sortOrder, limit: limit)
         }
+    }
+    
+    func resetFilters() {
+        showDateFilter = false
+        showAmountFilter = false
+        ascending = false
+        selectedSort = .date
+        filtersApplied = false
     }
     
     func isDouble(amount: String) -> Bool {
