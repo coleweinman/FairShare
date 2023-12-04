@@ -49,11 +49,14 @@ class UserAmountList: ObservableObject {
         splitAmount = splitAmount.rounded(2, .plain)
         var leftOver = NSDecimalNumber(decimal: (total - (splitAmount * numUsers)) * 100)
         var leftOverCents = Int(leftOver)
+        print("LEFTOVER: ", leftOverCents)
         // Round to 2 decimal places
         // Calculate leftover cents and add 1 cent for leftover amount of people
         for index in self.userAmountList.indices {
             if (index < leftOverCents) {
                 self.userAmountList[index].amount = splitAmount + 0.01
+            } else if (index < leftOverCents * (-1)) {
+                self.userAmountList[index].amount = splitAmount - 0.01
             } else {
                 self.userAmountList[index].amount = splitAmount
             }
