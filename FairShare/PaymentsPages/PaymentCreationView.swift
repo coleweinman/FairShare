@@ -123,9 +123,7 @@ struct PaymentCreationView: View {
                 paymentViewModel.payment?.to = receiver!
                 paymentViewModel.payment?.from = sender!
                 paymentViewModel.payment?.involvedUserIds = involvedUsers as! [String]
-                let _ = print("BEFORE")
                 let success = paymentViewModel.save()
-                let _ = print("AFTER")
                 if (success) {
                     alertMessage = "Payment successful"
                     sendAlert = true

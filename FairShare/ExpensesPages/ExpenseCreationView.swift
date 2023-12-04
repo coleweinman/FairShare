@@ -57,7 +57,6 @@ class UserAmountList: ObservableObject {
             } else {
                 self.userAmountList[index].amount = splitAmount
             }
-            print("NEW AMOUNT: ", self.userAmountList[index].amount)
         }
     }
 }
@@ -252,10 +251,6 @@ struct ExpenseCreationView: View {
             )
         })
     }
-    
-        func attachReceipt() {
-            // ToDo: Camera and camera roll launch
-        }
         func applyEvenSplit() {
             // ToDO
             if let expense = expenseViewModel.expense {
@@ -290,7 +285,6 @@ struct ExpenseCreationView: View {
                     expenseViewModel.expense!.liabilityDetails = userAmounts.userAmountList
                     expenseViewModel.expense!.involvedUserIds = userAmounts.userAmountList.map{$0.id}
                     
-                    // TODO: Comment back in
                     await MainActor.run {
                         self.savingAlert = true
                     }

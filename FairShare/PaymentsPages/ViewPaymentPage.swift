@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct ViewPaymentPage: View {
     
@@ -83,7 +84,6 @@ struct ViewPaymentPage: View {
                 }
                 ToolbarItem(placement: .primaryAction) {
                    Button {
-                        print("PERFORM DELETE")
                        // Open confirmation of delete with ok and cancel
                        showConfirmationDialogue.toggle()
                     } label: {
@@ -93,7 +93,6 @@ struct ViewPaymentPage: View {
             }
         }.confirmationDialog("Confirm deletion", isPresented: $showConfirmationDialogue) {
             Button("Confirm") { // Call delete
-                print("DELETE")
                 paymentViewModel.deleteData(paymentId: paymentId)
                 self.presentationMode.wrappedValue.dismiss()
             }
@@ -105,6 +104,7 @@ struct ViewPaymentPage: View {
         }.padding()
     }
 }
+
 
 /*#Preview {
     ViewPaymentPage()
